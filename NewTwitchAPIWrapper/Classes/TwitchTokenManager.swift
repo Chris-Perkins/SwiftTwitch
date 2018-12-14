@@ -15,6 +15,8 @@ import Foundation
 /// The singleton instance can be retrieved by using the following syntax:
 /// `TwitchTokenManager.shared`
 class TwitchTokenManager {
+    
+    // MARK: - Singleton Creator
 
     /// `shared` is the entry point for the singleton instance of the TwitchTokenManager.
     public static var shared: TwitchTokenManager {
@@ -29,8 +31,12 @@ class TwitchTokenManager {
     /// `singleInstance` holds the singleton instance that should be returned by `shared`.
     private static var singleInstance: TwitchTokenManager?
 
+    // MARK: - Instance-Level Properties
+
+    /// `accessToken` should specify the access token of the New Twitch API.
+    public var accessToken: String?
+
     // TODO: This maybe should require parameters?
     /// Initializes a TwitchTokenManager.
-    public init() {
-    }
+    public init() { }
 }
