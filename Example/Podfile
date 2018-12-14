@@ -6,6 +6,5 @@ target 'NewTwitchAPIWrapper_Example' do
   target 'NewTwitchAPIWrapper_Tests' do
     inherit! :search_paths
 
-    
   end
 end
