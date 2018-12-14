@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'NewTwitchAPIWrapper_Example' do
+  pod 'NewTwitchAPIWrapper', :path => '../'
+
+  target 'NewTwitchAPIWrapper_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
