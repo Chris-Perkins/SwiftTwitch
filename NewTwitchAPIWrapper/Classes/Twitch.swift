@@ -103,6 +103,7 @@ public class Twitch {
         /// extension with the specified ID will be analyzed.
         ///   - first: The number of objects to retrieve.
         ///   - type: The type of report to gather.
+        ///
         /// [More information available here](https://dev.twitch.tv/docs/insights/)
         public static func get(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
                                after: String? = nil, startedAt: Date? = nil, endedAt: Date? = nil,
@@ -166,20 +167,20 @@ extension Dictionary where Key == String, Value == Any {
 // MARK: - Date Extensions
 
 extension Date {
-    
+
     /// `zuluDateFormatter` is a lazily-instantiated date formatter whose time zone is set to UTC
     /// and whose format is RFC 3339.
     ///
     /// The RFC 3339 format is "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
     private static var zuluDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
-        
+
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         dateFormatter.timeZone = TimeZone(identifier: "UTC")!
-        
+
         return dateFormatter
     }()
-    
+
     /// `convertZuluDateStringToLocalDate` takes in a RFC 3339 Date `String` from the UTC time zone
     /// and converts it to a `Date` appropriate for the current time zone.
     ///
@@ -190,7 +191,7 @@ extension Date {
     internal static func convertZuluDateStringToLocalDate(_ dateString: String) -> Date? {
         return zuluDateFormatter.date(from: dateString)
     }
-    
+
     /// `convertDateToZuluString` takes in a Date and converts it to an RFC 3339 formatted String in
     /// the UTC TimeZone.
     ///
