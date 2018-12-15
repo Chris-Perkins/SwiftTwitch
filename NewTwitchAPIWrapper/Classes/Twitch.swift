@@ -86,6 +86,29 @@ public class Twitch {
             case overviewVersion2 = "overview_v2"
         }
 
+        /// `GetResult` defines the different types of results that can be retrieved from the `get`
+        /// call of the `Extension Analytics` API. Variables are included that specify the data that
+        /// was returned.
+        ///
+        /// - success: Defines that the call was successful. The included variables should be input
+        /// in the following order:
+        /// 1. URL - Specifies the URL that Twitch returned
+        /// 1. AnalyticsType - Specifies the analytics type that was returned from the API
+        /// 1. Date - Specifies the start date of the analytics result
+        /// 1. Date - Specifies the ending date of the analytics result
+        /// 1. String - Specifies the Extension ID of the analytics result
+        /// 1. String? - Specifies the pagination token; `nil` if an extension ID was used in the
+        /// call
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum GetResult {
+            case success(URL, AnalyticsType, Date, Date, String, String?)
+            case failure(Data?, URLResponse?, Error?)
+        }
+
         /// `get` will run the `Get Extension Analytics` API call of the New Twitch API.
         ///
         /// [More information about the web call is available here](
@@ -102,17 +125,23 @@ public class Twitch {
         ///   - extensionId: The extension to gather analytics for. If this is specified, only the
         /// extension with the specified ID will be analyzed.
         ///   - first: The number of objects to retrieve.
-        ///   - type: The type of report to gather.
+        ///   - type: The type of report to gather. For more information, please see documentation
+        /// on `AnalyticsType`.
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `GetResult`: `success` and `failure`. For more
+        /// information on what values are returned, please see documentation on `GetResult`
         ///
-        /// [More information available here](https://dev.twitch.tv/docs/insights/)
+        /// - seealso: `AnalyticsType`
+        /// - seealso: `GetResult`
         public static func get(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
                                after: String? = nil, startedAt: Date? = nil, endedAt: Date? = nil,
                                extensionId: String? = nil, first: Int? = nil,
-                               type: AnalyticsType? = nil) {
+                               type: AnalyticsType? = nil,
+                               completionHandler: (GetResult) -> Void) {
             var request = URLRequest(url: url)
             request.setValueToJSONContentType()
             request.httpBody =
-                getParamaters(after: after, startedAt: startedAt, endedAt: endedAt,
+                getGetParameters(after: after, startedAt: startedAt, endedAt: endedAt,
                               extensionId: extensionId, first: first, type: type).getAsData()
 
             urlSessionForInstance.dataTask(with: request) { (data, response, error) in
@@ -123,11 +152,42 @@ public class Twitch {
             }
         }
 
-        private static func getParamaters(after: String?, startedAt: Date?, endedAt: Date?,
-                                          extensionId: String?, first: Int?,
-                                          type: AnalyticsType?) -> [String: Any] {
+        /// `getParameters` is used to convert the typed Characters into a list of web request
+        /// parameters as a String-keyed Dictionary.
+        ///
+        /// - Parameters:
+        ///   - after: input
+        ///   - startedAt: input
+        ///   - endedAt: input
+        ///   - extensionId: input
+        ///   - first: input
+        ///   - type: input
+        /// - Returns: The String-keyed dictionary of parameters.
+        private static func getGetParameters(after: String?, startedAt: Date?, endedAt: Date?,
+                                             extensionId: String?, first: Int?,
+                                             type: AnalyticsType?) -> [String: Any] {
             var parametersDictionary = [String: Any]()
-            // TODO: Fill In
+            
+            if let after = after {
+                parametersDictionary[WebRequestKeys.after] = after
+            }
+            if let startedAt = startedAt {
+                parametersDictionary[WebRequestKeys.startedAt] =
+                    Date.convertDateToZuluString(startedAt)
+            }
+            if let endedAt = endedAt {
+                parametersDictionary[WebRequestKeys.endedAt] = Date.convertDateToZuluString(endedAt)
+            }
+            if let extensionId = extensionId {
+                parametersDictionary[WebRequestKeys.extensionId] = extensionId
+            }
+            if let first = first {
+                parametersDictionary[WebRequestKeys.first] = first
+            }
+            if let type = type {
+                parametersDictionary[WebRequestKeys.type] = type.rawValue
+            }
+            
             return parametersDictionary
         }
     }
