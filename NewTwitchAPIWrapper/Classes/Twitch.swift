@@ -10,7 +10,7 @@ import Foundation
 /// `Twitch` allows access to all New Twitch API functions.
 ///
 /// [The complete API reference is available here](https://dev.twitch.tv/docs/api/reference/)
-class Twitch {
+public class Twitch {
 
     /// `urlSessionForInstance` is a singleton for all Twitch API calls that will be used for.
     private static var urlSessionForInstance: URLSession = {
@@ -53,7 +53,7 @@ class Twitch {
     /// These reports are viewable and downloadable via a URL that is returned as a response.
     ///
     /// [More information is available here](https://dev.twitch.tv/docs/insights/)
-    struct ExtensionAnalytics {
+    public struct ExtensionAnalytics {
 
         /// The URL that will be used for all Extension Analytics calls.
         private static let url = URL(string: "https://api.twitch.tv/helix/analytics/extensions")!
@@ -104,10 +104,10 @@ class Twitch {
         ///   - first: The number of objects to retrieve.
         ///   - type: The type of report to gather.
         /// [More information available here](https://dev.twitch.tv/docs/insights/)
-        static func get(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
-                        after: String? = nil, startedAt: Date? = nil, endedAt: Date? = nil,
-                        extensionId: String? = nil, first: Int? = nil,
-                        type: AnalyticsType? = nil) {
+        public static func get(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                               after: String? = nil, startedAt: Date? = nil, endedAt: Date? = nil,
+                               extensionId: String? = nil, first: Int? = nil,
+                               type: AnalyticsType? = nil) {
             var request = URLRequest(url: url)
             request.setValueToJSONContentType()
             request.httpBody =
@@ -146,7 +146,7 @@ extension URLRequest {
     private static let contentTypeString = "Content-Type"
 
     /// Sets the Content-Type of this URLRequest to use application/json.
-    fileprivate mutating func setValueToJSONContentType() {
+    internal mutating func setValueToJSONContentType() {
         setValue(URLRequest.applicationJSONValue, forHTTPHeaderField: URLRequest.contentTypeString)
     }
 }
@@ -158,7 +158,47 @@ extension Dictionary where Key == String, Value == Any {
     /// Converts the dictionary to its Data representation.
     ///
     /// - Returns: The Data representation of the Dictionary.
-    func getAsData() -> Data {
+    internal func getAsData() -> Data {
         return NSKeyedArchiver.archivedData(withRootObject: self)
+    }
+}
+
+// MARK: - Date Extensions
+
+extension Date {
+    
+    /// `zuluDateFormatter` is a lazily-instantiated date formatter whose time zone is set to UTC
+    /// and whose format is RFC 3339.
+    ///
+    /// The RFC 3339 format is "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+    private static var zuluDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")!
+        
+        return dateFormatter
+    }()
+    
+    /// `convertZuluDateStringToLocalDate` takes in a RFC 3339 Date `String` from the UTC time zone
+    /// and converts it to a `Date` appropriate for the current time zone.
+    ///
+    /// The RFC 3339 format is "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+    ///
+    /// - Parameter dateString: The date string to convert
+    /// - Returns: The date that was converted to from the input `dateString`
+    internal static func convertZuluDateStringToLocalDate(_ dateString: String) -> Date? {
+        return zuluDateFormatter.date(from: dateString)
+    }
+    
+    /// `convertDateToZuluString` takes in a Date and converts it to an RFC 3339 formatted String in
+    /// the UTC TimeZone.
+    ///
+    /// The RFC 3339 format is "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+    ///
+    /// - Parameter date: The `Date` to convert to a Zulu time `String`
+    /// - Returns:
+    internal static func convertDateToZuluString(_ date: Date) -> String {
+        return zuluDateFormatter.string(from: date)
     }
 }
