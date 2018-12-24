@@ -137,22 +137,23 @@ public class Twitch {
                                after: String? = nil, startedAt: Date? = nil, endedAt: Date? = nil,
                                extensionId: String? = nil, first: Int? = nil,
                                type: AnalyticsType? = nil,
-                               completionHandler: (GetResult) -> Void) {
+                               completionHandler: @escaping (GetResult) -> Void) {
             var request = URLRequest(url: url)
             request.setValueToJSONContentType()
             request.httpBody =
-                getGetParameters(after: after, startedAt: startedAt, endedAt: endedAt,
-                              extensionId: extensionId, first: first, type: type).getAsData()
+                convertGetParametersToDict(after: after, startedAt: startedAt, endedAt: endedAt,
+                                           extensionId: extensionId, first: first, type: type)
+                    .getAsData()
 
             urlSessionForInstance.dataTask(with: request) { (data, response, error) in
                 if Twitch.getIfErrorOccurred(data: data, response: response, error: error) {
-                    // TODO: Unsuccessful Completion Call
+                    completionHandler(GetResult.failure(data, response, error))
                 }
                 // TODO: Parsing
             }
         }
 
-        /// `getParameters` is used to convert the typed Characters into a list of web request
+        /// `convertGetParametersToDict` is used to convert the typed Characters into a list of web request
         /// parameters as a String-keyed Dictionary.
         ///
         /// - Parameters:
@@ -163,11 +164,12 @@ public class Twitch {
         ///   - first: input
         ///   - type: input
         /// - Returns: The String-keyed dictionary of parameters.
-        private static func getGetParameters(after: String?, startedAt: Date?, endedAt: Date?,
-                                             extensionId: String?, first: Int?,
-                                             type: AnalyticsType?) -> [String: Any] {
+        private static func convertGetParametersToDict(after: String?, startedAt: Date?,
+                                                       endedAt: Date?, extensionId: String?,
+                                                       first: Int?,
+                                                       type: AnalyticsType?) -> [String: Any] {
             var parametersDictionary = [String: Any]()
-            
+
             if let after = after {
                 parametersDictionary[WebRequestKeys.after] = after
             }
@@ -187,7 +189,7 @@ public class Twitch {
             if let type = type {
                 parametersDictionary[WebRequestKeys.type] = type.rawValue
             }
-            
+
             return parametersDictionary
         }
     }
