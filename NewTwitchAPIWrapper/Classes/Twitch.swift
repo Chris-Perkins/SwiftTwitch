@@ -12,10 +12,10 @@ import Foundation
 /// [The complete API reference is available here](https://dev.twitch.tv/docs/api/reference/)
 public class Twitch {
 
+    // TODO: Do not use the shared singleton as it may have its delegate set up already. This may
+    // cause unexpected delegate method receivals.
     /// `urlSessionForInstance` is a singleton for all Twitch API calls that will be used for.
-    private static var urlSessionForInstance: URLSession = {
-        return URLSession(configuration: URLSessionConfiguration())
-    }()
+    private static let urlSessionForInstance: URLSession = URLSession.shared
 
     /// `RequestHeaderTypes` specifies the different types of headers that we'll use in our web
     /// requests
@@ -48,6 +48,8 @@ public class Twitch {
         }
         return false
     }
+
+    // MARK: - Extension Analytics
 
     /// Extension Analytics provides insight into the extensions that the authenticated user uses.
     /// These reports are viewable and downloadable via a URL that is returned as a response.
@@ -139,6 +141,13 @@ public class Twitch {
                                type: AnalyticsType? = nil,
                                completionHandler: @escaping (GetResult) -> Void) {
             var request = URLRequest(url: url)
+            do {
+                try request.addTokenAuthorizationHeader(fromTokenManager: tokenManager)
+            } catch {
+                completionHandler(GetResult.failure(nil, nil, error))
+                return
+            }
+
             request.setValueToJSONContentType()
             request.httpBody =
                 convertGetParametersToDict(after: after, startedAt: startedAt, endedAt: endedAt,
@@ -146,11 +155,33 @@ public class Twitch {
                     .getAsData()
 
             urlSessionForInstance.dataTask(with: request) { (data, response, error) in
-                if Twitch.getIfErrorOccurred(data: data, response: response, error: error) {
+                print(data == nil)
+                guard !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
                     completionHandler(GetResult.failure(data, response, error))
+                    return
                 }
-                // TODO: Parsing
-            }
+
+                guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary() else {
+                    completionHandler(GetResult.failure(data, response, error))
+                    return
+                }
+
+                guard let urlStr = dataAsDictionary[WebRequestKeys.url] as? String,
+                    let url = URL(string: urlStr),
+                    let extensionId = dataAsDictionary[WebRequestKeys.extensionId] as? String,
+                    let reportTypeStr = dataAsDictionary[WebRequestKeys.type] as? String,
+                    let reportType = getAnalyticsType(from: reportTypeStr),
+                    let startedAtStr = dataAsDictionary[WebRequestKeys.startedAt] as? String,
+                    let startedAtDate = Date.convertZuluDateStringToLocalDate(startedAtStr),
+                    let endedAtStr = dataAsDictionary[WebRequestKeys.endedAt] as? String,
+                    let endedAtDate = Date.convertZuluDateStringToLocalDate(endedAtStr) else {
+                        completionHandler(GetResult.failure(data, response, error))
+                        return
+                }
+                let paginationToken = dataAsDictionary[WebRequestKeys.pagination] as? String
+                completionHandler(GetResult.success(url, reportType, startedAtDate, endedAtDate,
+                                                    extensionId, paginationToken))
+            }.resume()
         }
 
         /// `convertGetParametersToDict` is used to convert the typed Characters into a list of web request
@@ -192,6 +223,24 @@ public class Twitch {
 
             return parametersDictionary
         }
+        
+        /// `getAnalyticsType` is used to retrieve the type of Analytics Report given its String
+        /// representation.
+        ///
+        /// - Parameter analyticsTypeString: The analytics type string to retrieve an
+        /// `AnalyticsType` for
+        /// - Returns: An `AnalyticsType` corresponding to the input `String` if it exists; nil if
+        /// no such relationship exists.
+        private static func getAnalyticsType(from analyticsTypeString: String) -> AnalyticsType? {
+            switch analyticsTypeString {
+            case AnalyticsType.overviewVersion1.rawValue:
+                return AnalyticsType.overviewVersion1
+            case AnalyticsType.overviewVersion2.rawValue:
+                return AnalyticsType.overviewVersion2
+            default:
+                return nil
+            }
+        }
     }
 
     /// Private initializer. The entire Twitch API can be accessed through static methods
@@ -201,6 +250,14 @@ public class Twitch {
 // MARK: - URLRequest Extensions
 
 extension URLRequest {
+    
+    /// `AuthorizationError` is used to specify the types of `Error`s that may occur while
+    /// attempting to add an authorization token to a URLRequest.
+    ///
+    /// - nilAccessToken: Used to specify that the access token was unexpectedly nil
+    internal enum AuthorizationError: Error {
+        case nilAccessToken
+    }
 
     /// The application JSON value.
     private static let applicationJSONValue = "application/json"
@@ -208,9 +265,32 @@ extension URLRequest {
     /// The Content-Type string key.
     private static let contentTypeString = "Content-Type"
 
+    /// The Authorization Header specifier.
+    private static let authorizationHeader = "Authorization"
+    
+    /// The prefix of Authorization headers.
+    ///
+    /// This value is in the format of "$PREFIX $VALUE".
+    private static let authorizationValueBearerHeaderPrefix = "Bearer"
+
     /// Sets the Content-Type of this URLRequest to use application/json.
     internal mutating func setValueToJSONContentType() {
         setValue(URLRequest.applicationJSONValue, forHTTPHeaderField: URLRequest.contentTypeString)
+    }
+    
+    /// `addTokenAuthorizationHeader` is used to add an Authorization header to a `URLRequest` whose
+    /// recipient is meant for the New Twitch API. This function will use the provided
+    /// `TwitchTokenManager` to set the token value.
+    ///
+    /// - Parameter tokenManager: The `TwitchTokenManager` whose token should be used as
+    /// authorization
+    internal mutating func addTokenAuthorizationHeader(
+        fromTokenManager tokenManager: TwitchTokenManager) throws {
+        guard let token = tokenManager.accessToken else {
+            throw AuthorizationError.nilAccessToken
+        }
+        setValue("\(URLRequest.authorizationValueBearerHeaderPrefix) \(token)",
+            forHTTPHeaderField: URLRequest.authorizationHeader)
     }
 }
 
@@ -218,11 +298,23 @@ extension URLRequest {
 
 extension Dictionary where Key == String, Value == Any {
 
-    /// Converts the dictionary to its Data representation.
+    /// Converts the `Dictionary` to its `Data` representation.
     ///
-    /// - Returns: The Data representation of the Dictionary.
+    /// - Returns: The `Data` representation of the `Dictionary`.
     internal func getAsData() -> Data {
         return NSKeyedArchiver.archivedData(withRootObject: self)
+    }
+}
+
+// MARK: - Data Extensions
+
+extension Data {
+
+    /// Gets a String-keyed `Dictionary` object from a `Data` object.
+    ///
+    /// - Returns: The nullable String-keyed `Dictionary` representation of the `Data`.
+    internal func getAsDictionary() -> Dictionary<String, Any>? {
+        return NSKeyedUnarchiver.unarchiveObject(with: self) as? Dictionary<String, Any>
     }
 }
 

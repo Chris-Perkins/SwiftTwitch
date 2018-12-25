@@ -7,11 +7,26 @@
 //
 
 import UIKit
+import NewTwitchAPIWrapper
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        Twitch.ExtensionAnalytics.get { (result) in
+            switch result {
+            case .failure(let data, let response, let error):
+                if let data = data {
+                    print(NSKeyedUnarchiver.unarchiveObject(with: data) as? Dictionary<String, Any>)
+                }
+                print(response)
+                print(error)
+            case .success(let url, let analyticsType, let start, let end, let t, let f):
+                print(url)
+            }
+        }
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
 
