@@ -23,6 +23,20 @@ public class Twitch {
         static let post = "POST"
         static let get = "GET"
     }
+    
+    /// `WebRequestKeys` define the web request keys for both resolving results and sending requests
+    /// for the New Twitch API.
+    private struct WebRequestKeys {
+        static let after = "after"
+        static let endedAt = "ended_at"
+        static let extensionId = "extension_id"
+        static let first = "first"
+        static let gameId = "game_id"
+        static let pagination = "pagination"
+        static let startedAt = "started_at"
+        static let type = "type"
+        static let url = "URL"
+    }
 
     /// `getIfErrorOccurred` is a quick function used by URLTask Completion Handlers for determining
     /// if an error occurred during the web request.
@@ -55,20 +69,6 @@ public class Twitch {
     ///
     /// [More information is available here](https://dev.twitch.tv/docs/insights/)
     public struct Analytics {
-
-        /// `WebRequestKeys` define the web request keys for both resolving results and sending
-        /// requests for the `Get Extension Analytics` call of the New Twitch API.
-        private struct WebRequestKeys {
-            static let after = "after"
-            static let endedAt = "ended_at"
-            static let extensionId = "extension_id"
-            static let first = "first"
-            static let gameId = "game_id"
-            static let pagination = "pagination"
-            static let startedAt = "started_at"
-            static let type = "type"
-            static let url = "URL"
-        }
 
         /// `type` defines the different types of extension analytics reports.
         /// `overviewVersion1` returns analytics for the first 90 days, and `overviewVersion2`
