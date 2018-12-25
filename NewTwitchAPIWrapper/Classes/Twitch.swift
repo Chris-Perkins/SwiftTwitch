@@ -48,7 +48,7 @@ public class Twitch {
         return false
     }
 
-    // MARK: - Extension Analytics
+    // MARK: - Analytics
 
     /// Extension Analytics provides insight into the extensions that the authenticated user uses.
     /// These reports are viewable and downloadable via a URL that is returned as a response.
@@ -111,7 +111,8 @@ public class Twitch {
             case failure(Data?, URLResponse?, Error?)
         }
 
-        /// `get` will run the `Get Extension Analytics` API call of the New Twitch API.
+        /// `getExtensionAnalytics` will run the `Get Extension Analytics` API call of the New
+        /// Twitch API.
         ///
         /// [More information about the web call is available here](
         /// https://dev.twitch.tv/docs/api/reference/#get-extension-analytics)
@@ -150,8 +151,8 @@ public class Twitch {
 
             request.setValueToJSONContentType()
             request.httpBody =
-                convertGetExtensionAnalyticsToDict(after: after, startedAt: startedAt, endedAt: endedAt,
-                                                   extensionId: extensionId, first: first, type: type).getAsData()
+                convertGetExtensionAnalyticsParamsToDict(after: after, startedAt: startedAt, endedAt: endedAt,
+                                                         extensionId: extensionId, first: first, type: type).getAsData()
 
             urlSessionForInstance.dataTask(with: request) { (data, response, error) in
                 print(data == nil)
@@ -185,8 +186,9 @@ public class Twitch {
             }
         }
 
-        /// `convertGetExtensionAnalyticsToDict` is used to convert the typed Characters into a list
-        /// of web request parameters as a String-keyed Dictionary.
+        /// `convertGetExtensionAnalyticsParamsToDict` is used to convert the typed parameters into
+        /// a list of web request parameters as a String-keyed Dictionary for a
+        /// `getExtensionAnalytics` method call.
         ///
         /// - Parameters:
         ///   - after: input
@@ -196,9 +198,10 @@ public class Twitch {
         ///   - first: input
         ///   - type: input
         /// - Returns: The String-keyed `Dictionary` of parameters.
-        private static func convertGetExtensionAnalyticsToDict(after: String?, startedAt: Date?, endedAt: Date?,
-                                                               extensionId: String?, first: Int?,
-                                                               type: AnalyticsType?) -> [String: Any] {
+        private static func convertGetExtensionAnalyticsParamsToDict(after: String?, startedAt: Date?,
+                                                                     endedAt: Date?, extensionId: String?,
+                                                                     first: Int?,
+                                                                     type: AnalyticsType?) -> [String: Any] {
             var parametersDictionary = [String: Any]()
 
             if let after = after {
@@ -223,7 +226,47 @@ public class Twitch {
 
             return parametersDictionary
         }
-        
+
+        /// `convertGetGameAnalyticsParamsToDict` is used to convert the typed parameters into a
+        /// list of web request parameters as a String-keyed Dictionary for a `getGameAnalytics`
+        /// method call.
+        ///
+        /// - Parameters:
+        ///   - after: input
+        ///   - startedAt: input
+        ///   - endedAt: input
+        ///   - extensionId: input
+        ///   - first: input
+        ///   - type: input
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertGameAnalyticsParamsToDict(after: String?, startedAt: Date?, endedAt: Date?,
+                                                             gameId: String?, first: Int?,
+                                                             type: AnalyticsType?) -> [String: Any] {
+            var parametersDictionary = [String: Any]()
+
+            if let after = after {
+                parametersDictionary[WebRequestKeys.after] = after
+            }
+            if let startedAt = startedAt {
+                parametersDictionary[WebRequestKeys.startedAt] =
+                    Date.convertDateToZuluString(startedAt)
+            }
+            if let endedAt = endedAt {
+                parametersDictionary[WebRequestKeys.endedAt] = Date.convertDateToZuluString(endedAt)
+            }
+            if let gameId = gameId {
+                parametersDictionary[WebRequestKeys.gameId] = gameId
+            }
+            if let first = first {
+                parametersDictionary[WebRequestKeys.first] = first
+            }
+            if let type = type {
+                parametersDictionary[WebRequestKeys.type] = type.rawValue
+            }
+
+            return parametersDictionary
+        }
+
         /// `getAnalyticsType` is used to retrieve the type of Analytics Report given its String
         /// representation.
         ///
@@ -250,7 +293,7 @@ public class Twitch {
 // MARK: - URLRequest Extensions
 
 extension URLRequest {
-    
+
     /// `AuthorizationError` is used to specify the types of `Error`s that may occur while
     /// attempting to add an authorization token to a URLRequest.
     ///
@@ -267,7 +310,7 @@ extension URLRequest {
 
     /// The Authorization Header specifier.
     private static let authorizationHeader = "Authorization"
-    
+
     /// The prefix of Authorization headers.
     ///
     /// This value is in the format of "$PREFIX $VALUE".
@@ -277,7 +320,7 @@ extension URLRequest {
     internal mutating func setValueToJSONContentType() {
         setValue(URLRequest.applicationJSONValue, forHTTPHeaderField: URLRequest.contentTypeString)
     }
-    
+
     /// `addTokenAuthorizationHeader` is used to add an Authorization header to a `URLRequest` whose
     /// recipient is meant for the New Twitch API. This function will use the provided
     /// `TwitchTokenManager` to set the token value.
