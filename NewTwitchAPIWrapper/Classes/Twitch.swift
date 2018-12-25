@@ -56,9 +56,6 @@ public class Twitch {
     /// [More information is available here](https://dev.twitch.tv/docs/insights/)
     public struct Analytics {
 
-        /// The URL that will be used for all Extension Analytics calls.
-        private static let url = URL(string: "https://api.twitch.tv/helix/analytics/extensions")!
-
         /// `WebRequestKeys` define the web request keys for both resolving results and sending
         /// requests for the `Get Extension Analytics` call of the New Twitch API.
         private struct WebRequestKeys {
@@ -110,6 +107,9 @@ public class Twitch {
             case success(URL, AnalyticsType, Date, Date, String, String?)
             case failure(Data?, URLResponse?, Error?)
         }
+
+        /// The URL that will be used for all Extension Analytics calls.
+        private static let url = URL(string: "https://api.twitch.tv/helix/analytics/extensions")!
 
         /// `getExtensionAnalytics` will run the `Get Extension Analytics` API call of the New
         /// Twitch API.
