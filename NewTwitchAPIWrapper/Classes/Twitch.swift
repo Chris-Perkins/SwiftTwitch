@@ -159,8 +159,9 @@ public class Twitch {
         ///   - type: The type of report to gather. For more information, please see documentation
         /// on `AnalyticsType`.
         ///   - completionHandler: The function that should be run whenever the retrieval is
-        /// successful. There are two types of `GetResult`: `success` and `failure`. For more
-        /// information on what values are returned, please see documentation on `GetResult`
+        /// successful. There are two types of `GetExtensionAnalyticsResult`: `success` and
+        /// `failure`. For more information on what values are returned, please see documentation on
+        /// `GetExtensionAnalyticsResult`
         ///
         /// - seealso: `AnalyticsType`
         /// - seealso: `GetExtensionAnalyticsResult`
@@ -232,8 +233,9 @@ public class Twitch {
         ///   - type: The type of report to gather. For more information, please see documentation
         /// on `AnalyticsType`.
         ///   - completionHandler: The function that should be run whenever the retrieval is
-        /// successful. There are two types of `GetResult`: `success` and `failure`. For more
-        /// information on what values are returned, please see documentation on `GetResult`
+        /// successful. There are two types of `GetGameAnalyticsResult`: `success` and `failure`.
+        /// For more information on what values are returned, please see documentation on
+        /// `GetGameAnalyticsResult`
         ///
         /// - seealso: `AnalyticsType`
         /// - seealso: `GetGameAnalyticsResult`
