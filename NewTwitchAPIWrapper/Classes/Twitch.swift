@@ -14,8 +14,8 @@ public class Twitch {
 
     // TODO: Do not use the shared singleton as it may have its delegate set up already. This may
     // cause unexpected delegate method receivals.
-    /// `urlSessionForInstance` is a singleton for all Twitch API calls that will be used for.
-    private static let urlSessionForInstance: URLSession = URLSession.shared
+    /// `urlSessionForWrapper` is a singleton for all Twitch API calls that will be used for.
+    private static let urlSessionForWrapper: URLSession = URLSession.shared
 
     /// `RequestHeaderTypes` specifies the different types of headers that we'll use in our web
     /// requests
@@ -85,9 +85,9 @@ public class Twitch {
             case overviewVersion2 = "overview_v2"
         }
 
-        /// `GetResult` defines the different types of results that can be retrieved from the `get`
-        /// call of the `Extension Analytics` API. Variables are included that specify the data that
-        /// was returned.
+        /// `GetResult` defines the different types of results that can be retrieved from the
+        /// `getExtensionAnalytics` call of the `Analytics` API. Variables are included that specify
+        /// the data that was returned.
         ///
         /// - success: Defines that the call was successful. The included variables should be input
         /// in the following order:
@@ -108,8 +108,36 @@ public class Twitch {
             case failure(Data?, URLResponse?, Error?)
         }
 
+        /// `GetResult` defines the different types of results that can be retrieved from the
+        /// `getGameAnalytics` call of the `Analytics` API. Variables are included that specify
+        /// the data that was returned.
+        ///
+        /// - success: Defines that the call was successful. The included variables should be input
+        /// in the following order:
+        /// 1. URL - Specifies the URL that Twitch returned
+        /// 1. AnalyticsType - Specifies the analytics type that was returned from the API
+        /// 1. Date - Specifies the start date of the analytics result
+        /// 1. Date - Specifies the ending date of the analytics result
+        /// 1. String - Specifies the Game ID of the analytics result
+        /// 1. String? - Specifies the pagination token; `nil` if an extension ID was used in the
+        /// call
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum GetGameAnalyticsResult {
+            case success(URL, AnalyticsType, Date, Date, String, String?)
+            case failure(Data?, URLResponse?, Error?)
+        }
+
         /// The URL that will be used for all Extension Analytics calls.
-        private static let url = URL(string: "https://api.twitch.tv/helix/analytics/extensions")!
+        private static let extensionAnalyticsURL =
+            URL(string: "https://api.twitch.tv/helix/analytics/extensions")!
+
+        /// The URL that will be used for all Game Analytics calls.
+        private static let gameAnalyticsURL =
+            URL(string: "https://api.twitch.tv/helix/analytics/games")!
 
         /// `getExtensionAnalytics` will run the `Get Extension Analytics` API call of the New
         /// Twitch API.
@@ -135,13 +163,13 @@ public class Twitch {
         /// information on what values are returned, please see documentation on `GetResult`
         ///
         /// - seealso: `AnalyticsType`
-        /// - seealso: `GetResult`
+        /// - seealso: `GetExtensionAnalyticsResult`
         public static func getExtensionAnalytics(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
                                                  after: String? = nil, startedAt: Date? = nil, endedAt: Date? = nil,
                                                  extensionId: String? = nil, first: Int? = nil,
                                                  type: AnalyticsType? = nil,
                                                  completionHandler: @escaping (GetExtensionAnalyticsResult) -> Void) {
-            var request = URLRequest(url: url)
+            var request = URLRequest(url: extensionAnalyticsURL)
             do {
                 try request.addTokenAuthorizationHeader(fromTokenManager: tokenManager)
             } catch {
@@ -154,8 +182,7 @@ public class Twitch {
                 convertGetExtensionAnalyticsParamsToDict(after: after, startedAt: startedAt, endedAt: endedAt,
                                                          extensionId: extensionId, first: first, type: type).getAsData()
 
-            urlSessionForInstance.dataTask(with: request) { (data, response, error) in
-                print(data == nil)
+            urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
                 guard !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
                     completionHandler(GetExtensionAnalyticsResult.failure(data, response, error))
                     return
@@ -175,15 +202,86 @@ public class Twitch {
                     let startedAtDate = Date.convertZuluDateStringToLocalDate(startedAtStr),
                     let endedAtStr = dataAsDictionary[WebRequestKeys.endedAt] as? String,
                     let endedAtDate = Date.convertZuluDateStringToLocalDate(endedAtStr) else {
-                        completionHandler(
-                            GetExtensionAnalyticsResult.failure(data, response, error))
+                        completionHandler(GetExtensionAnalyticsResult.failure(data, response, error))
                         return
                 }
                 let paginationToken = dataAsDictionary[WebRequestKeys.pagination] as? String
                 completionHandler(
                     GetExtensionAnalyticsResult.success(url, reportType, startedAtDate, endedAtDate,
                                                         extensionId, paginationToken))
+            }.resume()
+        }
+
+        /// `getGameAnalytics` will run the `Get Game Analytics` API call of the New
+        /// Twitch API.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#get-game-analytics)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - after: The pagination token of the call. This parameter is ignored if the
+        /// `gameId` parameter is specified.
+        ///   - startedAt: The date after which all analytics should start after. `endedAt` must
+        /// also be specified.
+        ///   - endedAt: The date before which analytics should be gathered for. `startedAt` must
+        /// also be specified.
+        ///   - gameId: The extension to gather analytics for. If this is specified, only the
+        /// game with the specified ID will be analyzed.
+        ///   - first: The number of objects to retrieve.
+        ///   - type: The type of report to gather. For more information, please see documentation
+        /// on `AnalyticsType`.
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `GetResult`: `success` and `failure`. For more
+        /// information on what values are returned, please see documentation on `GetResult`
+        ///
+        /// - seealso: `AnalyticsType`
+        /// - seealso: `GetGameAnalyticsResult`
+        public static func getGameAnalytics(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                            after: String? = nil, startedAt: Date? = nil, endedAt: Date? = nil,
+                                            gameId: String? = nil, first: Int? = nil, type: AnalyticsType? = nil,
+                                            completionHandler: @escaping (GetGameAnalyticsResult) -> Void) {
+            var request = URLRequest(url: gameAnalyticsURL)
+            do {
+                try request.addTokenAuthorizationHeader(fromTokenManager: tokenManager)
+            } catch {
+                completionHandler(GetGameAnalyticsResult.failure(nil, nil, error))
+                return
             }
+
+            request.setValueToJSONContentType()
+            request.httpBody =
+                convertGameAnalyticsParamsToDict(after: after, startedAt: startedAt, endedAt: endedAt,
+                                                gameId: gameId, first: first, type: type).getAsData()
+
+            urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
+                guard !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
+                    completionHandler(GetGameAnalyticsResult.failure(data, response, error))
+                    return
+                }
+
+                guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary() else {
+                    completionHandler(GetGameAnalyticsResult.failure(data, response, error))
+                    return
+                }
+
+                guard let urlStr = dataAsDictionary[WebRequestKeys.url] as? String,
+                    let url = URL(string: urlStr),
+                    let gameId = dataAsDictionary[WebRequestKeys.gameId] as? String,
+                    let reportTypeStr = dataAsDictionary[WebRequestKeys.type] as? String,
+                    let reportType = getAnalyticsType(from: reportTypeStr),
+                    let startedAtStr = dataAsDictionary[WebRequestKeys.startedAt] as? String,
+                    let startedAtDate = Date.convertZuluDateStringToLocalDate(startedAtStr),
+                    let endedAtStr = dataAsDictionary[WebRequestKeys.endedAt] as? String,
+                    let endedAtDate = Date.convertZuluDateStringToLocalDate(endedAtStr) else {
+                        completionHandler(GetGameAnalyticsResult.failure(data, response, error))
+                        return
+                }
+                let paginationToken = dataAsDictionary[WebRequestKeys.pagination] as? String
+                completionHandler(
+                    GetGameAnalyticsResult.success(url, reportType, startedAtDate, endedAtDate, gameId,
+                                                   paginationToken))
+            }.resume()
         }
 
         /// `convertGetExtensionAnalyticsParamsToDict` is used to convert the typed parameters into
