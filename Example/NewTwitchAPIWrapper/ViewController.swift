@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Twitch.ExtensionAnalytics.get { (result) in
+        Twitch.Analytics.getExtensionAnalytics { (result) in
             switch result {
             case .failure(let data, let response, let error):
                 if let data = data {

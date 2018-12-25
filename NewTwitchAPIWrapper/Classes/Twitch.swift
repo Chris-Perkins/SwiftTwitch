@@ -38,8 +38,7 @@ public class Twitch {
     ///   - response: The response received
     ///   - error: The error received
     /// - Returns: Whether or not an error occured during the web request.
-    private static func getIfErrorOccurred(data: Data?, response: URLResponse?,
-                                           error: Error?) -> Bool {
+    private static func getIfErrorOccurred(data: Data?, response: URLResponse?, error: Error?) -> Bool {
         guard let response = response, data == nil || error != nil else {
             return true
         }
@@ -55,7 +54,7 @@ public class Twitch {
     /// These reports are viewable and downloadable via a URL that is returned as a response.
     ///
     /// [More information is available here](https://dev.twitch.tv/docs/insights/)
-    public struct ExtensionAnalytics {
+    public struct Analytics {
 
         /// The URL that will be used for all Extension Analytics calls.
         private static let url = URL(string: "https://api.twitch.tv/helix/analytics/extensions")!
@@ -67,6 +66,7 @@ public class Twitch {
             static let endedAt = "ended_at"
             static let extensionId = "extension_id"
             static let first = "first"
+            static let gameId = "game_id"
             static let pagination = "pagination"
             static let startedAt = "started_at"
             static let type = "type"
@@ -106,7 +106,7 @@ public class Twitch {
         /// 1. Data? - The data that was returned by the API
         /// 1. URLResponse? - The response from the URL task
         /// 1. Error? - The error that was returned from the API call
-        public enum GetResult {
+        public enum GetExtensionAnalyticsResult {
             case success(URL, AnalyticsType, Date, Date, String, String?)
             case failure(Data?, URLResponse?, Error?)
         }
@@ -135,34 +135,33 @@ public class Twitch {
         ///
         /// - seealso: `AnalyticsType`
         /// - seealso: `GetResult`
-        public static func get(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
-                               after: String? = nil, startedAt: Date? = nil, endedAt: Date? = nil,
-                               extensionId: String? = nil, first: Int? = nil,
-                               type: AnalyticsType? = nil,
-                               completionHandler: @escaping (GetResult) -> Void) {
+        public static func getExtensionAnalytics(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                                 after: String? = nil, startedAt: Date? = nil, endedAt: Date? = nil,
+                                                 extensionId: String? = nil, first: Int? = nil,
+                                                 type: AnalyticsType? = nil,
+                                                 completionHandler: @escaping (GetExtensionAnalyticsResult) -> Void) {
             var request = URLRequest(url: url)
             do {
                 try request.addTokenAuthorizationHeader(fromTokenManager: tokenManager)
             } catch {
-                completionHandler(GetResult.failure(nil, nil, error))
+                completionHandler(GetExtensionAnalyticsResult.failure(nil, nil, error))
                 return
             }
 
             request.setValueToJSONContentType()
             request.httpBody =
-                convertGetParametersToDict(after: after, startedAt: startedAt, endedAt: endedAt,
-                                           extensionId: extensionId, first: first, type: type)
-                    .getAsData()
+                convertGetExtensionAnalyticsToDict(after: after, startedAt: startedAt, endedAt: endedAt,
+                                                   extensionId: extensionId, first: first, type: type).getAsData()
 
             urlSessionForInstance.dataTask(with: request) { (data, response, error) in
                 print(data == nil)
                 guard !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
-                    completionHandler(GetResult.failure(data, response, error))
+                    completionHandler(GetExtensionAnalyticsResult.failure(data, response, error))
                     return
                 }
 
                 guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary() else {
-                    completionHandler(GetResult.failure(data, response, error))
+                    completionHandler(GetExtensionAnalyticsResult.failure(data, response, error))
                     return
                 }
 
@@ -175,17 +174,19 @@ public class Twitch {
                     let startedAtDate = Date.convertZuluDateStringToLocalDate(startedAtStr),
                     let endedAtStr = dataAsDictionary[WebRequestKeys.endedAt] as? String,
                     let endedAtDate = Date.convertZuluDateStringToLocalDate(endedAtStr) else {
-                        completionHandler(GetResult.failure(data, response, error))
+                        completionHandler(
+                            GetExtensionAnalyticsResult.failure(data, response, error))
                         return
                 }
                 let paginationToken = dataAsDictionary[WebRequestKeys.pagination] as? String
-                completionHandler(GetResult.success(url, reportType, startedAtDate, endedAtDate,
-                                                    extensionId, paginationToken))
-            }.resume()
+                completionHandler(
+                    GetExtensionAnalyticsResult.success(url, reportType, startedAtDate, endedAtDate,
+                                                        extensionId, paginationToken))
+            }
         }
 
-        /// `convertGetParametersToDict` is used to convert the typed Characters into a list of web request
-        /// parameters as a String-keyed Dictionary.
+        /// `convertGetExtensionAnalyticsToDict` is used to convert the typed Characters into a list
+        /// of web request parameters as a String-keyed Dictionary.
         ///
         /// - Parameters:
         ///   - after: input
@@ -194,11 +195,10 @@ public class Twitch {
         ///   - extensionId: input
         ///   - first: input
         ///   - type: input
-        /// - Returns: The String-keyed dictionary of parameters.
-        private static func convertGetParametersToDict(after: String?, startedAt: Date?,
-                                                       endedAt: Date?, extensionId: String?,
-                                                       first: Int?,
-                                                       type: AnalyticsType?) -> [String: Any] {
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertGetExtensionAnalyticsToDict(after: String?, startedAt: Date?, endedAt: Date?,
+                                                               extensionId: String?, first: Int?,
+                                                               type: AnalyticsType?) -> [String: Any] {
             var parametersDictionary = [String: Any]()
 
             if let after = after {
@@ -243,7 +243,7 @@ public class Twitch {
         }
     }
 
-    /// Private initializer. The entire Twitch API can be accessed through static methods
+    /// Private initializer. The entire Twitch API can be accessed through static methods.
     private init() { }
 }
 
@@ -284,8 +284,7 @@ extension URLRequest {
     ///
     /// - Parameter tokenManager: The `TwitchTokenManager` whose token should be used as
     /// authorization
-    internal mutating func addTokenAuthorizationHeader(
-        fromTokenManager tokenManager: TwitchTokenManager) throws {
+    internal mutating func addTokenAuthorizationHeader(fromTokenManager tokenManager: TwitchTokenManager) throws {
         guard let token = tokenManager.accessToken else {
             throw AuthorizationError.nilAccessToken
         }
