@@ -1,5 +1,5 @@
 //
-//  GetExtensionAnalyticsData.swift
+//  GetGameAnalyticsData.swift
 //  NewTwitchAPIWrapper
 //
 //  Created by Christopher Perkins on 12/28/18.
@@ -7,16 +7,16 @@
 
 import Marshal
 
-/// `GetExtensionAnalyticsData` is a class that is used to provide a robust interface for data
-/// received from the `Get Extension Analytics` call of the New Twitch API.
-public struct GetExtensionAnalyticsData: Unmarshaling {
+/// `GetGameAnalyticsData` is a class that is used to provide a robust interface for data
+/// received from the `Get Game Analytics` call of the New Twitch API.
+public struct GetGameAnalyticsData: Unmarshaling {
 
     /// `url` specifies the URL that Twitch returned where the analytics report is contained.
     public let url: URL
 
-    /// `extensionId` specifies the ID of the extension that the report at the specified URL
-    /// contained in `url` is being analyzed.
-    public let extensionId: String
+    /// `gameId` specifies the ID of the game that the report at the specified URL contained in
+    /// `url` is being analyzed.
+    public let gameId: String
 
     /// `reportType` specifies the type of report of the report at the specified URL contained in
     /// `url`.
@@ -39,7 +39,7 @@ public struct GetExtensionAnalyticsData: Unmarshaling {
     /// - Throws: If data is missing that was expected to be non-`nil`.
     public init(object: MarshaledObject) throws {
         url = try object.value(for: Twitch.WebRequestKeys.url)
-        extensionId = try object.value(for: Twitch.WebRequestKeys.extensionId)
+        gameId = try object.value(for: Twitch.WebRequestKeys.gameId)
         reportType = try object.value(for: Twitch.WebRequestKeys.type)
         startedAt = try object.value(for: Twitch.WebRequestKeys.startedAt)
         endedAt = try object.value(for: Twitch.WebRequestKeys.endedAt)

@@ -85,7 +85,6 @@ public class Twitch {
             case overviewVersion2 = "overview_v2"
         }
 
-        // TODO: Change to an object with variables
         /// `GetExtensionAnalyticsResult` defines the different types of results that can be
         /// retrieved from the `getExtensionAnalytics` call of the `Analytics` API. Variables are
         /// included that specify the data that was returned.
@@ -102,27 +101,19 @@ public class Twitch {
             case failure(Data?, URLResponse?, Error?)
         }
 
-        // TODO: Change to an object with variables
         /// `GetGameAnalyticsResult` defines the different types of results that can be retrieved
         /// from the `getGameAnalytics` call of the `Analytics` API. Variables are included that
         /// specify the data that was returned.
         ///
-        /// - success: Defines that the call was successful. The included variables should be input
-        /// in the following order:
-        /// 1. URL - Specifies the URL that Twitch returned
-        /// 1. AnalyticsType - Specifies the analytics type that was returned from the API
-        /// 1. Date - Specifies the start date of the analytics result
-        /// 1. Date - Specifies the ending date of the analytics result
-        /// 1. String - Specifies the Game ID of the analytics result
-        /// 1. String? - Specifies the pagination token; `nil` if an extension ID was used in the
-        /// call
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// game analytics data.
         /// - failure: Defines that the call failed. Returns all data corresponding to the failed
         /// call. These data pieces are as follows:
         /// 1. Data? - The data that was returned by the API
         /// 1. URLResponse? - The response from the URL task
         /// 1. Error? - The error that was returned from the API call
         public enum GetGameAnalyticsResult {
-            case success(URL, AnalyticsType, Date, Date, String, String?)
+            case success([GetGameAnalyticsData])
             case failure(Data?, URLResponse?, Error?)
         }
 
@@ -250,27 +241,13 @@ public class Twitch {
                     return
                 }
 
-                guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary() else {
+                guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
+                    let gameAnalyticsData: [GetGameAnalyticsData] =
+                    try? dataAsDictionary.value(for: WebRequestKeys.data) else {
                     completionHandler(GetGameAnalyticsResult.failure(data, response, error))
                     return
                 }
-
-                guard let urlStr = dataAsDictionary[WebRequestKeys.url] as? String,
-                    let url = URL(string: urlStr),
-                    let gameId = dataAsDictionary[WebRequestKeys.gameId] as? String,
-                    let reportTypeStr = dataAsDictionary[WebRequestKeys.type] as? String,
-                    let reportType = getAnalyticsType(from: reportTypeStr),
-                    let startedAtStr = dataAsDictionary[WebRequestKeys.startedAt] as? String,
-                    let startedAtDate = Date.convertZuluDateStringToLocalDate(startedAtStr),
-                    let endedAtStr = dataAsDictionary[WebRequestKeys.endedAt] as? String,
-                    let endedAtDate = Date.convertZuluDateStringToLocalDate(endedAtStr) else {
-                        completionHandler(GetGameAnalyticsResult.failure(data, response, error))
-                        return
-                }
-                let paginationToken = dataAsDictionary[WebRequestKeys.pagination] as? String
-                completionHandler(
-                    GetGameAnalyticsResult.success(url, reportType, startedAtDate, endedAtDate, gameId,
-                                                   paginationToken))
+                completionHandler(GetGameAnalyticsResult.success(gameAnalyticsData))
             }.resume()
         }
 

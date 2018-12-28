@@ -22,8 +22,8 @@ class ViewController: UIViewController {
                 }
                 print(response)
                 print(error)
-            case .success(let url, let analyticsType, let start, let end, let t, let f):
-                print(url)
+            case .success(let thing):
+                print(thing)
             }
         }
         
