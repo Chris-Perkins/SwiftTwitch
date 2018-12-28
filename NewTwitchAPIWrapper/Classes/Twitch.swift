@@ -24,6 +24,7 @@ public class Twitch {
         static let after = "after"
         static let count = "count"
         static let data = "data"
+        static let dateRange = "date_range"
         static let endedAt = "ended_at"
         static let extensionId = "extension_id"
         static let first = "first"

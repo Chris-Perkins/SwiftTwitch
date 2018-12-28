@@ -41,8 +41,10 @@ public struct GetGameAnalyticsData: Unmarshaling {
         url = try object.value(for: Twitch.WebRequestKeys.url)
         gameId = try object.value(for: Twitch.WebRequestKeys.gameId)
         reportType = try object.value(for: Twitch.WebRequestKeys.type)
-        startedAt = try object.value(for: Twitch.WebRequestKeys.startedAt)
-        endedAt = try object.value(for: Twitch.WebRequestKeys.endedAt)
+        startedAt = try object.value(for:
+            "\(Twitch.WebRequestKeys.dateRange).\(Twitch.WebRequestKeys.startedAt)")
+        endedAt = try object.value(for:
+            "\(Twitch.WebRequestKeys.dateRange).\(Twitch.WebRequestKeys.endedAt)")
         paginationToken = try? object.value(for: Twitch.WebRequestKeys.pagination)
     }
 }
