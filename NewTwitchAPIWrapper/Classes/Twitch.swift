@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Marshal
 
 /// `Twitch` allows access to all New Twitch API functions.
 ///
@@ -22,6 +23,7 @@ public class Twitch {
     internal struct WebRequestKeys {
         static let after = "after"
         static let count = "count"
+        static let data = "data"
         static let endedAt = "ended_at"
         static let extensionId = "extension_id"
         static let first = "first"
@@ -88,22 +90,15 @@ public class Twitch {
         /// retrieved from the `getExtensionAnalytics` call of the `Analytics` API. Variables are
         /// included that specify the data that was returned.
         ///
-        /// - success: Defines that the call was successful. The included variables should be input
-        /// in the following order:
-        /// 1. URL - Specifies the URL that Twitch returned
-        /// 1. AnalyticsType - Specifies the analytics type that was returned from the API
-        /// 1. Date - Specifies the start date of the analytics result
-        /// 1. Date - Specifies the ending date of the analytics result
-        /// 1. String - Specifies the Extension ID of the analytics result
-        /// 1. String? - Specifies the pagination token; `nil` if an extension ID was used in the
-        /// call
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// extension analytics data.
         /// - failure: Defines that the call failed. Returns all data corresponding to the failed
         /// call. These data pieces are as follows:
         /// 1. Data? - The data that was returned by the API
         /// 1. URLResponse? - The response from the URL task
         /// 1. Error? - The error that was returned from the API call
         public enum GetExtensionAnalyticsResult {
-            case success(URL, AnalyticsType, Date, Date, String, String?)
+            case success([GetExtensionAnalyticsData])
             case failure(Data?, URLResponse?, Error?)
         }
 
@@ -192,27 +187,14 @@ public class Twitch {
                     return
                 }
 
-                guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary() else {
-                    completionHandler(GetExtensionAnalyticsResult.failure(data, response, error))
-                    return
-                }
-
-                guard let urlStr = dataAsDictionary[WebRequestKeys.url] as? String,
-                    let url = URL(string: urlStr),
-                    let extensionId = dataAsDictionary[WebRequestKeys.extensionId] as? String,
-                    let reportTypeStr = dataAsDictionary[WebRequestKeys.type] as? String,
-                    let reportType = getAnalyticsType(from: reportTypeStr),
-                    let startedAtStr = dataAsDictionary[WebRequestKeys.startedAt] as? String,
-                    let startedAtDate = Date.convertZuluDateStringToLocalDate(startedAtStr),
-                    let endedAtStr = dataAsDictionary[WebRequestKeys.endedAt] as? String,
-                    let endedAtDate = Date.convertZuluDateStringToLocalDate(endedAtStr) else {
+                guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
+                    let extensionAnalyticsData: [GetExtensionAnalyticsData] =
+                    try? dataAsDictionary.value(for: WebRequestKeys.data) else {
                         completionHandler(GetExtensionAnalyticsResult.failure(data, response, error))
                         return
                 }
-                let paginationToken = dataAsDictionary[WebRequestKeys.pagination] as? String
-                completionHandler(
-                    GetExtensionAnalyticsResult.success(url, reportType, startedAtDate, endedAtDate,
-                                                        extensionId, paginationToken))
+
+                completionHandler(GetExtensionAnalyticsResult.success(extensionAnalyticsData))
             }.resume()
         }
 
