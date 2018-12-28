@@ -17,13 +17,6 @@ public class Twitch {
     /// `urlSessionForWrapper` is a singleton for all Twitch API calls that will be used for.
     private static let urlSessionForWrapper: URLSession = URLSession.shared
 
-    /// `RequestHeaderTypes` specifies the different types of headers that we'll use in our web
-    /// requests
-    private struct RequestHeaderTypes {
-        static let post = "POST"
-        static let get = "GET"
-    }
-    
     /// `WebRequestKeys` define the web request keys for both resolving results and sending requests
     /// for the New Twitch API.
     private struct WebRequestKeys {
@@ -179,6 +172,7 @@ public class Twitch {
             }
 
             request.setValueToJSONContentType()
+            request.httpMethod = URLRequest.RequestHeaderTypes.get
             request.httpBody =
                 convertGetExtensionAnalyticsParamsToDict(after: after, startedAt: startedAt, endedAt: endedAt,
                                                          extensionId: extensionId, first: first, type: type).getAsData()
@@ -252,6 +246,7 @@ public class Twitch {
             }
 
             request.setValueToJSONContentType()
+            request.httpMethod = URLRequest.RequestHeaderTypes.get
             request.httpBody =
                 convertGameAnalyticsParamsToDict(after: after, startedAt: startedAt, endedAt: endedAt,
                                                 gameId: gameId, first: first, type: type).getAsData()
@@ -388,116 +383,4 @@ public class Twitch {
 
     /// Private initializer. The entire Twitch API can be accessed through static methods.
     private init() { }
-}
-
-// MARK: - URLRequest Extensions
-
-extension URLRequest {
-
-    /// `AuthorizationError` is used to specify the types of `Error`s that may occur while
-    /// attempting to add an authorization token to a URLRequest.
-    ///
-    /// - nilAccessToken: Used to specify that the access token was unexpectedly nil
-    internal enum AuthorizationError: Error {
-        case nilAccessToken
-    }
-
-    /// The application JSON value.
-    private static let applicationJSONValue = "application/json"
-
-    /// The Content-Type string key.
-    private static let contentTypeString = "Content-Type"
-
-    /// The Authorization Header specifier.
-    private static let authorizationHeader = "Authorization"
-
-    /// The prefix of Authorization headers.
-    ///
-    /// This value is in the format of "$PREFIX $VALUE".
-    private static let authorizationValueBearerHeaderPrefix = "Bearer"
-
-    /// Sets the Content-Type of this URLRequest to use application/json.
-    internal mutating func setValueToJSONContentType() {
-        setValue(URLRequest.applicationJSONValue, forHTTPHeaderField: URLRequest.contentTypeString)
-    }
-
-    /// `addTokenAuthorizationHeader` is used to add an Authorization header to a `URLRequest` whose
-    /// recipient is meant for the New Twitch API. This function will use the provided
-    /// `TwitchTokenManager` to set the token value.
-    ///
-    /// - Parameter tokenManager: The `TwitchTokenManager` whose token should be used as
-    /// authorization
-    internal mutating func addTokenAuthorizationHeader(fromTokenManager tokenManager: TwitchTokenManager) throws {
-        guard let token = tokenManager.accessToken else {
-            throw AuthorizationError.nilAccessToken
-        }
-        setValue("\(URLRequest.authorizationValueBearerHeaderPrefix) \(token)",
-            forHTTPHeaderField: URLRequest.authorizationHeader)
-    }
-}
-
-// TODO: Move Extensions to separate files
-
-// MARK: - Dictionary Extensions
-
-extension Dictionary where Key == String, Value == Any {
-
-    /// Converts the `Dictionary` to its `Data` representation.
-    ///
-    /// - Returns: The `Data` representation of the `Dictionary`.
-    internal func getAsData() -> Data {
-        return NSKeyedArchiver.archivedData(withRootObject: self)
-    }
-}
-
-// MARK: - Data Extensions
-
-extension Data {
-
-    /// Gets a String-keyed `Dictionary` object from a `Data` object.
-    ///
-    /// - Returns: The nullable String-keyed `Dictionary` representation of the `Data`.
-    internal func getAsDictionary() -> Dictionary<String, Any>? {
-        return NSKeyedUnarchiver.unarchiveObject(with: self) as? Dictionary<String, Any>
-    }
-}
-
-// MARK: - Date Extensions
-
-extension Date {
-
-    /// `zuluDateFormatter` is a lazily-instantiated date formatter whose time zone is set to UTC
-    /// and whose format is RFC 3339.
-    ///
-    /// The RFC 3339 format is "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-    private static var zuluDateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        dateFormatter.timeZone = TimeZone(identifier: "UTC")!
-
-        return dateFormatter
-    }()
-
-    /// `convertZuluDateStringToLocalDate` takes in a RFC 3339 Date `String` from the UTC time zone
-    /// and converts it to a `Date` appropriate for the current time zone.
-    ///
-    /// The RFC 3339 format is "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-    ///
-    /// - Parameter dateString: The date string to convert
-    /// - Returns: The date that was converted to from the input `dateString`
-    internal static func convertZuluDateStringToLocalDate(_ dateString: String) -> Date? {
-        return zuluDateFormatter.date(from: dateString)
-    }
-
-    /// `convertDateToZuluString` takes in a Date and converts it to an RFC 3339 formatted String in
-    /// the UTC TimeZone.
-    ///
-    /// The RFC 3339 format is "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-    ///
-    /// - Parameter date: The `Date` to convert to a Zulu time `String`
-    /// - Returns:
-    internal static func convertDateToZuluString(_ date: Date) -> String {
-        return zuluDateFormatter.string(from: date)
-    }
 }
