@@ -174,14 +174,10 @@ public class Twitch {
                                                          extensionId: extensionId, first: first, type: type).getAsData()
 
             urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
-                guard !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
-                    completionHandler(GetExtensionAnalyticsResult.failure(data, response, error))
-                    return
-                }
-
                 guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
                     let extensionAnalyticsData: [GetExtensionAnalyticsData] =
-                    try? dataAsDictionary.value(for: WebRequestKeys.data) else {
+                    try? dataAsDictionary.value(for: WebRequestKeys.data),
+                    !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
                         completionHandler(GetExtensionAnalyticsResult.failure(data, response, error))
                         return
                 }
@@ -236,16 +232,12 @@ public class Twitch {
                                                 gameId: gameId, first: first, type: type).getAsData()
 
             urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
-                guard !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
-                    completionHandler(GetGameAnalyticsResult.failure(data, response, error))
-                    return
-                }
-
                 guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
                     let gameAnalyticsData: [GetGameAnalyticsData] =
-                    try? dataAsDictionary.value(for: WebRequestKeys.data) else {
-                    completionHandler(GetGameAnalyticsResult.failure(data, response, error))
-                    return
+                    try? dataAsDictionary.value(for: WebRequestKeys.data),
+                    !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
+                        completionHandler(GetGameAnalyticsResult.failure(data, response, error))
+                        return
                 }
                 completionHandler(GetGameAnalyticsResult.success(gameAnalyticsData))
             }.resume()
@@ -439,19 +431,15 @@ public class Twitch {
                                                       userId: userId).getAsData()
 
             urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
-                guard !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
-                    completionHandler(GetBitsLeaderboardResult.failure(data, response, error))
-                    return
-                }
-
                 guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
                     let bitsLeaderboardData: GetBitsLeaderboardData =
-                    try? dataAsDictionary.value(for: WebRequestKeys.data) else {
+                    try? dataAsDictionary.value(for: WebRequestKeys.data),
+                    !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
                         completionHandler(GetBitsLeaderboardResult.failure(data, response, error))
                         return
                 }
                 completionHandler(GetBitsLeaderboardResult.success(bitsLeaderboardData))
-                }.resume()
+            }.resume()
         }
 
         /// `convertGetBitsLeaderboardParamsToDict` is used to convert the typed parameters into a
