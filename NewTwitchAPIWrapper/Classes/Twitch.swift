@@ -185,7 +185,6 @@ public class Twitch {
                         completionHandler(GetExtensionAnalyticsResult.failure(data, response, error))
                         return
                 }
-
                 completionHandler(GetExtensionAnalyticsResult.success(extensionAnalyticsData))
             }.resume()
         }
@@ -305,6 +304,7 @@ public class Twitch {
         ///   - first: input
         ///   - type: input
         /// - Returns: The String-keyed `Dictionary` of parameters.
+        // Todo: rename to convertGetGameAnalyticsParamsToDict
         private static func convertGameAnalyticsParamsToDict(after: String?, startedAt: Date?, endedAt: Date?,
                                                              gameId: String?, first: Int?,
                                                              type: AnalyticsType?) -> [String: Any] {
@@ -351,13 +351,13 @@ public class Twitch {
             }
         }
     }
-    
+
     // MARK: - Bits
-    
+
     /// Bits is a category of Twitch API calls that interacts with "Bits". Bits are currency pieces
     /// that translate into real-world money.
     public struct Bits {
-        
+
         /// `Period` defines the different types of periods that are accepted by the Twitch API for
         /// use in retrieving Bit Leaderboard statistics based on an amount of time.
         ///
@@ -376,20 +376,13 @@ public class Twitch {
             case month = "month"
             case year = "year"
         }
-        
+
         /// `GetBitsLeaderboardResult` defines the different types of results that can be retrieved
         /// from the `getBitsLeaderboard` call of the `Bits` API. Variables are included that
         /// specify the data that was returned.
         ///
-        /// - success: Defines that the call was successful. The included variables should be input
-        /// in the following order:
-        /// 1. String - Specifies the username of the user that the call was done for
-        /// 1. String - Specifies the iD of  the user that the call was done for
-        /// 1. Int - Specifies the score of the user
-        /// 1. Int - Specifies the rank of the user on the leaderboard
-        /// 1. String - Specifies the Game ID of the analytics result
-        /// 1. String? - Specifies the pagination token; `nil` if an extension ID was used in the
-        /// call
+        /// - success: Defines that the call was successful.  The output variable will contain all
+        /// game analytics data.
         /// - failure: Defines that the call failed. Returns all data corresponding to the failed
         /// call. These data pieces are as follows:
         /// 1. Data? - The data that was returned by the API
@@ -397,10 +390,13 @@ public class Twitch {
         /// 1. Error? - The error that was returned from the API call
         public enum GetBitsLeaderboardResult {
             // TODO: Change Success to be an object
-            case success(String, String, Int, Int, Int, Date, Date)
+            case success(GetBitsLeaderboardData)
             case failure(Data?, URLResponse?, Error?)
         }
         
+        /// `bitsLeaderboardURL` is the URL that should be accessed for all bits leaderboard calls.
+        private static let bitsLeaderboardURL = URL(string: "https://api.twitch.tv/helix/bits/leaderboard")!
+
         /// `getBitsLeaderboard` will run the `Get Bits Leaderboard` API call of the New
         /// Twitch API.
         ///
@@ -428,7 +424,66 @@ public class Twitch {
                                               count: Int? = nil, period: Twitch.Bits.Period? = nil,
                                               startedAt: Date? = nil, userId: String? = nil,
                                               completionHandler: @escaping (GetBitsLeaderboardResult) -> Void) {
-            
+            var request = URLRequest(url: bitsLeaderboardURL)
+            do {
+                try request.addTokenAuthorizationHeader(fromTokenManager: tokenManager)
+            } catch {
+                completionHandler(GetBitsLeaderboardResult.failure(nil, nil, error))
+                return
+            }
+
+            request.setValueToJSONContentType()
+            request.httpMethod = URLRequest.RequestHeaderTypes.get
+            request.httpBody =
+                convertGetBitsLeaderboardParamsToDict(count: count, period: period, startedAt: startedAt,
+                                                      userId: userId).getAsData()
+
+            urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
+                guard !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
+                    completionHandler(GetBitsLeaderboardResult.failure(data, response, error))
+                    return
+                }
+
+                guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
+                    let bitsLeaderboardData: GetBitsLeaderboardData =
+                    try? dataAsDictionary.value(for: WebRequestKeys.data) else {
+                        completionHandler(GetBitsLeaderboardResult.failure(data, response, error))
+                        return
+                }
+                completionHandler(GetBitsLeaderboardResult.success(bitsLeaderboardData))
+                }.resume()
+        }
+
+        /// `convertGetBitsLeaderboardParamsToDict` is used to convert the typed parameters into a
+        /// list of web request parameters as a String-keyed Dictionary for a `getBitsLeaderboard`
+        /// method call.
+        ///
+        /// - Parameters:
+        ///   - count: input
+        ///   - period: input
+        ///   - startedAt: input
+        ///   - userId: input
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertGetBitsLeaderboardParamsToDict(count: Int?, period: Twitch.Bits.Period?,
+                                                                  startedAt: Date?,
+                                                                  userId: String?) -> [String: Any] {
+            var parametersDictionary = [String: Any]()
+
+            if let count = count {
+                parametersDictionary[WebRequestKeys.count] = count
+            }
+            if let period = period {
+                parametersDictionary[WebRequestKeys.period] = period.rawValue
+            }
+            if let startedAt = startedAt {
+                parametersDictionary[WebRequestKeys.startedAt] =
+                    Date.convertDateToZuluString(startedAt)
+            }
+            if let userId = userId {
+                parametersDictionary[WebRequestKeys.userId] = userId
+            }
+
+            return parametersDictionary
         }
     }
 
