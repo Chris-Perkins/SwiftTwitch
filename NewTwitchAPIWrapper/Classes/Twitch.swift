@@ -16,19 +16,26 @@ public class Twitch {
     // cause unexpected delegate method receivals.
     /// `urlSessionForWrapper` is a singleton for all Twitch API calls that will be used for.
     private static let urlSessionForWrapper: URLSession = URLSession.shared
-
+    
     /// `WebRequestKeys` define the web request keys for both resolving results and sending requests
     /// for the New Twitch API.
-    private struct WebRequestKeys {
+    internal struct WebRequestKeys {
         static let after = "after"
+        static let count = "count"
         static let endedAt = "ended_at"
         static let extensionId = "extension_id"
         static let first = "first"
         static let gameId = "game_id"
         static let pagination = "pagination"
+        static let period = "period"
+        static let rank = "rank"
+        static let score = "score"
         static let startedAt = "started_at"
+        static let total = "total"
         static let type = "type"
         static let url = "URL"
+        static let userId = "user_id"
+        static let userName = "user_name"
     }
 
     /// `getIfErrorOccurred` is a quick function used by URLTask Completion Handlers for determining
@@ -57,10 +64,8 @@ public class Twitch {
 
     // MARK: - Analytics
 
-    /// Extension Analytics provides insight into the extensions that the authenticated user uses.
-    /// These reports are viewable and downloadable via a URL that is returned as a response.
-    ///
-    /// [More information is available here](https://dev.twitch.tv/docs/insights/)
+    /// Analytics is a category of Twitch API calls that provide insight to the game usage or
+    /// extension usage of the token bearing user.
     public struct Analytics {
 
         /// `type` defines the different types of extension analytics reports.
@@ -78,9 +83,10 @@ public class Twitch {
             case overviewVersion2 = "overview_v2"
         }
 
-        /// `GetResult` defines the different types of results that can be retrieved from the
-        /// `getExtensionAnalytics` call of the `Analytics` API. Variables are included that specify
-        /// the data that was returned.
+        // TODO: Change to an object with variables
+        /// `GetExtensionAnalyticsResult` defines the different types of results that can be
+        /// retrieved from the `getExtensionAnalytics` call of the `Analytics` API. Variables are
+        /// included that specify the data that was returned.
         ///
         /// - success: Defines that the call was successful. The included variables should be input
         /// in the following order:
@@ -101,9 +107,10 @@ public class Twitch {
             case failure(Data?, URLResponse?, Error?)
         }
 
-        /// `GetResult` defines the different types of results that can be retrieved from the
-        /// `getGameAnalytics` call of the `Analytics` API. Variables are included that specify
-        /// the data that was returned.
+        // TODO: Change to an object with variables
+        /// `GetGameAnalyticsResult` defines the different types of results that can be retrieved
+        /// from the `getGameAnalytics` call of the `Analytics` API. Variables are included that
+        /// specify the data that was returned.
         ///
         /// - success: Defines that the call was successful. The included variables should be input
         /// in the following order:
@@ -134,6 +141,8 @@ public class Twitch {
 
         /// `getExtensionAnalytics` will run the `Get Extension Analytics` API call of the New
         /// Twitch API.
+        ///
+        /// This API call requires a token with `analytics:read:extensions` permissions.
         ///
         /// [More information about the web call is available here](
         /// https://dev.twitch.tv/docs/api/reference/#get-extension-analytics)
@@ -209,6 +218,8 @@ public class Twitch {
 
         /// `getGameAnalytics` will run the `Get Game Analytics` API call of the New
         /// Twitch API.
+        ///
+        /// This API call requires a token with `analytics:read:games` permissions.
         ///
         /// [More information about the web call is available here](
         /// https://dev.twitch.tv/docs/api/reference/#get-game-analytics)
@@ -378,6 +389,86 @@ public class Twitch {
             default:
                 return nil
             }
+        }
+    }
+    
+    // MARK: - Bits
+    
+    /// Bits is a category of Twitch API calls that interacts with "Bits". Bits are currency pieces
+    /// that translate into real-world money.
+    public struct Bits {
+        
+        /// `Period` defines the different types of periods that are accepted by the Twitch API for
+        /// use in retrieving Bit Leaderboard statistics based on an amount of time.
+        ///
+        /// - all: Defines a period of the broadcaster's entire channel
+        /// - day: Defines a period of one day specified at 00:00:00 on the `started_at` date
+        /// - week: Defines a period of one week specified at 00:00:00 on the `started_at` date on a
+        /// Monday through the next Monday
+        /// - month: Defines a period of one month specified at 00:00:00 on the `started_at` date on
+        /// the first day of the month until the last day of the month
+        /// - year: Defines a period of the day specified at 00:00:00 on the `started_at` date on
+        /// the first day of the year until the last day of the year
+        public enum Period: String {
+            case all = "all"
+            case day = "day"
+            case week = "week"
+            case month = "month"
+            case year = "year"
+        }
+        
+        /// `GetBitsLeaderboardResult` defines the different types of results that can be retrieved
+        /// from the `getBitsLeaderboard` call of the `Bits` API. Variables are included that
+        /// specify the data that was returned.
+        ///
+        /// - success: Defines that the call was successful. The included variables should be input
+        /// in the following order:
+        /// 1. String - Specifies the username of the user that the call was done for
+        /// 1. String - Specifies the iD of  the user that the call was done for
+        /// 1. Int - Specifies the score of the user
+        /// 1. Int - Specifies the rank of the user on the leaderboard
+        /// 1. String - Specifies the Game ID of the analytics result
+        /// 1. String? - Specifies the pagination token; `nil` if an extension ID was used in the
+        /// call
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum GetBitsLeaderboardResult {
+            // TODO: Change Success to be an object
+            case success(String, String, Int, Int, Int, Date, Date)
+            case failure(Data?, URLResponse?, Error?)
+        }
+        
+        /// `getBitsLeaderboard` will run the `Get Bits Leaderboard` API call of the New
+        /// Twitch API.
+        ///
+        /// This API call requires a token with `bits:read` permissions.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#get-bits-leaderboard)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - count: The maximum number of users to obtain data for on the leaderboard. Highest
+        /// ranking users will be returned first.
+        ///   - period: The period to obtain data for. If this value is `.all`, then `startedAt`
+        /// will be ignored.
+        ///   - startedAt: The `Date` for which the period should start for.
+        ///   - userId: The id of the user to get Bit leaderboard results for.
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `GetBitsLeaderboardResult`: `success` and `failure`.
+        /// For more information on what values are returned, please see documentation on
+        /// `GetGameAnalyticsResult`
+        ///
+        /// - seealso: `Period`
+        /// - seealso: `GetBitsLeaderboardResult`
+        public static func getBitsLeaderboard(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                              count: Int? = nil, period: Twitch.Bits.Period? = nil,
+                                              startedAt: Date? = nil, userId: String? = nil,
+                                              completionHandler: @escaping (GetBitsLeaderboardResult) -> Void) {
+            
         }
     }
 

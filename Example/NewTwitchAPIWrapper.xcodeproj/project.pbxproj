@@ -304,10 +304,12 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-NewTwitchAPIWrapper_Example/Pods-NewTwitchAPIWrapper_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Marshal/Marshal.framework",
 				"${BUILT_PRODUCTS_DIR}/NewTwitchAPIWrapper/NewTwitchAPIWrapper.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Marshal.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NewTwitchAPIWrapper.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
