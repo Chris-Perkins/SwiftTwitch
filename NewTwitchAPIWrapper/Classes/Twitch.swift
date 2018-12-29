@@ -41,29 +41,6 @@ public class Twitch {
         static let userName = "user_name"
     }
 
-    /// `getIfErrorOccurred` is a quick function used by URLTask Completion Handlers for determining
-    /// if an error occurred during the web request.
-    ///
-    /// Errors are said to occur in three situations:
-    /// 1. The error is **not** `nil`
-    /// 1. The response is `nil`
-    /// 1. The response status code is not `200`
-    ///
-    /// - Parameters:
-    ///   - data: The data received
-    ///   - response: The response received
-    ///   - error: The error received
-    /// - Returns: Whether or not an error occured during the web request.
-    private static func getIfErrorOccurred(data: Data?, response: URLResponse?, error: Error?) -> Bool {
-        guard let response = response, error == nil else {
-            return true
-        }
-        guard let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode == 200 else {
-            return true
-        }
-        return false
-    }
-
     // MARK: - Analytics
 
     /// Analytics is a category of Twitch API calls that provide insight to the game usage or
@@ -402,6 +379,8 @@ public class Twitch {
             return parametersDictionary
         }
     }
+    
+    // MARK: - Twitch Functions
 
     /// `performAPIWebRequest` will create a Web Request destined for the New Twitch API. The URL,
     /// httpMethod, parameters, and a token manager must be provided in order to create a Twitch
@@ -443,6 +422,27 @@ public class Twitch {
             }
             successHandler(retrievedObject)
         }.resume()
+    }
+
+    /// `getIfErrorOccurred` is a quick function used by URLTask Completion Handlers for determining
+    /// if an error occurred during the web request.
+    ///
+    /// Errors are said to occur in three situations:
+    /// 1. The error is **not** `nil`
+    /// 1. The response is `nil`
+    /// 1. The response status code is not `200`
+    ///
+    /// - Parameters:
+    ///   - data: The data received
+    ///   - response: The response received
+    ///   - error: The error received
+    /// - Returns: Whether or not an error occured during the web request.
+    private static func getIfErrorOccurred(data: Data?, response: URLResponse?, error: Error?) -> Bool {
+        guard let response = response, let httpStatus = response as? HTTPURLResponse,
+            error == nil && httpStatus.statusCode == 200 else {
+                return true
+        }
+        return false
     }
 
     /// Private initializer. The entire Twitch API can be accessed through static methods.
