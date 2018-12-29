@@ -158,29 +158,14 @@ public class Twitch {
                                                  extensionId: String? = nil, first: Int? = nil,
                                                  type: AnalyticsType? = nil,
                                                  completionHandler: @escaping (GetExtensionAnalyticsResult) -> Void) {
-            var request = URLRequest(url: extensionAnalyticsURL)
-            do {
-                try request.addTokenAuthorizationHeader(fromTokenManager: tokenManager)
-            } catch {
-                completionHandler(GetExtensionAnalyticsResult.failure(nil, nil, error))
-                return
-            }
-
-            request.setValueToJSONContentType()
-            request.httpMethod = URLRequest.RequestHeaderTypes.get
-            request.httpBody =
-                convertGetExtensionAnalyticsParamsToDict(after: after, startedAt: startedAt, endedAt: endedAt,
-                                                         extensionId: extensionId, first: first, type: type).getAsData()
-
-            urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
-                guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
-                    let extensionAnalyticsData = try? GetExtensionAnalyticsData(object: dataAsDictionary),
-                    !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
-                        completionHandler(GetExtensionAnalyticsResult.failure(data, response, error))
-                        return
-                }
-                completionHandler(GetExtensionAnalyticsResult.success(extensionAnalyticsData))
-            }.resume()
+            Twitch.performAPIWebRequest(
+                to: extensionAnalyticsURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withParameters: convertGetExtensionAnalyticsParamsToDict(after: after, startedAt: startedAt,
+                                                                         endedAt: endedAt, extensionId: extensionId,
+                                                                         first: first, type: type),
+                withTokenManager: tokenManager,
+                onSuccess: { completionHandler(GetExtensionAnalyticsResult.success($0)) },
+                onFailure: { completionHandler(GetExtensionAnalyticsResult.failure($0, $1, $2)) })
         }
 
         /// `getGameAnalytics` will run the `Get Game Analytics` API call of the New
@@ -189,7 +174,7 @@ public class Twitch {
         /// This API call requires a token with `analytics:read:games` permissions.
         ///
         /// [More information about the web call is available here](
-        /// https://dev.twitch.tv/docs/api/reference/#get-game-analytics)
+        /// https://dev.twitch.tv/docs/api/referenxce/#get-game-analytics)
         ///
         /// - Parameters:
         ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
@@ -215,29 +200,14 @@ public class Twitch {
                                             after: String? = nil, startedAt: Date? = nil, endedAt: Date? = nil,
                                             gameId: String? = nil, first: Int? = nil, type: AnalyticsType? = nil,
                                             completionHandler: @escaping (GetGameAnalyticsResult) -> Void) {
-            var request = URLRequest(url: gameAnalyticsURL)
-            do {
-                try request.addTokenAuthorizationHeader(fromTokenManager: tokenManager)
-            } catch {
-                completionHandler(GetGameAnalyticsResult.failure(nil, nil, error))
-                return
-            }
-
-            request.setValueToJSONContentType()
-            request.httpMethod = URLRequest.RequestHeaderTypes.get
-            request.httpBody =
-                convertGameAnalyticsParamsToDict(after: after, startedAt: startedAt, endedAt: endedAt,
-                                                gameId: gameId, first: first, type: type).getAsData()
-
-            urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
-                guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
-                    let gameAnalyticsData = try? GetGameAnalyticsData(object: dataAsDictionary),
-                    !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
-                        completionHandler(GetGameAnalyticsResult.failure(data, response, error))
-                        return
-                }
-                completionHandler(GetGameAnalyticsResult.success(gameAnalyticsData))
-            }.resume()
+            Twitch.performAPIWebRequest(
+                to: gameAnalyticsURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withParameters: convertGameAnalyticsParamsToDict(after: after, startedAt: startedAt,
+                                                                 endedAt: endedAt, gameId: gameId, first: first,
+                                                                 type: type),
+                withTokenManager: tokenManager,
+                onSuccess: { completionHandler(GetGameAnalyticsResult.success($0)) },
+                onFailure: { completionHandler(GetGameAnalyticsResult.failure($0, $1, $2)) })
         }
 
         /// `convertGetExtensionAnalyticsParamsToDict` is used to convert the typed parameters into
@@ -413,29 +383,13 @@ public class Twitch {
                                               count: Int? = nil, period: Twitch.Bits.Period? = nil,
                                               startedAt: Date? = nil, userId: String? = nil,
                                               completionHandler: @escaping (GetBitsLeaderboardResult) -> Void) {
-            var request = URLRequest(url: bitsLeaderboardURL)
-            do {
-                try request.addTokenAuthorizationHeader(fromTokenManager: tokenManager)
-            } catch {
-                completionHandler(GetBitsLeaderboardResult.failure(nil, nil, error))
-                return
-            }
-
-            request.setValueToJSONContentType()
-            request.httpMethod = URLRequest.RequestHeaderTypes.get
-            request.httpBody =
-                convertGetBitsLeaderboardParamsToDict(count: count, period: period, startedAt: startedAt,
-                                                      userId: userId).getAsData()
-
-            urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
-                guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
-                    let bitsLeaderboardData = try? GetBitsLeaderboardData(object: dataAsDictionary),
-                    !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
-                        completionHandler(GetBitsLeaderboardResult.failure(data, response, error))
-                        return
-                }
-                completionHandler(GetBitsLeaderboardResult.success(bitsLeaderboardData))
-            }.resume()
+            Twitch.performAPIWebRequest(
+                to: bitsLeaderboardURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withParameters: convertGetBitsLeaderboardParamsToDict(count: count, period: period,
+                                                                      startedAt: startedAt, userId: userId),
+                withTokenManager: tokenManager,
+                onSuccess: { completionHandler(GetBitsLeaderboardResult.success($0)) },
+                onFailure: { completionHandler(GetBitsLeaderboardResult.failure($0, $1, $2)) })
         }
 
         /// `convertGetBitsLeaderboardParamsToDict` is used to convert the typed parameters into a
@@ -469,6 +423,48 @@ public class Twitch {
 
             return parametersDictionary
         }
+    }
+
+    /// `performAPIWebRequest` will create a Web Request destined for the New Twitch API. The URL,
+    /// httpMethod, parameters, and a token manager must be provided in order to create a Twitch
+    /// URL Request. By calling this function, a URLRequest whose authorization bearer, httpMethod,
+    /// and httpBody are set will be created. Should this web request fail for any reason, the
+    /// `failureHandler` will be called. If the request is successful, then `successHandler` will
+    /// be called instead.
+    ///
+    /// - Parameters:
+    ///   - url: The URL to perform the web request to
+    ///   - httpMethod: The method to perform the url request with
+    ///   - parameters: The parameters of the web request
+    ///   - tokenManager: The token manager that is used to provide authentication
+    ///   - successHandler: The handler for a successful web request
+    ///   - failureHandler: The handler for a failed web request
+    private static func performAPIWebRequest<T: Unmarshaling>(
+        to url: URL, withHTTPMethod httpMethod: String?, withParameters parameters: [String: Any],
+        withTokenManager tokenManager: TwitchTokenManager, onSuccess successHandler: @escaping (T) -> (),
+        onFailure failureHandler: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        
+        var request = URLRequest(url: url)
+        do {
+            try request.addTokenAuthorizationHeader(fromTokenManager: tokenManager)
+        } catch {
+            failureHandler(nil, nil, error)
+            return
+        }
+        
+        request.setValueToJSONContentType()
+        request.httpMethod = httpMethod
+        request.httpBody = parameters.getAsData()
+        
+        urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
+            guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
+                let retrievedObject = try? T(object: dataAsDictionary),
+                !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
+                    failureHandler(data, response, error)
+                    return
+            }
+            successHandler(retrievedObject)
+        }.resume()
     }
 
     /// Private initializer. The entire Twitch API can be accessed through static methods.
