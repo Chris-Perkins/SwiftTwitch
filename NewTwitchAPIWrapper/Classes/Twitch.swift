@@ -44,11 +44,10 @@ public class Twitch {
     /// `getIfErrorOccurred` is a quick function used by URLTask Completion Handlers for determining
     /// if an error occurred during the web request.
     ///
-    /// Errors are said to occur in four situations:
-    /// 1. The data is nil
-    /// 1. The error is NOT nil
-    /// 1. The response is nil
-    /// 1. The response status code is not 200
+    /// Errors are said to occur in three situations:
+    /// 1. The error is **not** `nil`
+    /// 1. The response is `nil`
+    /// 1. The response status code is not `200`
     ///
     /// - Parameters:
     ///   - data: The data received
@@ -56,10 +55,10 @@ public class Twitch {
     ///   - error: The error received
     /// - Returns: Whether or not an error occured during the web request.
     private static func getIfErrorOccurred(data: Data?, response: URLResponse?, error: Error?) -> Bool {
-        guard let response = response, data == nil || error != nil else {
+        guard let response = response, error == nil else {
             return true
         }
-        if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
+        guard let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode == 200 else {
             return true
         }
         return false
@@ -98,7 +97,7 @@ public class Twitch {
         /// 1. URLResponse? - The response from the URL task
         /// 1. Error? - The error that was returned from the API call
         public enum GetExtensionAnalyticsResult {
-            case success([GetExtensionAnalyticsData])
+            case success(GetExtensionAnalyticsData)
             case failure(Data?, URLResponse?, Error?)
         }
 
@@ -114,7 +113,7 @@ public class Twitch {
         /// 1. URLResponse? - The response from the URL task
         /// 1. Error? - The error that was returned from the API call
         public enum GetGameAnalyticsResult {
-            case success([GetGameAnalyticsData])
+            case success(GetGameAnalyticsData)
             case failure(Data?, URLResponse?, Error?)
         }
 
@@ -175,8 +174,7 @@ public class Twitch {
 
             urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
                 guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
-                    let extensionAnalyticsData: [GetExtensionAnalyticsData] =
-                    try? dataAsDictionary.value(for: WebRequestKeys.data),
+                    let extensionAnalyticsData = try? GetExtensionAnalyticsData(object: dataAsDictionary),
                     !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
                         completionHandler(GetExtensionAnalyticsResult.failure(data, response, error))
                         return
@@ -233,8 +231,7 @@ public class Twitch {
 
             urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
                 guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
-                    let gameAnalyticsData: [GetGameAnalyticsData] =
-                    try? dataAsDictionary.value(for: WebRequestKeys.data),
+                    let gameAnalyticsData = try? GetGameAnalyticsData(object: dataAsDictionary),
                     !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
                         completionHandler(GetGameAnalyticsResult.failure(data, response, error))
                         return
@@ -432,8 +429,7 @@ public class Twitch {
 
             urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
                 guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
-                    let bitsLeaderboardData: GetBitsLeaderboardData =
-                    try? dataAsDictionary.value(for: WebRequestKeys.data),
+                    let bitsLeaderboardData = try? GetBitsLeaderboardData(object: dataAsDictionary),
                     !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
                         completionHandler(GetBitsLeaderboardResult.failure(data, response, error))
                         return

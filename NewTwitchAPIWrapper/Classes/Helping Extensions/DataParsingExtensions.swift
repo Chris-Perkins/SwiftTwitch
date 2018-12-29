@@ -14,8 +14,11 @@ extension Dictionary where Key == String, Value == Any {
     /// Converts the `Dictionary` to its `Data` representation.
     ///
     /// - Returns: The `Data` representation of the `Dictionary`.
-    internal func getAsData() -> Data {
-        return NSKeyedArchiver.archivedData(withRootObject: self)
+    internal func getAsData() -> Data? {
+        guard let jsonData = try? jsonData() else {
+            return nil
+        }
+        return jsonData
     }
 }
 

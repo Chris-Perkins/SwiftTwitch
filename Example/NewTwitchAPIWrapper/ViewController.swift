@@ -17,11 +17,7 @@ class ViewController: UIViewController {
         Twitch.Bits.getBitsLeaderboard() { (result) in
             switch result {
             case .failure(let data, let response, let error):
-                if let data = data {
-                    print(NSKeyedUnarchiver.unarchiveObject(with: data) as? Dictionary<String, Any>)
-                }
                 print(response)
-                print(error)
             case .success(let thing):
                 print(thing)
             }
