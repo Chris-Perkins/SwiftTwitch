@@ -227,25 +227,17 @@ public class Twitch {
                                                                      first: Int?,
                                                                      type: AnalyticsType?) -> [String: Any] {
             var parametersDictionary = [String: Any]()
+            parametersDictionary.addValueIfNotNil(after, toKey: WebRequestKeys.after)
+            parametersDictionary.addValueIfNotNil(extensionId, toKey: WebRequestKeys.extensionId)
+            parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
+            parametersDictionary.addValueIfNotNil(type?.rawValue, toKey: WebRequestKeys.type)
 
-            if let after = after {
-                parametersDictionary[WebRequestKeys.after] = after
-            }
             if let startedAt = startedAt {
                 parametersDictionary[WebRequestKeys.startedAt] =
                     Date.convertDateToZuluString(startedAt)
             }
             if let endedAt = endedAt {
                 parametersDictionary[WebRequestKeys.endedAt] = Date.convertDateToZuluString(endedAt)
-            }
-            if let extensionId = extensionId {
-                parametersDictionary[WebRequestKeys.extensionId] = extensionId
-            }
-            if let first = first {
-                parametersDictionary[WebRequestKeys.first] = first
-            }
-            if let type = type {
-                parametersDictionary[WebRequestKeys.type] = type.rawValue
             }
 
             return parametersDictionary
@@ -268,25 +260,17 @@ public class Twitch {
                                                              gameId: String?, first: Int?,
                                                              type: AnalyticsType?) -> [String: Any] {
             var parametersDictionary = [String: Any]()
+            parametersDictionary.addValueIfNotNil(after, toKey: WebRequestKeys.after)
+            parametersDictionary.addValueIfNotNil(gameId, toKey: WebRequestKeys.gameId)
+            parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
+            parametersDictionary.addValueIfNotNil(type?.rawValue, toKey: WebRequestKeys.type)
 
-            if let after = after {
-                parametersDictionary[WebRequestKeys.after] = after
-            }
             if let startedAt = startedAt {
                 parametersDictionary[WebRequestKeys.startedAt] =
                     Date.convertDateToZuluString(startedAt)
             }
             if let endedAt = endedAt {
                 parametersDictionary[WebRequestKeys.endedAt] = Date.convertDateToZuluString(endedAt)
-            }
-            if let gameId = gameId {
-                parametersDictionary[WebRequestKeys.gameId] = gameId
-            }
-            if let first = first {
-                parametersDictionary[WebRequestKeys.first] = first
-            }
-            if let type = type {
-                parametersDictionary[WebRequestKeys.type] = type.rawValue
             }
 
             return parametersDictionary
@@ -406,19 +390,13 @@ public class Twitch {
                                                                   startedAt: Date?,
                                                                   userId: String?) -> [String: Any] {
             var parametersDictionary = [String: Any]()
+            parametersDictionary.addValueIfNotNil(count, toKey: WebRequestKeys.count)
+            parametersDictionary.addValueIfNotNil(period?.rawValue, toKey: WebRequestKeys.period)
+            parametersDictionary.addValueIfNotNil(userId, toKey: WebRequestKeys.userId)
 
-            if let count = count {
-                parametersDictionary[WebRequestKeys.count] = count
-            }
-            if let period = period {
-                parametersDictionary[WebRequestKeys.period] = period.rawValue
-            }
             if let startedAt = startedAt {
                 parametersDictionary[WebRequestKeys.startedAt] =
                     Date.convertDateToZuluString(startedAt)
-            }
-            if let userId = userId {
-                parametersDictionary[WebRequestKeys.userId] = userId
             }
 
             return parametersDictionary
