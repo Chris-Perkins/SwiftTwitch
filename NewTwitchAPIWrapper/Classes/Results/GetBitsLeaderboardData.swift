@@ -19,10 +19,10 @@ public struct GetBitsLeaderboardData: Unmarshaling {
     public let total: Int
 
     /// `startedAt` specifies the date when the extension's attributes analyzation started.
-    public let startedAt: Date
+    public let startedAt: Date?
 
     /// `endedAt` specifies the date when the extension's attributed analyzation ended.
-    public let endedAt: Date
+    public let endedAt: Date?
 
     /// Initializes a `GetExtensionAnalyticsData` object from the input `MarshaledObject`. This will
     /// throw if there is missing data from the input `MarshaledObject`.
@@ -32,9 +32,9 @@ public struct GetBitsLeaderboardData: Unmarshaling {
     public init(object: MarshaledObject) throws {
         userData = try object.value(for: Twitch.WebRequestKeys.data)
         total = try object.value(for: Twitch.WebRequestKeys.total)
-        startedAt = try object.value(for:
+        startedAt = try? object.value(for:
             "\(Twitch.WebRequestKeys.dateRange).\(Twitch.WebRequestKeys.startedAt)")
-        endedAt = try object.value(for:
+        endedAt = try? object.value(for:
             "\(Twitch.WebRequestKeys.dateRange).\(Twitch.WebRequestKeys.endedAt)")
     }
 }

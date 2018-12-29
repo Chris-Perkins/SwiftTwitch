@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Twitch.Analytics.getGameAnalytics { (result) in
+        Twitch.Bits.getBitsLeaderboard() { (result) in
             switch result {
             case .failure(let data, let response, let error):
                 if let data = data {

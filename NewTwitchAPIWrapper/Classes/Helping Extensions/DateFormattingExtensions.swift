@@ -56,7 +56,7 @@ extension Date: ValueType {
             throw MarshalError.typeMismatch(expected: String.self, actual: type(of: object))
         }
         guard let date = Date.convertZuluDateStringToLocalDate(dateString) else {
-            throw MarshalError.typeMismatch(expected: "ISO8601 date string", actual: dateString)
+            throw MarshalError.typeMismatch(expected: "Zulu date string", actual: dateString)
         }
         return date
     }

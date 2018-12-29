@@ -23,10 +23,10 @@ public struct GetGameAnalyticsData: Unmarshaling {
     public let reportType: Twitch.Analytics.AnalyticsType
 
     /// `startedAt` specifies the date when the extension's attributes analyzation started.
-    public let startedAt: Date
+    public let startedAt: Date?
 
     /// `endedAt` specifies the date when the extension's attributed analyzation ended.
-    public let endedAt: Date
+    public let endedAt: Date?
 
     /// `paginationToken` defines the token that allows for the pagination of results in the
     /// `Get Extension Analytics` call.
@@ -41,9 +41,9 @@ public struct GetGameAnalyticsData: Unmarshaling {
         url = try object.value(for: Twitch.WebRequestKeys.url)
         gameId = try object.value(for: Twitch.WebRequestKeys.gameId)
         reportType = try object.value(for: Twitch.WebRequestKeys.type)
-        startedAt = try object.value(for:
+        startedAt = try? object.value(for:
             "\(Twitch.WebRequestKeys.dateRange).\(Twitch.WebRequestKeys.startedAt)")
-        endedAt = try object.value(for:
+        endedAt = try? object.value(for:
             "\(Twitch.WebRequestKeys.dateRange).\(Twitch.WebRequestKeys.endedAt)")
         paginationToken = try? object.value(for: Twitch.WebRequestKeys.pagination)
     }

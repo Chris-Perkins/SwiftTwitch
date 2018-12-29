@@ -26,7 +26,10 @@ extension Data {
     /// Gets a String-keyed `Dictionary` object from a `Data` object.
     ///
     /// - Returns: The nullable String-keyed `Dictionary` representation of the `Data`.
-    internal func getAsDictionary() -> Dictionary<String, Any>? {
-        return NSKeyedUnarchiver.unarchiveObject(with: self) as? Dictionary<String, Any>
+    internal func getAsDictionary() -> [String: Any]? {
+        guard let jsonObject = try? JSONSerialization.jsonObject(with: self, options: .allowFragments) else {
+            return nil
+        }
+        return jsonObject as? [String: Any]
     }
 }
