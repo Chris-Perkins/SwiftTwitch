@@ -22,13 +22,17 @@ public class Twitch {
     /// for the New Twitch API.
     internal struct WebRequestKeys {
         static let after = "after"
+        static let broadcasterId = "broadcaster_id"
         static let count = "count"
         static let data = "data"
         static let dateRange = "date_range"
+        static let editURL = "edit_url"
         static let endedAt = "ended_at"
         static let extensionId = "extension_id"
         static let first = "first"
         static let gameId = "game_id"
+        static let hasDelay = "has_delay"
+        static let id = "id"
         static let pagination = "pagination"
         static let period = "period"
         static let rank = "rank"
@@ -301,7 +305,7 @@ public class Twitch {
         /// from the `getBitsLeaderboard` call of the `Bits` API. Variables are included that
         /// specify the data that was returned.
         ///
-        /// - success: Defines that the call was successful.  The output variable will contain all
+        /// - success: Defines that the call was successful. The output variable will contain all
         /// game analytics data.
         /// - failure: Defines that the call failed. Returns all data corresponding to the failed
         /// call. These data pieces are as follows:
@@ -379,7 +383,81 @@ public class Twitch {
             return parametersDictionary
         }
     }
-    
+
+    // MARK: - Clips
+
+    /// Clips is a category of Twitch API calls that interacts with "Clips". Clips are short videos
+    /// taken during live streams. Clips may be created or retrieved.
+    public struct Clips {
+
+        /// `CreateClipResult` defines the different types of results that can be retrieved from the
+        /// `createClip` call of the `Clips` API. Variables are included that specify the data that
+        /// was returned.
+        ///
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// clip response data.
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum CreateClipResult {
+            case success(CreateClipData)
+            case failure(Data?, URLResponse?, Error?)
+        }
+
+        /// `bitsLeaderboardURL` is the URL that should be accessed for all bits leaderboard calls.
+        private static let clipsURL = URL(string: "https://api.twitch.tv/helix/clips")!
+
+        /// `createClip` will run the `Create Clip` API call of the New Twitch API.
+        ///
+        /// This API call requires a token with `clips:edit` permissions.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#create-clip)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - count: The maximum number of users to obtain data for on the leaderboard. Highest
+        /// ranking users will be returned first.
+        ///   - period: The period to obtain data for. If this value is `.all`, then `startedAt`
+        /// will be ignored.
+        ///   - startedAt: The `Date` for which the period should start for.
+        ///   - userId: The id of the user to get Bit leaderboard results for.
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `GetBitsLeaderboardResult`: `success` and `failure`.
+        /// For more information on what values are returned, please see documentation on
+        /// `GetGameAnalyticsResult`
+        ///
+        /// - seealso: `Period`
+        /// - seealso: `GetBitsLeaderboardResult`
+        public static func createClip(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                      broadcasterId: String, hasDelay: Bool? = nil,
+                                      completionHandler: @escaping (CreateClipResult) -> Void) {
+            Twitch.performAPIWebRequest(
+                to: clipsURL, withHTTPMethod: URLRequest.RequestHeaderTypes.post,
+                withParameters: convertCreateClipParamsToDict(broadcasterId: broadcasterId, hasDelay: hasDelay),
+                withTokenManager: tokenManager,
+                onSuccess: { completionHandler(CreateClipResult.success($0)) },
+                onFailure: { completionHandler(CreateClipResult.failure($0, $1, $2)) })
+        }
+
+        /// `convertCreateClipParamsToDict` is used to convert the typed parameters into a list of
+        /// web request parameters as a String-keyed Dictionary for a `createClip` method call.
+        ///
+        /// - Parameters:
+        ///   - broadcasterId: input
+        ///   - hasDelay: input
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertCreateClipParamsToDict(broadcasterId: String,
+                                                          hasDelay: Bool?) -> [String: Any] {
+            var parametersDictionary = [String: Any]()
+            parametersDictionary[WebRequestKeys.broadcasterId] = broadcasterId
+            parametersDictionary.addValueIfNotNil(hasDelay, toKey: WebRequestKeys.hasDelay)
+            return parametersDictionary
+        }
+    }
+
     // MARK: - Twitch Functions
 
     /// `performAPIWebRequest` will create a Web Request destined for the New Twitch API. The URL,
@@ -398,8 +476,8 @@ public class Twitch {
     ///   - failureHandler: The handler for a failed web request
     private static func performAPIWebRequest<T: Unmarshaling>(
         to url: URL, withHTTPMethod httpMethod: String?, withParameters parameters: [String: Any],
-        withTokenManager tokenManager: TwitchTokenManager, onSuccess successHandler: @escaping (T) -> (),
-        onFailure failureHandler: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        withTokenManager tokenManager: TwitchTokenManager, onSuccess successHandler: @escaping (T) -> Void,
+        onFailure failureHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
         
         var request = URLRequest(url: url)
         do {

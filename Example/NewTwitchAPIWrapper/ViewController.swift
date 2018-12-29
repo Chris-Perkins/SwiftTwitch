@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Twitch.Bits.getBitsLeaderboard() { (result) in
+        Twitch.Clips.createClip(broadcasterId: "44322889") { (result) in
             switch result {
             case .failure(let data, let response, let error):
                 print(response)
