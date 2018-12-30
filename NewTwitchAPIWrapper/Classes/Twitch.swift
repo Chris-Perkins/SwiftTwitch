@@ -23,6 +23,7 @@ public class Twitch {
     internal struct WebRequestKeys {
         static let after = "after"
         static let before = "before"
+        static let boxArtURL = "box_art_url"
         static let broadcasterId = "broadcaster_id"
         static let broadcasterName = "broadcaster_name"
         static let count = "count"
@@ -41,6 +42,7 @@ public class Twitch {
         static let id = "id"
         static let language = "language"
         static let manifestId = "manifest_id"
+        static let name = "name"
         static let pagination = "pagination"
         static let period = "period"
         static let rank = "rank"
@@ -549,6 +551,78 @@ public class Twitch {
             if let endedAt = endedAt {
                 parametersDictionary[WebRequestKeys.endedAt] = Date.convertDateToZuluString(endedAt)
             }
+            return parametersDictionary
+        }
+    }
+    
+    // MARK: - Games
+
+    public struct Games {
+
+        /// `GetTopGamesResult` defines the different types of results that can be
+        /// retrieved from the `getTopGames` call of the `Games` API. Variables are
+        /// included that specify the data that was returned.
+        ///
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// extension analytics data.
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum GetTopGamesResult {
+            case success(GetTopGamesData)
+            case failure(Data?, URLResponse?, Error?)
+        }
+
+        /// The URL that will be used for the `Get Top Games` API call.
+        private static let getTopGamesURL = URL(string: "https://api.twitch.tv/helix/games/top")!
+
+        /// `getTopGames` will run the `Get Top Games` API call of the New Twitch API.
+        ///
+        /// This method does **not** require a `TwitchTokenManager`. No Authorization is required.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#get-top-games)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - after: The forward pagination token of the call.
+        ///   - before: The backwards pagination token of the call.
+        ///   - first: The number of objects to retrieve. Maximum 100. Default 20.
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `GetTopGamesResult`: `success` and
+        /// `failure`.
+        ///
+        /// - seealso: `GetTopGamesResult`
+        public static func getTopGames(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                       after: String? = nil, before: String? = nil, first: Int? = nil,
+                                       completionHandler: @escaping (GetTopGamesResult) -> Void) {
+            Twitch.performAPIWebRequest(
+                to: getTopGamesURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withParameters: convertGetTopGamesParamsToDict(after: after, before: before, first: first),
+                enforcesAuthorization: true, withTokenManager: tokenManager,
+                onSuccess: { completionHandler(GetTopGamesResult.success($0)) },
+                onFailure: { completionHandler(GetTopGamesResult.failure($0, $1, $2)) })
+        }
+
+        /// `convertGetTopGamesParamsToDict` is used to convert the typed parameters into a list of
+        /// web request parameters as a String-keyed Dictionary for a `getTopGames` method call.
+        ///
+        /// - Parameters:
+        ///   - after: input
+        ///   - startedAt: input
+        ///   - endedAt: input
+        ///   - extensionId: input
+        ///   - first: input
+        ///   - type: input
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertGetTopGamesParamsToDict(after: String?, before: String?,
+                                                           first: Int?) -> [String: Any] {
+            var parametersDictionary = [String: Any]()
+            parametersDictionary.addValueIfNotNil(after, toKey: WebRequestKeys.after)
+            parametersDictionary.addValueIfNotNil(before, toKey: WebRequestKeys.before)
+            parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
             return parametersDictionary
         }
     }
