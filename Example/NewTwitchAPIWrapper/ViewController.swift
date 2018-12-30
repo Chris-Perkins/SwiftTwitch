@@ -14,10 +14,17 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Twitch.Clips.createClip(broadcasterId: "44322889") { (result) in
+        Twitch.Clips.getClips(clipIds: ["RacySpotlessVampireUnSane"]) { (result) in
             switch result {
             case .failure(let data, let response, let error):
+                let x = data!
+                guard let jsonObject = try? JSONSerialization.jsonObject(with: x, options: .allowFragments) else {
+                    return
+                }
+                let t = jsonObject as? [String: Any]
+                print(t)
                 print(response)
+                print(error)
             case .success(let thing):
                 print(thing)
             }

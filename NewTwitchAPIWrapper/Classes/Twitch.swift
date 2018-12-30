@@ -22,27 +22,38 @@ public class Twitch {
     /// for the New Twitch API.
     internal struct WebRequestKeys {
         static let after = "after"
+        static let before = "before"
         static let broadcasterId = "broadcaster_id"
+        static let broadcasterName = "broadcaster_name"
         static let count = "count"
+        static let createdAt = "created_at"
+        static let creatorId = "creator_id"
+        static let creatorName = "creator_name"
         static let data = "data"
         static let dateRange = "date_range"
         static let editURL = "edit_url"
+        static let embedURL = "embed_url"
         static let endedAt = "ended_at"
         static let extensionId = "extension_id"
         static let first = "first"
         static let gameId = "game_id"
         static let hasDelay = "has_delay"
         static let id = "id"
+        static let language = "language"
         static let pagination = "pagination"
         static let period = "period"
         static let rank = "rank"
         static let score = "score"
         static let startedAt = "started_at"
+        static let thumbnailURL = "thumbnail_url"
+        static let title = "title"
         static let total = "total"
         static let type = "type"
-        static let url = "URL"
+        static let url = "url"
         static let userId = "user_id"
         static let userName = "user_name"
+        static let videoId = "video_id"
+        static let viewCount = "view_count"
     }
 
     // MARK: - Analytics
@@ -214,8 +225,7 @@ public class Twitch {
             parametersDictionary.addValueIfNotNil(type?.rawValue, toKey: WebRequestKeys.type)
 
             if let startedAt = startedAt {
-                parametersDictionary[WebRequestKeys.startedAt] =
-                    Date.convertDateToZuluString(startedAt)
+                parametersDictionary[WebRequestKeys.startedAt] = Date.convertDateToZuluString(startedAt)
             }
             if let endedAt = endedAt {
                 parametersDictionary[WebRequestKeys.endedAt] = Date.convertDateToZuluString(endedAt)
@@ -247,8 +257,7 @@ public class Twitch {
             parametersDictionary.addValueIfNotNil(type?.rawValue, toKey: WebRequestKeys.type)
 
             if let startedAt = startedAt {
-                parametersDictionary[WebRequestKeys.startedAt] =
-                    Date.convertDateToZuluString(startedAt)
+                parametersDictionary[WebRequestKeys.startedAt] = Date.convertDateToZuluString(startedAt)
             }
             if let endedAt = endedAt {
                 parametersDictionary[WebRequestKeys.endedAt] = Date.convertDateToZuluString(endedAt)
@@ -340,7 +349,7 @@ public class Twitch {
         ///   - completionHandler: The function that should be run whenever the retrieval is
         /// successful. There are two types of `GetBitsLeaderboardResult`: `success` and `failure`.
         /// For more information on what values are returned, please see documentation on
-        /// `GetGameAnalyticsResult`
+        /// `GetBitsLeaderboardResult`
         ///
         /// - seealso: `Period`
         /// - seealso: `GetBitsLeaderboardResult`
@@ -406,8 +415,28 @@ public class Twitch {
             case failure(Data?, URLResponse?, Error?)
         }
 
+        /// `GetClipsResult` defines the different types of results that can be retrieved from the
+        /// `Get Clips` call of the `Clips` API. Variables are included that specify the data that
+        /// was returned.
+        ///
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// clip response data.
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum GetClipsResult {
+            case success(GetClipsData)
+            case failure(Data?, URLResponse?, Error?)
+        }
+
         /// `bitsLeaderboardURL` is the URL that should be accessed for all bits leaderboard calls.
         private static let clipsURL = URL(string: "https://api.twitch.tv/helix/clips")!
+
+        /// `clipIdDelimiter` is used to specify the `String` that separates multiple clip IDs in a
+        /// web request.
+        private static let clipIdDelimiter = ","
 
         /// `createClip` will run the `Create Clip` API call of the New Twitch API.
         ///
@@ -417,20 +446,16 @@ public class Twitch {
         /// https://dev.twitch.tv/docs/api/reference/#create-clip)
         ///
         /// - Parameters:
-        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
-        ///   - count: The maximum number of users to obtain data for on the leaderboard. Highest
-        /// ranking users will be returned first.
-        ///   - period: The period to obtain data for. If this value is `.all`, then `startedAt`
-        /// will be ignored.
-        ///   - startedAt: The `Date` for which the period should start for.
-        ///   - userId: The id of the user to get Bit leaderboard results for.
+        ///   - broadcasterId: The ID of the broadcaster to create a clip for.
+        ///   - hasDelay: if `true`, delay is added to account for the delay between the actual
+        /// stream and when they would experience that moment in the stream. If `false`, then the
+        /// clip is captured at the immediate moment with no delay. The default value is `false`.
         ///   - completionHandler: The function that should be run whenever the retrieval is
-        /// successful. There are two types of `GetBitsLeaderboardResult`: `success` and `failure`.
+        /// successful. There are two types of `CreateClipResult`: `success` and `failure`.
         /// For more information on what values are returned, please see documentation on
-        /// `GetGameAnalyticsResult`
+        /// `CreateClipResult`
         ///
-        /// - seealso: `Period`
-        /// - seealso: `GetBitsLeaderboardResult`
+        /// - seealso: `CreateClipResult`
         public static func createClip(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
                                       broadcasterId: String, hasDelay: Bool? = nil,
                                       completionHandler: @escaping (CreateClipResult) -> Void) {
@@ -440,6 +465,49 @@ public class Twitch {
                 withTokenManager: tokenManager,
                 onSuccess: { completionHandler(CreateClipResult.success($0)) },
                 onFailure: { completionHandler(CreateClipResult.failure($0, $1, $2)) })
+        }
+
+        /// `createClip` will run the `Create Clip` API call of the New Twitch API. A broadcaster
+        /// ID, game ID, or clip IDs must be provided.
+        ///
+        /// This API call requires no special permissions.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#get-clips)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - broadcasterId: The ID of the broadcaster to retrieve clips for. Must be specified if
+        /// no other specification exists.
+        ///   - gameId: The ID of the game to retrieve clips for. Must be specified if no other
+        /// specification exists.
+        ///   - clipIds: The ID of the clips to retrieve. Maximum of 100. Must be specified if no
+        /// other specification exists.
+        ///   - after: The backwards pagination token
+        ///   - before: The backwards pagination token
+        ///   - startedAt: The preceding date in the past where all clips should be created after
+        ///   - endedAt: The proceeding date in the past where all clips should be created before
+        ///   - first: The maximum number of clips to retrieve. Default of 20; maximum of 100.
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `GetClipsResult`: `success` and `failure`.
+        /// For more information on what values are returned, please see documentation on
+        /// `GetClipsResult`
+        ///
+        /// - seealso: `Period`
+        /// - seealso: `GetClipsResult`
+        public static func getClips(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                    broadcasterId: String? = nil, gameId: String? = nil, clipIds: [String]? = nil,
+                                    after: String? = nil, before: String? = nil, startedAt: Date? = nil,
+                                    endedAt: Date? = nil, first: Int? = nil,
+                                    completionHandler: @escaping (GetClipsResult) -> Void) {
+            Twitch.performAPIWebRequest(
+                to: clipsURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withParameters: convertGetClipsParamsToDict(broadcasterId: broadcasterId, gameId: gameId,
+                                                            clipIds: clipIds, before: before, after: after,
+                                                            startedAt: startedAt, endedAt: endedAt, first: first),
+                withTokenManager: tokenManager,
+                onSuccess: { completionHandler(GetClipsResult.success($0)) },
+                onFailure: { completionHandler(GetClipsResult.failure($0, $1, $2)) })
         }
 
         /// `convertCreateClipParamsToDict` is used to convert the typed parameters into a list of
@@ -454,6 +522,41 @@ public class Twitch {
             var parametersDictionary = [String: Any]()
             parametersDictionary[WebRequestKeys.broadcasterId] = broadcasterId
             parametersDictionary.addValueIfNotNil(hasDelay, toKey: WebRequestKeys.hasDelay)
+            return parametersDictionary
+        }
+
+        /// `convertGetClipsParamsToDict` is used to convert the typed parameters into a list of
+        /// web request parameters as a String-keyed Dictionary for a `createClip` method call.
+        ///
+        /// - Parameters:
+        ///   - broadcasterId: input
+        ///   - gameId: input
+        ///   - clipIds: input
+        ///   - before: input
+        ///   - after: input
+        ///   - startedAt: input
+        ///   - endedAt: input
+        ///   - first: input
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertGetClipsParamsToDict(broadcasterId: String?, gameId: String?, clipIds: [String]?,
+                                                        before: String?, after: String?, startedAt: Date?,
+                                                        endedAt: Date?, first: Int?) -> [String: Any] {
+            var parametersDictionary = [String: Any]()
+            parametersDictionary.addValueIfNotNil(broadcasterId, toKey: WebRequestKeys.broadcasterId)
+            parametersDictionary.addValueIfNotNil(gameId, toKey: WebRequestKeys.gameId)
+            parametersDictionary.addValueIfNotNil(before, toKey: WebRequestKeys.before)
+            parametersDictionary.addValueIfNotNil(after, toKey: WebRequestKeys.after)
+            parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
+
+            if let clipIds = clipIds {
+                parametersDictionary[WebRequestKeys.id] = clipIds.joined(separator: clipIdDelimiter)
+            }
+            if let startedAt = startedAt {
+                parametersDictionary[WebRequestKeys.startedAt] = Date.convertDateToZuluString(startedAt)
+            }
+            if let endedAt = endedAt {
+                parametersDictionary[WebRequestKeys.endedAt] = Date.convertDateToZuluString(endedAt)
+            }
             return parametersDictionary
         }
     }
@@ -478,19 +581,18 @@ public class Twitch {
         to url: URL, withHTTPMethod httpMethod: String?, withParameters parameters: [String: Any],
         withTokenManager tokenManager: TwitchTokenManager, onSuccess successHandler: @escaping (T) -> Void,
         onFailure failureHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
-        
-        var request = URLRequest(url: url)
+
+        var request = URLRequest(url: url.withQueryItems(parameters))
         do {
             try request.addTokenAuthorizationHeader(fromTokenManager: tokenManager)
         } catch {
             failureHandler(nil, nil, error)
             return
         }
-        
+
         request.setValueToJSONContentType()
         request.httpMethod = httpMethod
-        request.httpBody = parameters.getAsData()
-        
+
         urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
             guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
                 let retrievedObject = try? T(object: dataAsDictionary),

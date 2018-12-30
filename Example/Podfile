@@ -2,6 +2,7 @@ use_frameworks!
 
 target 'NewTwitchAPIWrapper_Example' do
   pod 'NewTwitchAPIWrapper', :path => '../'
+  platform :ios, '12.0'
 
   target 'NewTwitchAPIWrapper_Tests' do
     inherit! :search_paths

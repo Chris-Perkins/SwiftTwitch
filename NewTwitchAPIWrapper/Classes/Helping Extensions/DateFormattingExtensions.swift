@@ -15,11 +15,11 @@ extension Date {
     /// `zuluDateFormatter` is a lazily-instantiated date formatter whose time zone is set to UTC
     /// and whose format is RFC 3339.
     ///
-    /// The RFC 3339 format is "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+    /// The RFC 3339 format is "yyyy-MM-dd'T'HH:mm:ss'Z'"
     private static var zuluDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
         dateFormatter.timeZone = TimeZone(identifier: "UTC")!
         
         return dateFormatter
