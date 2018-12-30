@@ -155,7 +155,7 @@ public class Twitch {
                 withParameters: convertGetExtensionAnalyticsParamsToDict(after: after, startedAt: startedAt,
                                                                          endedAt: endedAt, extensionId: extensionId,
                                                                          first: first, type: type),
-                withTokenManager: tokenManager,
+                enforcesAuthorization: true, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetExtensionAnalyticsResult.success($0)) },
                 onFailure: { completionHandler(GetExtensionAnalyticsResult.failure($0, $1, $2)) })
         }
@@ -195,7 +195,7 @@ public class Twitch {
                 withParameters: convertGameAnalyticsParamsToDict(after: after, startedAt: startedAt,
                                                                  endedAt: endedAt, gameId: gameId, first: first,
                                                                  type: type),
-                withTokenManager: tokenManager,
+                enforcesAuthorization: true, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetGameAnalyticsResult.success($0)) },
                 onFailure: { completionHandler(GetGameAnalyticsResult.failure($0, $1, $2)) })
         }
@@ -357,7 +357,7 @@ public class Twitch {
                 to: bitsLeaderboardURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
                 withParameters: convertGetBitsLeaderboardParamsToDict(count: count, period: period,
                                                                       startedAt: startedAt, userId: userId),
-                withTokenManager: tokenManager,
+                enforcesAuthorization: true, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetBitsLeaderboardResult.success($0)) },
                 onFailure: { completionHandler(GetBitsLeaderboardResult.failure($0, $1, $2)) })
         }
@@ -456,7 +456,7 @@ public class Twitch {
             Twitch.performAPIWebRequest(
                 to: clipsURL, withHTTPMethod: URLRequest.RequestHeaderTypes.post,
                 withParameters: convertCreateClipParamsToDict(broadcasterId: broadcasterId, hasDelay: hasDelay),
-                withTokenManager: tokenManager,
+                enforcesAuthorization: true, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(CreateClipResult.success($0)) },
                 onFailure: { completionHandler(CreateClipResult.failure($0, $1, $2)) })
         }
@@ -497,7 +497,7 @@ public class Twitch {
                 withParameters: convertGetClipsParamsToDict(broadcasterId: broadcasterId, gameId: gameId,
                                                             clipIds: clipIds, before: before, after: after,
                                                             startedAt: startedAt, endedAt: endedAt, first: first),
-                withTokenManager: tokenManager,
+                enforcesAuthorization: false, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetClipsResult.success($0)) },
                 onFailure: { completionHandler(GetClipsResult.failure($0, $1, $2)) })
         }
@@ -566,20 +566,25 @@ public class Twitch {
     ///   - url: The URL to perform the web request to
     ///   - httpMethod: The method to perform the url request with
     ///   - parameters: The parameters of the web request
+    ///   - enforcesAuthorization: If set to `true`, this will fail the API call if adding the
+    /// authorization header fails. If `false`, the call will be ignored instead.
     ///   - tokenManager: The token manager that is used to provide authentication
     ///   - successHandler: The handler for a successful web request
     ///   - failureHandler: The handler for a failed web request
     private static func performAPIWebRequest<T: Unmarshaling>(
         to url: URL, withHTTPMethod httpMethod: String?, withParameters parameters: [String: Any],
-        withTokenManager tokenManager: TwitchTokenManager, onSuccess successHandler: @escaping (T) -> Void,
+        enforcesAuthorization: Bool, withTokenManager tokenManager: TwitchTokenManager,
+        onSuccess successHandler: @escaping (T) -> Void,
         onFailure failureHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
 
         var request = URLRequest(url: url.withQueryItems(parameters))
         do {
             try request.addTokenAuthorizationHeader(fromTokenManager: tokenManager)
         } catch {
-            failureHandler(nil, nil, error)
-            return
+            if enforcesAuthorization {
+                failureHandler(nil, nil, error)
+                return
+            }
         }
 
         request.setValueToJSONContentType()
