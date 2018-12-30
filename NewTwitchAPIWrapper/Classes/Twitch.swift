@@ -58,6 +58,10 @@ public class Twitch {
         static let videoId = "video_id"
         static let viewCount = "view_count"
     }
+    
+    /// `listDelimiter` is used to specify the `String` that separates multiple items in a web
+    /// request.
+    private static let listDelimiter = ","
 
     // MARK: - Analytics
 
@@ -432,10 +436,6 @@ public class Twitch {
         /// `clipsURL` is the URL that should be accessed for all bits leaderboard calls.
         private static let clipsURL = URL(string: "https://api.twitch.tv/helix/clips")!
 
-        /// `clipIdDelimiter` is used to specify the `String` that separates multiple clip IDs in a
-        /// web request.
-        private static let clipIdDelimiter = ","
-
         /// `createClip` will run the `Create Clip` API call of the New Twitch API.
         ///
         /// This API call requires a token with `clips:edit` permissions.
@@ -543,7 +543,7 @@ public class Twitch {
             parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
 
             if let clipIds = clipIds {
-                parametersDictionary[WebRequestKeys.id] = clipIds.joined(separator: clipIdDelimiter)
+                parametersDictionary[WebRequestKeys.id] = clipIds.joined(separator: listDelimiter)
             }
             if let startedAt = startedAt {
                 parametersDictionary[WebRequestKeys.startedAt] = Date.convertDateToZuluString(startedAt)
@@ -564,7 +564,7 @@ public class Twitch {
         /// included that specify the data that was returned.
         ///
         /// - success: Defines that the call was successful. The output variable will contain all
-        /// extension analytics data.
+        /// returned data.
         /// - failure: Defines that the call failed. Returns all data corresponding to the failed
         /// call. These data pieces are as follows:
         /// 1. Data? - The data that was returned by the API
@@ -574,9 +574,28 @@ public class Twitch {
             case success(GetTopGamesData)
             case failure(Data?, URLResponse?, Error?)
         }
+        
+        /// `GetGamesResult` defines the different types of results that can be retrieved from the
+        /// `getGames` call of the `Games` API. Variables are included that specify the data that
+        /// was returned.
+        ///
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// returned data.
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum GetGamesResult {
+            case success(GetGamesData)
+            case failure(Data?, URLResponse?, Error?)
+        }
 
         /// The URL that will be used for the `Get Top Games` API call.
         private static let getTopGamesURL = URL(string: "https://api.twitch.tv/helix/games/top")!
+
+        /// The URL that will be used for the `Get Games` API call.
+        private static let getGamesURL = URL(string: "https://api.twitch.tv/helix/games")!
 
         /// `getTopGames` will run the `Get Top Games` API call of the New Twitch API.
         ///
@@ -601,11 +620,41 @@ public class Twitch {
             Twitch.performAPIWebRequest(
                 to: getTopGamesURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
                 withParameters: convertGetTopGamesParamsToDict(after: after, before: before, first: first),
-                enforcesAuthorization: true, withTokenManager: tokenManager,
+                enforcesAuthorization: false, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetTopGamesResult.success($0)) },
                 onFailure: { completionHandler(GetTopGamesResult.failure($0, $1, $2)) })
         }
 
+        /// `getGames` will run the `Get Games` API call of the New Twitch API.
+        ///
+        /// This method does **not** require a `TwitchTokenManager`. No Authorization is required.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#get-games)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - gameIds: The IDs of the games to retrieve information for. Max 100. This does not
+        /// need to be specified if `gameNames` is not `nil`.
+        ///   - gameNames: The names of the games to retrieve information for. These MUST be exact
+        /// matches. E.g.: "Super Smash Bros." will not resolve, but "Super Smash Bros. Ultimate"
+        /// will. Max 100. This does not need to be specified if `gameIds` is not `nil`.
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `GetTopGamesResult`: `success` and
+        /// `failure`.
+        ///
+        /// - seealso: `GetTopGamesResult`
+        public static func getGames(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                    gameIds: [String]?, gameNames: [String]?,
+                                    completionHandler: @escaping (GetGamesResult) -> Void) {
+            Twitch.performAPIWebRequest(
+                to: getGamesURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withParameters: convertGetGamesParamsToDict(gameIds: gameIds, gameNames: gameNames),
+                enforcesAuthorization: false, withTokenManager: tokenManager,
+                onSuccess: { completionHandler(GetGamesResult.success($0)) },
+                onFailure: { completionHandler(GetGamesResult.failure($0, $1, $2)) })
+        }
+        
         /// `convertGetTopGamesParamsToDict` is used to convert the typed parameters into a list of
         /// web request parameters as a String-keyed Dictionary for a `getTopGames` method call.
         ///
@@ -623,6 +672,24 @@ public class Twitch {
             parametersDictionary.addValueIfNotNil(after, toKey: WebRequestKeys.after)
             parametersDictionary.addValueIfNotNil(before, toKey: WebRequestKeys.before)
             parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
+            return parametersDictionary
+        }
+        
+        /// `convertGetGamesParamsToDict` is used to convert the typed parameters into a list of web
+        /// request parameters as a String-keyed Dictionary for a `getGames` method call.
+        ///
+        /// - Parameters:
+        ///   - gameIds: input
+        ///   - gameNames: input
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertGetGamesParamsToDict(gameIds: [String]?, gameNames: [String]?) -> [String: Any] {
+            var parametersDictionary = [String: Any]()
+            if let gameIds = gameIds {
+                parametersDictionary[WebRequestKeys.id] = gameIds.joined(separator: listDelimiter)
+            }
+            if let gameNames = gameNames {
+                parametersDictionary[WebRequestKeys.name] = gameNames.joined(separator: listDelimiter)
+            }
             return parametersDictionary
         }
     }

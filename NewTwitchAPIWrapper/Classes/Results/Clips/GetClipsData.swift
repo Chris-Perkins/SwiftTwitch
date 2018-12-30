@@ -21,7 +21,7 @@ public struct GetClipsData: Unmarshaling {
     /// Initializes a `GetsClipsData` object from the input `MarshaledObject`. This will throw
     /// if there is missing data from the input `MarshaledObject`.
     ///
-    /// - Parameter object: The object to initialize a `GetClips` piece from
+    /// - Parameter object: The object to initialize a `GetClipsData` object from
     /// - Throws: If data is missing that was expected to be non-`nil`.
     public init(object: MarshaledObject) throws {
         clipData = try object.value(for: Twitch.WebRequestKeys.data)

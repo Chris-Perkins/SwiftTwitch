@@ -18,10 +18,10 @@ public struct GetTopGamesData: Unmarshaling {
     /// `Get Top Games` API call.
     public let paginationToken: String?
     
-    /// Initializes a `GetsClipsData` object from the input `MarshaledObject`. This will throw
+    /// Initializes a `GetTopGamesData` object from the input `MarshaledObject`. This will throw
     /// if there is missing data from the input `MarshaledObject`.
     ///
-    /// - Parameter object: The object to initialize a `GetClips` piece from
+    /// - Parameter object: The object to initialize a `GetTopGamesData` object from
     /// - Throws: If data is missing that was expected to be non-`nil`.
     public init(object: MarshaledObject) throws {
         gameData = try object.value(for: Twitch.WebRequestKeys.data)
