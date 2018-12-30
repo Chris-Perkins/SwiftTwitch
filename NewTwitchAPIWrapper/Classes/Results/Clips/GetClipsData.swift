@@ -12,7 +12,7 @@ import Marshal
 public struct GetClipsData: Unmarshaling {
     
     /// `clipData` specifies the data of the clips that was retrieved from the API call.
-    public let clipData: [GetClipsClipData]
+    public let clipData: [ClipData]
     
     /// `paginationToken` defines the token that allows for the pagination of results in the
     /// `Get Clips` API call.

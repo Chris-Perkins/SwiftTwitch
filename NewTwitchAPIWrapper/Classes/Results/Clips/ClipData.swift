@@ -1,5 +1,5 @@
 //
-//  GetClipsClipData.swift
+//  ClipData.swift
 //  NewTwitchAPIWrapper
 //
 //  Created by Christopher Perkins on 12/29/18.
@@ -7,9 +7,9 @@
 
 import Marshal
 
-/// `GetClipsClipData` is a class that encapsulates all of the information of a single returned clip
-/// from the returned array of Clip data from the New Twitch API's `Get Clips` call.
-public struct GetClipsClipData: Unmarshaling {
+/// `ClipData` is a class that encapsulates all of the information of a single returned clip from
+/// the returned array of Clip data from the New Twitch API's `Clips` methods.
+public struct ClipData: Unmarshaling {
     
     /// `broadcasterId` specifies the ID of the user from whose stream the clip was taken from.
     public let broadcasterId: String
@@ -61,8 +61,8 @@ public struct GetClipsClipData: Unmarshaling {
     /// `viewCount` specifies the amount of views this clip has.
     public let viewCount: Int
     
-    /// Initializes a `GetClipsClipData` object from the input `MarshaledObject`. This will throw
-    /// if there is missing data from the input `MarshaledObject`.
+    /// Initializes a `ClipData` object from the input `MarshaledObject`. This will throw if there
+    /// is missing data from the input `MarshaledObject`.
     ///
     /// - Parameter object: The object to initialize a `GetClipsClipData` piece from
     /// - Throws: If data is missing that was expected to be non-`nil`.

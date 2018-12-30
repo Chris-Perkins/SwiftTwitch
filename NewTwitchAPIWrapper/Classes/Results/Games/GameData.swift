@@ -1,5 +1,5 @@
 //
-//  GetTopGamesGameData.swift
+//  GameData.swift
 //  Marshal
 //
 //  Created by Christopher Perkins on 12/29/18.
@@ -7,9 +7,9 @@
 
 import Marshal
 
-/// `GetTopGamesGameData` is a class that encapsulates all of the information of a single returned
-/// game from the returned array of Game data from the New Twitch API's `Get Top Games` call.
-public struct GetTopGamesGameData: Unmarshaling {
+/// `GameData` is a class that encapsulates all of the information of a single returned game from
+/// the returned array of Game data from the New Twitch API's `Games` methods.
+public struct GameData: Unmarshaling {
     
     /// `boxArtURL` specifies the URL as a `String` where the box art of the game can be found.
     /// To use this as a real `URL`, you must replace the `{width}` and `{height}` strings found
@@ -22,8 +22,8 @@ public struct GetTopGamesGameData: Unmarshaling {
     /// `name` specifies the name of the game on Twitch.
     public let name: String
     
-    /// Initializes a `GetTopGamesGameData` object from the input `MarshaledObject`. This will throw
-    /// if there is missing data from the input `MarshaledObject`.
+    /// Initializes a `GameData` object from the input `MarshaledObject`. This will throw if there
+    /// is missing data from the input `MarshaledObject`.
     ///
     /// - Parameter object: The object to initialize a `GetTopGamesGameData` piece from
     /// - Throws: If data is missing that was expected to be non-`nil`.

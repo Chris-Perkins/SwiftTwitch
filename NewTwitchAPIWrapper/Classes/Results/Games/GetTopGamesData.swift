@@ -12,7 +12,7 @@ import Marshal
 public struct GetTopGamesData: Unmarshaling {
     
     /// `gameData` specifies the data of the top games that was retrieved from the API call.
-    public let gameData: [GetTopGamesGameData]
+    public let gameData: [GameData]
     
     /// `paginationToken` defines the token that allows for the pagination of results in the
     /// `Get Top Games` API call.
