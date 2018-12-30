@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Twitch.Clips.getClips(clipIds: ["RacySpotlessVampireUnSane"]) { (result) in
+        Twitch.Clips.getClips(broadcasterId: "19571641") { (result) in
             switch result {
             case .failure(let data, let response, let error):
                 let x = data!

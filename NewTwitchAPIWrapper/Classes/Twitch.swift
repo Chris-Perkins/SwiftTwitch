@@ -40,6 +40,7 @@ public class Twitch {
         static let hasDelay = "has_delay"
         static let id = "id"
         static let language = "language"
+        static let manifestId = "manifest_id"
         static let pagination = "pagination"
         static let period = "period"
         static let rank = "rank"
@@ -140,8 +141,7 @@ public class Twitch {
         /// on `AnalyticsType`.
         ///   - completionHandler: The function that should be run whenever the retrieval is
         /// successful. There are two types of `GetExtensionAnalyticsResult`: `success` and
-        /// `failure`. For more information on what values are returned, please see documentation on
-        /// `GetExtensionAnalyticsResult`
+        /// `failure`.
         ///
         /// - seealso: `AnalyticsType`
         /// - seealso: `GetExtensionAnalyticsResult`
@@ -183,8 +183,6 @@ public class Twitch {
         /// on `AnalyticsType`.
         ///   - completionHandler: The function that should be run whenever the retrieval is
         /// successful. There are two types of `GetGameAnalyticsResult`: `success` and `failure`.
-        /// For more information on what values are returned, please see documentation on
-        /// `GetGameAnalyticsResult`
         ///
         /// - seealso: `AnalyticsType`
         /// - seealso: `GetGameAnalyticsResult`
@@ -348,8 +346,6 @@ public class Twitch {
         ///   - userId: The id of the user to get Bit leaderboard results for.
         ///   - completionHandler: The function that should be run whenever the retrieval is
         /// successful. There are two types of `GetBitsLeaderboardResult`: `success` and `failure`.
-        /// For more information on what values are returned, please see documentation on
-        /// `GetBitsLeaderboardResult`
         ///
         /// - seealso: `Period`
         /// - seealso: `GetBitsLeaderboardResult`
@@ -431,7 +427,7 @@ public class Twitch {
             case failure(Data?, URLResponse?, Error?)
         }
 
-        /// `bitsLeaderboardURL` is the URL that should be accessed for all bits leaderboard calls.
+        /// `clipsURL` is the URL that should be accessed for all bits leaderboard calls.
         private static let clipsURL = URL(string: "https://api.twitch.tv/helix/clips")!
 
         /// `clipIdDelimiter` is used to specify the `String` that separates multiple clip IDs in a
@@ -452,8 +448,6 @@ public class Twitch {
         /// clip is captured at the immediate moment with no delay. The default value is `false`.
         ///   - completionHandler: The function that should be run whenever the retrieval is
         /// successful. There are two types of `CreateClipResult`: `success` and `failure`.
-        /// For more information on what values are returned, please see documentation on
-        /// `CreateClipResult`
         ///
         /// - seealso: `CreateClipResult`
         public static func createClip(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
@@ -490,8 +484,6 @@ public class Twitch {
         ///   - first: The maximum number of clips to retrieve. Default of 20; maximum of 100.
         ///   - completionHandler: The function that should be run whenever the retrieval is
         /// successful. There are two types of `GetClipsResult`: `success` and `failure`.
-        /// For more information on what values are returned, please see documentation on
-        /// `GetClipsResult`
         ///
         /// - seealso: `Period`
         /// - seealso: `GetClipsResult`
@@ -557,6 +549,89 @@ public class Twitch {
             if let endedAt = endedAt {
                 parametersDictionary[WebRequestKeys.endedAt] = Date.convertDateToZuluString(endedAt)
             }
+            return parametersDictionary
+        }
+    }
+
+    // MARK: - Entitlements
+
+    /// Entitlements allows users to upload, check the status, and download entitlements.
+    /// Entitlements are digital items that users are entitled to use.
+    public struct Entitlements {
+
+        /// `CreateEntitlementGrantsUploadURLResult` defines the different types of results that can
+        /// be retrieved from the `Create Entitlements Grant Upload URL` call of the `Entitlements`
+        /// API. Variables are included that specify the data that was returned.
+        ///
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// entitlement response data.
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum CreateEntitlementGrantsUploadURLResult {
+            case success(CreateEntitlementGrantsUploadURLData)
+            case failure(Data?, URLResponse?, Error?)
+        }
+
+        // Todo: Define bulkDropsGrant
+        /// Entitlement defines the type of entitlement to be granted for `Create Entitlement Grants
+        /// Upload URL` API calls.
+        ///
+        /// - bulkDropsGrant: I'm honestly not sure what this means. It's just the only one in the
+        /// Twitch API.
+        public enum EntitlementType: String {
+            case bulkDropsGrant = "bulk_drops_grant"
+        }
+
+        /// `createEntitlementGrantsUploadURL` is the URL that should be accessed for all bits
+        /// calls to create an upload entitlement grant.
+        private static let createEntitlementGrantsUploadURL =
+            URL(string: "https://api.twitch.tv/helix/entitlements/upload")!
+
+        /// `createEntitlementsGrantUploadURL` will run the `Create Entitlements Upload Grant URL`
+        /// API call of the New Twitch API.
+        ///
+        /// This API call requires no permissions.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#create-entitlement-grants-upload-url)
+        ///
+        /// - Parameters:
+        ///   - manifestId: A unique identifier of the manifest file to be uploaded. Must be 1-64
+        /// characters long.
+        ///   - type: The type of entitlement to be granted.
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `CreateEntitlementGrantsUploadURLResult`: `success`
+        /// and `failure`.
+        ///
+        /// - seealso: `CreateEntitlementGrantsUploadURLResult`
+        public static func createEntitlementsGrantUploadURL(
+            tokenManager: TwitchTokenManager = TwitchTokenManager.shared, manifestId: String,
+            type: EntitlementType, completionHandler: @escaping (CreateEntitlementGrantsUploadURLResult) -> Void) {
+            Twitch.performAPIWebRequest(
+                to: createEntitlementGrantsUploadURL, withHTTPMethod: URLRequest.RequestHeaderTypes.post,
+                withParameters: convertCreateUploadEntitlementsGrantURLParamsToDict(manifestId: manifestId,
+                                                                                    entitlementType: type),
+                withTokenManager: tokenManager,
+                onSuccess: { completionHandler(CreateEntitlementGrantsUploadURLResult.success($0)) },
+                onFailure: { completionHandler(CreateEntitlementGrantsUploadURLResult.failure($0, $1, $2)) })
+        }
+
+        /// `convertCreateUploadEntitlementsGrantURLParamsToDict` is used to convert the typed
+        /// parameters into a list of web request parameters as a String-keyed Dictionary for a
+        /// `createEntitlementsGrantUploadURL` method call.
+        ///
+        /// - Parameters:
+        ///   - manifestId: input
+        ///   - entitlementType: input
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertCreateUploadEntitlementsGrantURLParamsToDict(
+            manifestId: String, entitlementType: EntitlementType) -> [String: Any] {
+            var parametersDictionary = [String: Any]()
+            parametersDictionary[WebRequestKeys.manifestId] = manifestId
+            parametersDictionary[WebRequestKeys.type] = entitlementType.rawValue
             return parametersDictionary
         }
     }
