@@ -26,6 +26,8 @@ public class Twitch {
         static let boxArtURL = "box_art_url"
         static let broadcasterId = "broadcaster_id"
         static let broadcasterName = "broadcaster_name"
+        static let communityId = "community_id"
+        static let communityIds = "community_ids"
         static let count = "count"
         static let createdAt = "created_at"
         static let creatorId = "creator_id"
@@ -54,9 +56,11 @@ public class Twitch {
         static let type = "type"
         static let url = "url"
         static let userId = "user_id"
+        static let userLogin = "user_login"
         static let userName = "user_name"
         static let videoId = "video_id"
         static let viewCount = "view_count"
+        static let viewerCount = "viewer_count"
     }
     
     /// `listDelimiter` is used to specify the `String` that separates multiple items in a web
@@ -557,6 +561,8 @@ public class Twitch {
     
     // MARK: - Games
 
+    /// Games is a category of Twitch API calls that interacts with "Games" on Twitch. Despite
+    /// the name, "Games" can refer to podcasts, art, or other streaming categories.
     public struct Games {
 
         /// `GetTopGamesResult` defines the different types of results that can be
@@ -689,6 +695,109 @@ public class Twitch {
             }
             if let gameNames = gameNames {
                 parametersDictionary[WebRequestKeys.name] = gameNames.joined(separator: listDelimiter)
+            }
+            return parametersDictionary
+        }
+    }
+
+    // MARK: - Streams
+
+    /// Streams is a category of Twitch API calls that interacts with "Streams" on Twitch.
+    public struct Streams {
+
+        /// `GetStreamsResult` defines the different types of results that can be retrieved from the
+        /// `getStreams` call of the `Games` API. Variables are included that specify the data that
+        /// was returned.
+        ///
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// returned data.
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum GetStreamsResult {
+            case success(GetStreamsData)
+            case failure(Data?, URLResponse?, Error?)
+        }
+
+        /// The URL that will be used for the `Get Streams` API call.
+        private static let getStreamsURL = URL(string: "https://api.twitch.tv/helix/streams")!
+
+        /// `getStreams` will run the `Get Streams` API call of the New Twitch API. The returned
+        /// streams are sorted in descending order such that the most-watched viewer is returned
+        /// first in the received data.
+        ///
+        /// This method does **not** require a `TwitchTokenManager`. No Authorization is required.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#get-streams)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - after: The forward pagination token.
+        ///   - before: The backwards pagination token.
+        ///   - communityIds: Specifies that streams from the specified communities should be
+        /// returned. Up to 100 IDs are possible.
+        ///   - first: The maximum number of streams to return. Maximum 100. Default 20.
+        ///   - gameIds: The IDs of the games to retrieve streams for. Maximum 100.
+        ///   - languages: The languages of streams that should be received. Maximum 100.
+        ///   - userIds: The IDs of the users whose streams should be retrieved. Maximum 100.
+        ///   - userNames: The names of the users whose streams should be retrieved. Maximum 100.
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `GetStreamsResult`: `success` and `failure`.
+        ///
+        /// - seealso: `GetStreamsResult`
+        public static func getStreams(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                      after: String? = nil, before: String? = nil, communityIds: [String]? = nil,
+                                      first: Int? = nil, gameIds: [String]? = nil, languages: [String]? = nil,
+                                      userIds: [String]? = nil, userNames: [String]? = nil,
+                                      completionHandler: @escaping (GetStreamsResult) -> Void) {
+            Twitch.performAPIWebRequest(
+                to: getStreamsURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withParameters: convertGetStreamsParamsToDict(after: after, before: before, communityIds: communityIds,
+                                                              first: first, gameIds: gameIds, languages: languages,
+                                                              userIds: userIds, userNames: userNames),
+                enforcesAuthorization: false, withTokenManager: tokenManager,
+                onSuccess: { completionHandler(GetStreamsResult.success($0)) },
+                onFailure: { completionHandler(GetStreamsResult.failure($0, $1, $2)) })
+        }
+
+        /// `convertGetStreamsParamsToDict` is used to convert the typed parameters into a list of
+        /// web request parameters as a String-keyed Dictionary for a `getStreams` method call.
+        ///
+        /// - Parameters:
+        ///   - after: input
+        ///   - before: input
+        ///   - communityIds: input
+        ///   - first: input
+        ///   - gameIds: input
+        ///   - languages: input
+        ///   - userIds: input
+        ///   - userNames: input
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertGetStreamsParamsToDict(after: String?, before: String?, communityIds: [String]?,
+                                                          first: Int?, gameIds: [String]?, languages: [String]?,
+                                                          userIds: [String]?,
+                                                          userNames: [String]?) -> [String: Any] {
+            var parametersDictionary = [String: Any]()
+            parametersDictionary.addValueIfNotNil(after, toKey: WebRequestKeys.after)
+            parametersDictionary.addValueIfNotNil(before, toKey: WebRequestKeys.before)
+            parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
+            if let communityIds = communityIds {
+                parametersDictionary[WebRequestKeys.communityId] = communityIds.joined(separator: listDelimiter)
+            }
+            if let gameIds = gameIds {
+                parametersDictionary[WebRequestKeys.gameId] = gameIds.joined(separator: listDelimiter)
+            }
+            if let languages = languages {
+                parametersDictionary[WebRequestKeys.language] = languages.joined(separator: listDelimiter)
+            }
+            if let userIds = userIds {
+                parametersDictionary[WebRequestKeys.userId] = userIds.joined(separator: listDelimiter)
+            }
+            if let userNames = userNames {
+                parametersDictionary[WebRequestKeys.userLogin] = userNames.joined(separator: listDelimiter)
             }
             return parametersDictionary
         }
