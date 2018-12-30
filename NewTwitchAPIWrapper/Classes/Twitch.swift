@@ -490,7 +490,7 @@ public class Twitch {
         /// - seealso: `Period`
         /// - seealso: `GetClipsResult`
         public static func getClips(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
-                                    broadcasterId: String? = nil, gameId: String? = nil, clipIds: [String]? = nil,
+                                    broadcasterId: String?, gameId: String?, clipIds: [String]?,
                                     after: String? = nil, before: String? = nil, startedAt: Date? = nil,
                                     endedAt: Date? = nil, first: Int? = nil,
                                     completionHandler: @escaping (GetClipsResult) -> Void) {
