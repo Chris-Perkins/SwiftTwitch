@@ -170,10 +170,11 @@ public class Twitch {
                                                  completionHandler: @escaping (GetExtensionAnalyticsResult) -> Void) {
             Twitch.performAPIWebRequest(
                 to: extensionAnalyticsURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
-                withParameters: convertGetExtensionAnalyticsParamsToDict(after: after, startedAt: startedAt,
-                                                                         endedAt: endedAt, extensionId: extensionId,
-                                                                         first: first, type: type),
-                enforcesAuthorization: true, withTokenManager: tokenManager,
+                withQueryParameters: convertGetExtensionAnalyticsParamsToDict(after: after, startedAt: startedAt,
+                                                                              endedAt: endedAt,
+                                                                              extensionId: extensionId,
+                                                                              first: first, type: type),
+                withBodyParameters: nil, enforcesAuthorization: true, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetExtensionAnalyticsResult.success($0)) },
                 onFailure: { completionHandler(GetExtensionAnalyticsResult.failure($0, $1, $2)) })
         }
@@ -210,10 +211,10 @@ public class Twitch {
                                             completionHandler: @escaping (GetGameAnalyticsResult) -> Void) {
             Twitch.performAPIWebRequest(
                 to: gameAnalyticsURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
-                withParameters: convertGameAnalyticsParamsToDict(after: after, startedAt: startedAt,
-                                                                 endedAt: endedAt, gameId: gameId, first: first,
-                                                                 type: type),
-                enforcesAuthorization: true, withTokenManager: tokenManager,
+                withQueryParameters: convertGameAnalyticsParamsToDict(after: after, startedAt: startedAt,
+                                                                      endedAt: endedAt, gameId: gameId,
+                                                                      first: first, type: type),
+                withBodyParameters: nil, enforcesAuthorization: true, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetGameAnalyticsResult.success($0)) },
                 onFailure: { completionHandler(GetGameAnalyticsResult.failure($0, $1, $2)) })
         }
@@ -355,9 +356,10 @@ public class Twitch {
                                               completionHandler: @escaping (GetBitsLeaderboardResult) -> Void) {
             Twitch.performAPIWebRequest(
                 to: bitsLeaderboardURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
-                withParameters: convertGetBitsLeaderboardParamsToDict(count: count, period: period,
-                                                                      startedAt: startedAt, userId: userId),
-                enforcesAuthorization: true, withTokenManager: tokenManager,
+                withQueryParameters: convertGetBitsLeaderboardParamsToDict(count: count, period: period,
+                                                                           startedAt: startedAt,
+                                                                           userId: userId),
+                withBodyParameters: nil, enforcesAuthorization: true, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetBitsLeaderboardResult.success($0)) },
                 onFailure: { completionHandler(GetBitsLeaderboardResult.failure($0, $1, $2)) })
         }
@@ -451,8 +453,9 @@ public class Twitch {
                                       completionHandler: @escaping (CreateClipResult) -> Void) {
             Twitch.performAPIWebRequest(
                 to: clipsURL, withHTTPMethod: URLRequest.RequestHeaderTypes.post,
-                withParameters: convertCreateClipParamsToDict(broadcasterId: broadcasterId, hasDelay: hasDelay),
-                enforcesAuthorization: true, withTokenManager: tokenManager,
+                withQueryParameters: convertCreateClipParamsToDict(broadcasterId: broadcasterId,
+                                                                   hasDelay: hasDelay),
+                withBodyParameters: nil, enforcesAuthorization: true, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(CreateClipResult.success($0)) },
                 onFailure: { completionHandler(CreateClipResult.failure($0, $1, $2)) })
         }
@@ -490,10 +493,11 @@ public class Twitch {
                                     completionHandler: @escaping (GetClipsResult) -> Void) {
             Twitch.performAPIWebRequest(
                 to: clipsURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
-                withParameters: convertGetClipsParamsToDict(broadcasterId: broadcasterId, gameId: gameId,
-                                                            clipIds: clipIds, before: before, after: after,
-                                                            startedAt: startedAt, endedAt: endedAt, first: first),
-                enforcesAuthorization: false, withTokenManager: tokenManager,
+                withQueryParameters: convertGetClipsParamsToDict(broadcasterId: broadcasterId, gameId: gameId,
+                                                                 clipIds: clipIds, before: before,
+                                                                 after: after, startedAt: startedAt,
+                                                                 endedAt: endedAt, first: first),
+                withBodyParameters: nil, enforcesAuthorization: false, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetClipsResult.success($0)) },
                 onFailure: { completionHandler(GetClipsResult.failure($0, $1, $2)) })
         }
@@ -615,8 +619,9 @@ public class Twitch {
                                        completionHandler: @escaping (GetTopGamesResult) -> Void) {
             Twitch.performAPIWebRequest(
                 to: getTopGamesURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
-                withParameters: convertGetTopGamesParamsToDict(after: after, before: before, first: first),
-                enforcesAuthorization: false, withTokenManager: tokenManager,
+                withQueryParameters: convertGetTopGamesParamsToDict(after: after, before: before,
+                                                                    first: first),
+                withBodyParameters: nil, enforcesAuthorization: false, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetTopGamesResult.success($0)) },
                 onFailure: { completionHandler(GetTopGamesResult.failure($0, $1, $2)) })
         }
@@ -645,8 +650,8 @@ public class Twitch {
                                     completionHandler: @escaping (GetGamesResult) -> Void) {
             Twitch.performAPIWebRequest(
                 to: getGamesURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
-                withParameters: convertGetGamesParamsToDict(gameIds: gameIds, gameNames: gameNames),
-                enforcesAuthorization: false, withTokenManager: tokenManager,
+                withQueryParameters: convertGetGamesParamsToDict(gameIds: gameIds, gameNames: gameNames),
+                withBodyParameters: nil, enforcesAuthorization: false, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetGamesResult.success($0)) },
                 onFailure: { completionHandler(GetGamesResult.failure($0, $1, $2)) })
         }
@@ -764,10 +769,11 @@ public class Twitch {
                                       completionHandler: @escaping (GetStreamsResult) -> Void) {
             Twitch.performAPIWebRequest(
                 to: getStreamsURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
-                withParameters: convertGetStreamsParamsToDict(after: after, before: before, communityIds: communityIds,
-                                                              first: first, gameIds: gameIds, languages: languages,
-                                                              userIds: userIds, userNames: userNames),
-                enforcesAuthorization: false, withTokenManager: tokenManager,
+                withQueryParameters: convertGetStreamsParamsToDict(after: after, before: before,
+                                                                   communityIds: communityIds, first: first,
+                                                                   gameIds: gameIds, languages: languages,
+                                                                   userIds: userIds, userNames: userNames),
+                withBodyParameters: nil, enforcesAuthorization: false, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetStreamsResult.success($0)) },
                 onFailure: { completionHandler(GetStreamsResult.failure($0, $1, $2)) })
         }
@@ -804,10 +810,12 @@ public class Twitch {
                                               completionHandler: @escaping (GetStreamsMetadataResult) -> Void) {
             Twitch.performAPIWebRequest(
                 to: getStreamsMetadataURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
-                withParameters: convertGetStreamsParamsToDict(after: after, before: before, communityIds: communityIds,
-                                                              first: first, gameIds: gameIds, languages: languages,
-                                                              userIds: userIds, userNames: userNames),
-                enforcesAuthorization: false, withTokenManager: tokenManager,
+                withQueryParameters: convertGetStreamsParamsToDict(after: after, before: before,
+                                                                   communityIds: communityIds,
+                                                                   first: first, gameIds: gameIds,
+                                                                   languages: languages, userIds: userIds,
+                                                                   userNames: userNames),
+                withBodyParameters: nil, enforcesAuthorization: false, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetStreamsMetadataResult.success($0)) },
                 onFailure: { completionHandler(GetStreamsMetadataResult.failure($0, $1, $2)) })
         }
@@ -864,19 +872,21 @@ public class Twitch {
     /// - Parameters:
     ///   - url: The URL to perform the web request to
     ///   - httpMethod: The method to perform the url request with
-    ///   - parameters: The parameters of the web request
+    ///   - queryParameters: The query parameters of the web request
+    ///   - bodyParameters: The body parameters of the web request
     ///   - enforcesAuthorization: If set to `true`, this will fail the API call if adding the
     /// authorization header fails. If `false`, the call will be ignored instead.
     ///   - tokenManager: The token manager that is used to provide authentication
     ///   - successHandler: The handler for a successful web request
     ///   - failureHandler: The handler for a failed web request
     private static func performAPIWebRequest<T: Unmarshaling>(
-        to url: URL, withHTTPMethod httpMethod: String?, withParameters parameters: [String: Any],
-        enforcesAuthorization: Bool, withTokenManager tokenManager: TwitchTokenManager,
+        to url: URL, withHTTPMethod httpMethod: String?, withQueryParameters queryParameters: [String: Any]?,
+        withBodyParameters bodyParameters: [String: Any]?, enforcesAuthorization: Bool,
+        withTokenManager tokenManager: TwitchTokenManager,
         onSuccess successHandler: @escaping (T) -> Void,
         onFailure failureHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
 
-        var request = URLRequest(url: url.withQueryItems(parameters))
+        var request = URLRequest(url: queryParameters == nil ? url : url.withQueryItems(queryParameters!))
         do {
             try request.addTokenAuthorizationHeader(fromTokenManager: tokenManager)
         } catch {
@@ -888,6 +898,7 @@ public class Twitch {
 
         request.setValueToJSONContentType()
         request.httpMethod = httpMethod
+        request.httpBody = bodyParameters?.getAsData()
 
         urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
             guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
