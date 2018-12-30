@@ -273,24 +273,6 @@ public class Twitch {
 
             return parametersDictionary
         }
-
-        /// `getAnalyticsType` is used to retrieve the type of Analytics Report given its String
-        /// representation.
-        ///
-        /// - Parameter analyticsTypeString: The analytics type string to retrieve an
-        /// `AnalyticsType` for
-        /// - Returns: An `AnalyticsType` corresponding to the input `String` if it exists; nil if
-        /// no such relationship exists.
-        private static func getAnalyticsType(from analyticsTypeString: String) -> AnalyticsType? {
-            switch analyticsTypeString {
-            case AnalyticsType.overviewVersion1.rawValue:
-                return AnalyticsType.overviewVersion1
-            case AnalyticsType.overviewVersion2.rawValue:
-                return AnalyticsType.overviewVersion2
-            default:
-                return nil
-            }
-        }
     }
 
     // MARK: - Bits
