@@ -21,11 +21,14 @@ public class Twitch {
     /// `WebRequestKeys` define the web request keys for both resolving results and sending requests
     /// for the New Twitch API.
     internal struct WebRequestKeys {
+        static let ability = "ability"
         static let after = "after"
         static let before = "before"
         static let boxArtURL = "box_art_url"
+        static let broadcaster = "broadcaster"
         static let broadcasterId = "broadcaster_id"
         static let broadcasterName = "broadcaster_name"
+        static let classKey = "class"
         static let communityId = "community_id"
         static let communityIds = "community_ids"
         static let count = "count"
@@ -41,13 +44,18 @@ public class Twitch {
         static let first = "first"
         static let gameId = "game_id"
         static let hasDelay = "has_delay"
+        static let hearthstone = "hearthstone"
+        static let hero = "hero"
         static let id = "id"
         static let language = "language"
         static let manifestId = "manifest_id"
         static let name = "name"
+        static let opponent = "opponent"
+        static let overwatch = "overwatch"
         static let pagination = "pagination"
         static let period = "period"
         static let rank = "rank"
+        static let role = "role"
         static let score = "score"
         static let startedAt = "started_at"
         static let thumbnailURL = "thumbnail_url"
@@ -703,11 +711,30 @@ public class Twitch {
             case failure(Data?, URLResponse?, Error?)
         }
 
+        /// `GetStreamsMetadataResult` defines the different types of results that can be retrieved
+        /// from the `getStreamsMetadata` call of the `Games` API. Variables are included that
+        /// specify the data that was returned.
+        ///
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// returned data.
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum GetStreamsMetadataResult {
+            case success(GetStreamsMetadataData)
+            case failure(Data?, URLResponse?, Error?)
+        }
+
         /// The URL that will be used for the `Get Streams` API call.
         private static let getStreamsURL = URL(string: "https://api.twitch.tv/helix/streams")!
 
+        /// The URL that will be used for the `Get Streams` API call.
+        private static let getStreamsMetadataURL = URL(string: "https://api.twitch.tv/helix/streams/metadata")!
+
         /// `getStreams` will run the `Get Streams` API call of the New Twitch API. The returned
-        /// streams are sorted in descending order such that the most-watched viewer is returned
+        /// streams are sorted in descending order such that the most-watched streamer is returned
         /// first in the received data.
         ///
         /// This method does **not** require a `TwitchTokenManager`. No Authorization is required.
@@ -743,6 +770,46 @@ public class Twitch {
                 enforcesAuthorization: false, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetStreamsResult.success($0)) },
                 onFailure: { completionHandler(GetStreamsResult.failure($0, $1, $2)) })
+        }
+
+        /// `getStreamsMetadata` will run the `Get Streams Metadata` API call of the New Twitch API.
+        /// The returned streams are sorted in descending order such that the most-watched streamer
+        /// is returned first in the received data.
+        ///
+        /// This method does **not** require a `TwitchTokenManager`. No Authorization is required.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#get-streams)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - after: The forward pagination token.
+        ///   - before: The backwards pagination token.
+        ///   - communityIds: Specifies that streams from the specified communities should be
+        /// returned. Up to 100 IDs are possible.
+        ///   - first: The maximum number of streams to return. Maximum 100. Default 20.
+        ///   - gameIds: The IDs of the games to retrieve streams for. Maximum 100.
+        ///   - languages: The languages of streams that should be received. Maximum 100.
+        ///   - userIds: The IDs of the users whose streams should be retrieved. Maximum 100.
+        ///   - userNames: The names of the users whose streams should be retrieved. Maximum 100.
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `GetStreamsMetadataResult`: `success` and `failure`.
+        ///
+        /// - seealso: `GetStreamsMetadataResult`
+        public static func getStreamsMetadata(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                              after: String? = nil, before: String? = nil,
+                                              communityIds: [String]? = nil, first: Int? = nil,
+                                              gameIds: [String]? = nil, languages: [String]? = nil,
+                                              userIds: [String]? = nil, userNames: [String]? = nil,
+                                              completionHandler: @escaping (GetStreamsMetadataResult) -> Void) {
+            Twitch.performAPIWebRequest(
+                to: getStreamsMetadataURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withParameters: convertGetStreamsParamsToDict(after: after, before: before, communityIds: communityIds,
+                                                              first: first, gameIds: gameIds, languages: languages,
+                                                              userIds: userIds, userNames: userNames),
+                enforcesAuthorization: false, withTokenManager: tokenManager,
+                onSuccess: { completionHandler(GetStreamsMetadataResult.success($0)) },
+                onFailure: { completionHandler(GetStreamsMetadataResult.failure($0, $1, $2)) })
         }
 
         /// `convertGetStreamsParamsToDict` is used to convert the typed parameters into a list of

@@ -30,7 +30,7 @@ public struct StreamData: Unmarshaling {
     public let streamerUserName: String
     
     /// `gameId` specifies the ID of the game being streamed.
-    public let gameId: String
+    public let gameId: String?
 
     /// `communityIds` specifies the communities that this stream is a part of.
     public let communityIds: [String]
@@ -64,7 +64,7 @@ public struct StreamData: Unmarshaling {
         streamId = try object.value(for: Twitch.WebRequestKeys.id)
         streamerId = try object.value(for: Twitch.WebRequestKeys.userId)
         streamerUserName = try object.value(for: Twitch.WebRequestKeys.userName)
-        gameId = try object.value(for: Twitch.WebRequestKeys.gameId)
+        gameId = try? object.value(for: Twitch.WebRequestKeys.gameId)
         communityIds = try object.value(for: Twitch.WebRequestKeys.communityIds)
         streamType = try object.value(for: Twitch.WebRequestKeys.type)
         title = try object.value(for: Twitch.WebRequestKeys.title)
