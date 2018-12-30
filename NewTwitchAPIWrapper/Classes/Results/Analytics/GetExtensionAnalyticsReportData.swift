@@ -33,7 +33,7 @@ public struct GetExtensionAnalyticsReportData: Unmarshaling {
     /// Initializes a `GetExtensionAnalyticsReportData` object from the input `MarshaledObject`.
     /// This will throw if there is missing data from the input `MarshaledObject`.
     ///
-    /// - Parameter object: The object to initialize a `GetExtensionAnalyticsReportData` piece from
+    /// - Parameter object: The object to initialize a `GetExtensionAnalyticsReportData` object from
     /// - Throws: If data is missing that was expected to be non-`nil`.
     public init(object: MarshaledObject) throws {
         url = try object.value(for: Twitch.WebRequestKeys.url)

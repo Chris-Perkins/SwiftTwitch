@@ -35,6 +35,7 @@ public class Twitch {
         static let createdAt = "created_at"
         static let creatorId = "creator_id"
         static let creatorName = "creator_name"
+        static let cursor = "cursor"
         static let data = "data"
         static let dateRange = "date_range"
         static let editURL = "edit_url"

@@ -14,9 +14,9 @@ public struct GetStreamsMetadataData: Unmarshaling {
     /// `streamMetadata` specifies the metadata of the streams that was retrieved from the API call.
     public let streamMetadata: [StreamMetadata]
     
-    /// `paginationToken` defines the token that allows for the pagination of results in the
-    /// `Get Streams Metadata` API call.
-    public let paginationToken: String?
+    /// `paginationData` defines the token that allows for the pagination of results in the
+    /// `Get Streams Metadata` call.
+    public let paginationData: PaginationData?
     
     /// Initializes a `GetStreamsMetadata` object from the input `MarshaledObject`. This will throw
     /// if there is missing data from the input `MarshaledObject`.
@@ -25,6 +25,6 @@ public struct GetStreamsMetadataData: Unmarshaling {
     /// - Throws: If data is missing that was expected to be non-`nil`.
     public init(object: MarshaledObject) throws {
         streamMetadata = try object.value(for: Twitch.WebRequestKeys.data)
-        paginationToken = try? object.value(for: Twitch.WebRequestKeys.pagination)
+        paginationData = try? object.value(for: Twitch.WebRequestKeys.pagination)
     }
 }

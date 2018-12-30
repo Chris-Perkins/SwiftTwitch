@@ -15,17 +15,17 @@ public struct GetExtensionAnalyticsData: Unmarshaling {
     /// the analytics reports.
     public let reportData: [GetExtensionAnalyticsReportData]
     
-    /// `paginationToken` defines the token that allows for the pagination of results in the
+    /// `paginationData` defines the token that allows for the pagination of results in the
     /// `Get Extension Analytics` call.
-    public let paginationToken: String?
+    public let paginationData: PaginationData?
 
     /// Initializes a `GetExtensionAnalyticsData` object from the input `MarshaledObject`. This will
     /// throw if there is missing data from the input `MarshaledObject`.
     ///
-    /// - Parameter object: The object to initialize a `GetExtensionAnalyticsData` piece from
+    /// - Parameter object: The object to initialize a `GetExtensionAnalyticsData` object from
     /// - Throws: If data is missing that was expected to be non-`nil`.
     public init(object: MarshaledObject) throws {
         reportData = try object.value(for: Twitch.WebRequestKeys.data)
-        paginationToken = try? object.value(for: Twitch.WebRequestKeys.pagination)
+        paginationData = try? object.value(for: Twitch.WebRequestKeys.pagination)
     }
 }
