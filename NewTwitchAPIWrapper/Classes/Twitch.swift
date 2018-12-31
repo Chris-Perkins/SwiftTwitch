@@ -38,6 +38,7 @@ public class Twitch {
         static let cursor = "cursor"
         static let data = "data"
         static let dateRange = "date_range"
+        static let description = "description"
         static let editURL = "edit_url"
         static let embedURL = "embed_url"
         static let endedAt = "ended_at"
@@ -55,6 +56,7 @@ public class Twitch {
         static let overwatch = "overwatch"
         static let pagination = "pagination"
         static let period = "period"
+        static let positionSeconds = "position_seconds"
         static let rank = "rank"
         static let role = "role"
         static let score = "score"
@@ -702,7 +704,7 @@ public class Twitch {
     public struct Streams {
 
         /// `GetStreamsResult` defines the different types of results that can be retrieved from the
-        /// `getStreams` call of the `Games` API. Variables are included that specify the data that
+        /// `getStreams` call of the `Streams` API. Variables are included that specify the data that
         /// was returned.
         ///
         /// - success: Defines that the call was successful. The output variable will contain all
@@ -718,7 +720,7 @@ public class Twitch {
         }
 
         /// `GetStreamsMetadataResult` defines the different types of results that can be retrieved
-        /// from the `getStreamsMetadata` call of the `Games` API. Variables are included that
+        /// from the `getStreamsMetadata` call of the `Sttreams` API. Variables are included that
         /// specify the data that was returned.
         ///
         /// - success: Defines that the call was successful. The output variable will contain all
@@ -733,11 +735,30 @@ public class Twitch {
             case failure(Data?, URLResponse?, Error?)
         }
 
+        /// `CreateStreamMarkerResult` defines the different types of results that can be retrieved
+        /// from the `createStreamMarker` call of the `Games` API. Variables are included that
+        /// specify the data that was returned.
+        ///
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// returned data.
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum CreateStreamMarkerResult {
+            case success(CreateStreamMarkerData)
+            case failure(Data?, URLResponse?, Error?)
+        }
+
         /// The URL that will be used for the `Get Streams` API call.
         private static let getStreamsURL = URL(string: "https://api.twitch.tv/helix/streams")!
 
         /// The URL that will be used for the `Get Streams` API call.
         private static let getStreamsMetadataURL = URL(string: "https://api.twitch.tv/helix/streams/metadata")!
+
+        /// The URL that will be used for the `Get Streams` API call.
+        private static let createStreamMarkerURL = URL(string: "https://api.twitch.tv/helix/streams/markers")!
 
         /// `getStreams` will run the `Get Streams` API call of the New Twitch API. The returned
         /// streams are sorted in descending order such that the most-watched streamer is returned
@@ -821,6 +842,37 @@ public class Twitch {
                 onFailure: { completionHandler(GetStreamsMetadataResult.failure($0, $1, $2)) })
         }
 
+        /// `createStreamMarker` will run the `Create Stream Marker` API call of the New Twitch API.
+        /// Stream Markers are points in streams that the Streamer or Editor wants to mark so that
+        /// they can return to that point later. The marker will be created at the current timestamp
+        /// of the livestream.
+        ///
+        /// This method does requires `user:edit:permissions` permissions on a user who is an editor
+        /// or streamer of the stream where the stream marker should be created.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#get-streams)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - userId: The ID of the user who's stream should be marked at the current time
+        ///   - description: The description of the marker.
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `CreateStreamMarkerResult`: `success` and `failure`.
+        ///
+        /// - seealso: `CreateStreamMarkerResult`
+        public static func createStreamMarker(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                              userId: String, description: String?,
+                                              completionHandler: @escaping (CreateStreamMarkerResult) -> Void) {
+            Twitch.performAPIWebRequest(
+                to: getStreamsMetadataURL, withHTTPMethod: URLRequest.RequestHeaderTypes.post,
+                withQueryParameters: nil,
+                withBodyParameters: convertCreateStreamMarkerParamsToDict(userId: userId, description: description),
+                enforcesAuthorization: true, withTokenManager: tokenManager,
+                onSuccess: { completionHandler(CreateStreamMarkerResult.success($0)) },
+                onFailure: { completionHandler(CreateStreamMarkerResult.failure($0, $1, $2)) })
+        }
+
         /// `convertGetStreamsParamsToDict` is used to convert the typed parameters into a list of
         /// web request parameters as a String-keyed Dictionary for a `getStreams` method call.
         ///
@@ -857,6 +909,22 @@ public class Twitch {
             if let userNames = userNames {
                 parametersDictionary[WebRequestKeys.userLogin] = userNames.joined(separator: listDelimiter)
             }
+            return parametersDictionary
+        }
+
+        /// `convertCreateStreamMarkerParamsToDict` is used to convert the typed parameters into a
+        /// list of web request parameters as a String-keyed Dictionary for a `createStreamMarker`
+        /// method call.
+        ///
+        /// - Parameters:
+        ///   - userId: input
+        ///   - description: input
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertCreateStreamMarkerParamsToDict(userId: String,
+                                                                  description: String?) -> [String: Any] {
+            var parametersDictionary = [String: Any]()
+            parametersDictionary[Twitch.WebRequestKeys.userId] = userId
+            parametersDictionary.addValueIfNotNil(description, toKey: Twitch.WebRequestKeys.description)
             return parametersDictionary
         }
     }
