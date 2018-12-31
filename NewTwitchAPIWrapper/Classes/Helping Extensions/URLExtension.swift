@@ -19,21 +19,25 @@ extension URL {
      
      - returns: the URL with the mutated query string
      */
-    internal func withQueryItems(_ contentsOf: [String: Any?]) -> URL {
-        guard var urlComponents = URLComponents(string: absoluteString), !contentsOf.isEmpty else {
+    internal func withQueryItems(_ items: [String: Any?]) -> URL {
+        guard var urlComponents = URLComponents(string: absoluteString), !items.isEmpty else {
             return URL(string: absoluteString)!
         }
-        
-        let keys = contentsOf.keys.map { $0.lowercased() }
-        
-        urlComponents.queryItems = urlComponents.queryItems?
-            .filter { !keys.contains($0.name.lowercased()) } ?? []
-        
-        urlComponents.queryItems?.append(contentsOf: contentsOf.compactMap {
-            guard let value = $0.value else { return nil } //Skip if nil
-            return URLQueryItem(name: $0.key, value: "\(value)")
-        })
-        
+
+        urlComponents.queryItems = []
+        var queryItems = [URLQueryItem]()
+        for item in items {
+            guard let value = item.value else { continue }
+            if let valueArray = value as? [Any] {
+                queryItems.append(contentsOf: valueArray.map {
+                    URLQueryItem(name: item.key, value: "\($0)")
+                })
+            }  else {
+                queryItems.append(URLQueryItem(name: item.key, value: "\(value)"))
+            }
+        }
+        urlComponents.queryItems = queryItems
+
         return URL(string: urlComponents.string ?? absoluteString)!
     }
 }

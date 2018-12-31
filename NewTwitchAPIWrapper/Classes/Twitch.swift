@@ -28,6 +28,7 @@ public class Twitch {
         static let broadcaster = "broadcaster"
         static let broadcasterId = "broadcaster_id"
         static let broadcasterName = "broadcaster_name"
+        static let broadcasterType = "broadcaster_type"
         static let classKey = "class"
         static let communityId = "community_id"
         static let communityIds = "community_ids"
@@ -39,7 +40,9 @@ public class Twitch {
         static let data = "data"
         static let dateRange = "date_range"
         static let description = "description"
+        static let displayName = "display_name"
         static let editURL = "edit_url"
+        static let email = "email"
         static let embedURL = "embed_url"
         static let endedAt = "ended_at"
         static let extensionId = "extension_id"
@@ -50,14 +53,17 @@ public class Twitch {
         static let hero = "hero"
         static let id = "id"
         static let language = "language"
+        static let login = "login"
         static let manifestId = "manifest_id"
         static let markers = "markers"
         static let name = "name"
+        static let offlineImageURL = "offline_image_url"
         static let opponent = "opponent"
         static let overwatch = "overwatch"
         static let pagination = "pagination"
         static let period = "period"
         static let positionSeconds = "position_seconds"
+        static let profileImageURL = "profile_image_url"
         static let rank = "rank"
         static let role = "role"
         static let score = "score"
@@ -75,10 +81,6 @@ public class Twitch {
         static let viewCount = "view_count"
         static let viewerCount = "viewer_count"
     }
-    
-    /// `listDelimiter` is used to specify the `String` that separates multiple items in a web
-    /// request.
-    private static let listDelimiter = ","
 
     // MARK: - Analytics
 
@@ -544,10 +546,7 @@ public class Twitch {
             parametersDictionary.addValueIfNotNil(before, toKey: WebRequestKeys.before)
             parametersDictionary.addValueIfNotNil(after, toKey: WebRequestKeys.after)
             parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
-
-            if let clipIds = clipIds {
-                parametersDictionary[WebRequestKeys.id] = clipIds.joined(separator: listDelimiter)
-            }
+            parametersDictionary.addValueIfNotNil(clipIds, toKey: WebRequestKeys.id)
             if let startedAt = startedAt {
                 parametersDictionary[WebRequestKeys.startedAt] = Date.convertDateToZuluString(startedAt)
             }
@@ -690,12 +689,8 @@ public class Twitch {
         /// - Returns: The String-keyed `Dictionary` of parameters.
         private static func convertGetGamesParamsToDict(gameIds: [String]?, gameNames: [String]?) -> [String: Any] {
             var parametersDictionary = [String: Any]()
-            if let gameIds = gameIds {
-                parametersDictionary[WebRequestKeys.id] = gameIds.joined(separator: listDelimiter)
-            }
-            if let gameNames = gameNames {
-                parametersDictionary[WebRequestKeys.name] = gameNames.joined(separator: listDelimiter)
-            }
+            parametersDictionary.addValueIfNotNil(gameIds, toKey: WebRequestKeys.id)
+            parametersDictionary.addValueIfNotNil(gameNames, toKey: WebRequestKeys.name)
             return parametersDictionary
         }
     }
@@ -949,21 +944,11 @@ public class Twitch {
             parametersDictionary.addValueIfNotNil(after, toKey: WebRequestKeys.after)
             parametersDictionary.addValueIfNotNil(before, toKey: WebRequestKeys.before)
             parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
-            if let communityIds = communityIds {
-                parametersDictionary[WebRequestKeys.communityId] = communityIds.joined(separator: listDelimiter)
-            }
-            if let gameIds = gameIds {
-                parametersDictionary[WebRequestKeys.gameId] = gameIds.joined(separator: listDelimiter)
-            }
-            if let languages = languages {
-                parametersDictionary[WebRequestKeys.language] = languages.joined(separator: listDelimiter)
-            }
-            if let userIds = userIds {
-                parametersDictionary[WebRequestKeys.userId] = userIds.joined(separator: listDelimiter)
-            }
-            if let userNames = userNames {
-                parametersDictionary[WebRequestKeys.userLogin] = userNames.joined(separator: listDelimiter)
-            }
+            parametersDictionary.addValueIfNotNil(communityIds, toKey: WebRequestKeys.communityId)
+            parametersDictionary.addValueIfNotNil(gameIds, toKey: WebRequestKeys.gameId)
+            parametersDictionary.addValueIfNotNil(languages, toKey: WebRequestKeys.language)
+            parametersDictionary.addValueIfNotNil(userIds, toKey: WebRequestKeys.userId)
+            parametersDictionary.addValueIfNotNil(userNames, toKey: WebRequestKeys.userLogin)
             return parametersDictionary
         }
 

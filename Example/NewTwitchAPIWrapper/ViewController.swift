@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        Twitch.Streams.getStreamsMetadata { (result) in
+        Twitch.Streams.getStreams(gameIds: ["33214", "509658"]) { (result) in
             switch result {
             case .failure(let data, let response, let error):
                 let x = data!
