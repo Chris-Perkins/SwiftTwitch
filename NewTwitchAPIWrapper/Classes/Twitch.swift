@@ -1032,8 +1032,25 @@ public class Twitch {
             case failure(Data?, URLResponse?, Error?)
         }
 
-        /// `getUsersURL` is the URL that should be accessed for the `Get Users` API call.
-        private static let getUsersURL = URL(string: "https://api.twitch.tv/helix/users")!
+        /// `UpdateUserResult` defines the different types of results that can be retrieved from the
+        /// `updateUser` call of the `Users` API. Variables are included that specify the data that
+        /// was returned on completion of this call.
+        ///
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// game analytics data.
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum UpdateUserResult {
+            case success(UpdateUserData)
+            case failure(Data?, URLResponse?, Error?)
+        }
+        
+        /// `usersURL` is the URL that should be accessed for basic GET/POST calls that interact
+        /// with users data.
+        private static let usersURL = URL(string: "https://api.twitch.tv/helix/users")!
 
         /// `getUsersFollowsURL` is the URL that should be accessed for the `Get Users Follows` API
         /// call.
@@ -1064,7 +1081,7 @@ public class Twitch {
                                     userIds: [String]?, userLoginNames: [String]?,
                                     completionHandler: @escaping (GetUsersResult) -> Void) {
             Twitch.performAPIWebRequest(
-                to: getUsersURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                to: usersURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
                 withQueryParameters: convertGetUsersParamsToDict(userLoginNames: userLoginNames, userIds: userIds),
                 withBodyParameters: nil, enforcesAuthorization: true, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetUsersResult.success($0)) },
@@ -1108,6 +1125,33 @@ public class Twitch {
                 onFailure: { completionHandler(GetUsersFollowsResult.failure($0, $1, $2)) })
         }
 
+        /// `updateUser` will run the `Update User` API call of the New Twitch API. You can use this
+        /// API call to update the description of the user. No other methods are available at this
+        /// moment.
+        ///
+        /// This API call requires a token with `user:edit` permissions.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#update-user)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - description: The description to set for the user.
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `UpdateUserResult`: `success` and `failure`.
+        ///
+        /// - seealso: `UpdateUserResult`
+        public static func updateUser(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                      description: String?,
+                                      completionHandler: @escaping (UpdateUserResult) -> Void) {
+            Twitch.performAPIWebRequest(
+                to: usersURL, withHTTPMethod: URLRequest.RequestHeaderTypes.put,
+                withQueryParameters: convertUpdateUserParamsToDict(description: description),
+                withBodyParameters: nil, enforcesAuthorization: true, withTokenManager: tokenManager,
+                onSuccess: { completionHandler(UpdateUserResult.success($0)) },
+                onFailure: { completionHandler(UpdateUserResult.failure($0, $1, $2)) })
+        }
+
         /// `convertGetUsersParamsToDict` is used to convert the typed parameters into a list of web
         /// request parameters as a String-keyed Dictionary for a `getUsers` method call.
         ///
@@ -1140,6 +1184,17 @@ public class Twitch {
             parametersDictionary.addValueIfNotNil(followedId, toKey: WebRequestKeys.toId)
             parametersDictionary.addValueIfNotNil(after, toKey: WebRequestKeys.after)
             parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
+            return parametersDictionary
+        }
+
+        /// `convertUpdateUserParamsToDict` is used to convert the typed parameters into a list of
+        /// web request parameters as a String-keyed Dictionary for a `updateUser` method call.
+        ///
+        /// - Parameter description: input
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertUpdateUserParamsToDict(description: String?) -> [String: Any] {
+            var parametersDictionary = [String: Any]()
+            parametersDictionary.addValueIfNotNil(description, toKey: Twitch.WebRequestKeys.description)
             return parametersDictionary
         }
     }

@@ -12,7 +12,9 @@ extension URLRequest {
     /// `RequestHeaderTypes` specifies the different types of headers that are used in Web Requests.
     /// This enum will be expanded if additional request types are required.
     internal struct RequestHeaderTypes {
+        // TODO: Alphabetize
         static let post = "POST"
+        static let put = "PUT"
         static let get = "GET"
     }
     

@@ -33,7 +33,7 @@ public struct UserFollowData: Unmarshaling {
     /// Initializes a `UserFollowData` object from the input `MarshaledObject`. This will throw if
     /// there is missing data from the input `MarshaledObject`.
     ///
-    /// - Parameter object: The object to initialize a `UserFollowData` piece from
+    /// - Parameter object: The object to initialize a `UserFollowData` object from
     /// - Throws: If data is missing that was expected to be non-`nil`.
     public init(object: MarshaledObject) throws {
         followerId = try object.value(for: Twitch.WebRequestKeys.fromId)
