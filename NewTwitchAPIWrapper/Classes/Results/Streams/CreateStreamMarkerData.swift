@@ -12,7 +12,7 @@ import Marshal
 public struct CreateStreamMarkerData: Unmarshaling {
 
     /// `streamMarkerData` holds data about the stream marker that was created.
-    public let streamMarkerData: [StreamMarkerData]
+    public let streamMarkerData: [UnpostedStreamMarkerData]
 
     /// Initializes a `CreateStreamMarkerData` object from the input `MarshaledObject`. This will
     /// throw if there is missing data from the input `MarshaledObject`.

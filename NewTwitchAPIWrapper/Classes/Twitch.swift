@@ -51,6 +51,7 @@ public class Twitch {
         static let id = "id"
         static let language = "language"
         static let manifestId = "manifest_id"
+        static let markers = "markers"
         static let name = "name"
         static let opponent = "opponent"
         static let overwatch = "overwatch"
@@ -70,6 +71,7 @@ public class Twitch {
         static let userLogin = "user_login"
         static let userName = "user_name"
         static let videoId = "video_id"
+        static let videos = "videos"
         static let viewCount = "view_count"
         static let viewerCount = "viewer_count"
     }
@@ -751,14 +753,30 @@ public class Twitch {
             case failure(Data?, URLResponse?, Error?)
         }
 
+        /// `GetStreamMarkersResult` defines the different types of results that can be retrieved
+        /// from the `getStreamMarkers` call of the `Games` API. Variables are included that specify
+        /// the data that was returned.
+        ///
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// returned data.
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum GetStreamMarkersResult {
+            case success(GetStreamMarkersData)
+            case failure(Data?, URLResponse?, Error?)
+        }
+
         /// The URL that will be used for the `Get Streams` API call.
         private static let getStreamsURL = URL(string: "https://api.twitch.tv/helix/streams")!
 
-        /// The URL that will be used for the `Get Streams` API call.
+        /// The URL that will be used for the `Get Streams Metadata` API call.
         private static let getStreamsMetadataURL = URL(string: "https://api.twitch.tv/helix/streams/metadata")!
 
-        /// The URL that will be used for the `Get Streams` API call.
-        private static let createStreamMarkerURL = URL(string: "https://api.twitch.tv/helix/streams/markers")!
+        /// The URL that will be used for all Stream Markers API calls.
+        private static let streamMarkersURL = URL(string: "https://api.twitch.tv/helix/streams/markers")!
 
         /// `getStreams` will run the `Get Streams` API call of the New Twitch API. The returned
         /// streams are sorted in descending order such that the most-watched streamer is returned
@@ -807,7 +825,7 @@ public class Twitch {
         /// This method does **not** require a `TwitchTokenManager`. No Authorization is required.
         ///
         /// [More information about the web call is available here](
-        /// https://dev.twitch.tv/docs/api/reference/#get-streams)
+        /// https://dev.twitch.tv/docs/api/reference/#get-streams-metadata)
         ///
         /// - Parameters:
         ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
@@ -847,11 +865,11 @@ public class Twitch {
         /// they can return to that point later. The marker will be created at the current timestamp
         /// of the livestream.
         ///
-        /// This method does requires `user:edit:permissions` permissions on a user who is an editor
+        /// This method does requires `user:edit:broadcast` permissions on a user who is an editor
         /// or streamer of the stream where the stream marker should be created.
         ///
         /// [More information about the web call is available here](
-        /// https://dev.twitch.tv/docs/api/reference/#get-streams)
+        /// https://dev.twitch.tv/docs/api/reference/#create-stream-marker)
         ///
         /// - Parameters:
         ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
@@ -862,15 +880,52 @@ public class Twitch {
         ///
         /// - seealso: `CreateStreamMarkerResult`
         public static func createStreamMarker(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
-                                              userId: String, description: String?,
+                                              userId: String, description: String? = nil,
                                               completionHandler: @escaping (CreateStreamMarkerResult) -> Void) {
             Twitch.performAPIWebRequest(
-                to: getStreamsMetadataURL, withHTTPMethod: URLRequest.RequestHeaderTypes.post,
+                to: streamMarkersURL, withHTTPMethod: URLRequest.RequestHeaderTypes.post,
                 withQueryParameters: nil,
                 withBodyParameters: convertCreateStreamMarkerParamsToDict(userId: userId, description: description),
                 enforcesAuthorization: true, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(CreateStreamMarkerResult.success($0)) },
                 onFailure: { completionHandler(CreateStreamMarkerResult.failure($0, $1, $2)) })
+        }
+
+        /// `getStreamMarkers` will run the `Get Stream Markers` API call of the New Twitch API.
+        /// Stream Markers are points in streams that the Streamer or Editor wants to mark so that
+        /// they can return to that point later. The marker will be created at the current timestamp
+        /// of the livestream.
+        ///
+        /// This method does requires `user:read:broadcast` permissions on a user who is an editor
+        /// or streamer of the stream where the stream marker should be created.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#get-stream-markers)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - userId: The ID of the user whose stream markers should be obtained
+        ///   - videoId: The ID of the video whose stream markers should be obtained
+        ///   - after: The forward pagination token.
+        ///   - before: The backwards pagination token.
+        ///   - communityIds: Specifies that streams from the specified communities should be
+        /// returned. Up to 100 IDs are possible.
+        ///   - first: The maximum number of streams to return. Maximum 100. Default 20.
+        /// successful. There are two types of `CreateStreamMarkerResult`: `success` and `failure`.
+        ///
+        /// - seealso: `CreateStreamMarkerResult`
+        public static func getStreamMarkers(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                            userId: String, videoId: String, after: String? = nil,
+                                            before: String? = nil, first: Int? = nil,
+                                            completionHandler: @escaping (GetStreamMarkersResult) -> Void) {
+            Twitch.performAPIWebRequest(
+                to: streamMarkersURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withQueryParameters: convertGetStreamMarkersParamsToDict(userId: userId, videoId: videoId,
+                                                                         after: after, before: before,
+                                                                         first: first),
+                withBodyParameters: nil, enforcesAuthorization: true, withTokenManager: tokenManager,
+                onSuccess: { completionHandler(GetStreamMarkersResult.success($0)) },
+                onFailure: { completionHandler(GetStreamMarkersResult.failure($0, $1, $2)) })
         }
 
         /// `convertGetStreamsParamsToDict` is used to convert the typed parameters into a list of
@@ -925,6 +980,28 @@ public class Twitch {
             var parametersDictionary = [String: Any]()
             parametersDictionary[Twitch.WebRequestKeys.userId] = userId
             parametersDictionary.addValueIfNotNil(description, toKey: Twitch.WebRequestKeys.description)
+            return parametersDictionary
+        }
+
+        /// `convertGetStreamMarkersParamsToDict` is used to convert the typed parameters into a
+        /// list of web request parameters as a String-keyed Dictionary for a `getStreamMarkers`
+        /// method call.
+        ///
+        /// - Parameters:
+        ///   - userId: input
+        ///   - videoId: input
+        ///   - after: input
+        ///   - before: input
+        ///   - first: input
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertGetStreamMarkersParamsToDict(userId: String, videoId: String, after: String?,
+                                                                before: String?, first: Int?) -> [String: Any] {
+            var parametersDictionary = [String: Any]()
+            parametersDictionary[Twitch.WebRequestKeys.userId] = userId
+            parametersDictionary[Twitch.WebRequestKeys.videoId] = videoId
+            parametersDictionary.addValueIfNotNil(after, toKey: Twitch.WebRequestKeys.after)
+            parametersDictionary.addValueIfNotNil(before, toKey: Twitch.WebRequestKeys.before)
+            parametersDictionary.addValueIfNotNil(first, toKey: Twitch.WebRequestKeys.first)
             return parametersDictionary
         }
     }
