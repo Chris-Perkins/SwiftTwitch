@@ -18,6 +18,7 @@ public class Twitch {
     /// `urlSessionForWrapper` is a singleton for all Twitch API calls that will be used for.
     private static let urlSessionForWrapper: URLSession = URLSession.shared
     
+    // TODO: Move this to a separate file for readability?
     /// `WebRequestKeys` define the web request keys for both resolving results and sending requests
     /// for the New Twitch API.
     internal struct WebRequestKeys {
@@ -29,6 +30,7 @@ public class Twitch {
         static let broadcasterId = "broadcaster_id"
         static let broadcasterName = "broadcaster_name"
         static let broadcasterType = "broadcaster_type"
+        static let canActivate = "can_activate"
         static let classKey = "class"
         static let communityId = "community_id"
         static let communityIds = "community_ids"
@@ -81,6 +83,7 @@ public class Twitch {
         static let userId = "user_id"
         static let userLogin = "user_login"
         static let userName = "user_name"
+        static let version = "version"
         static let videoId = "video_id"
         static let videos = "videos"
         static let viewCount = "view_count"
@@ -323,7 +326,7 @@ public class Twitch {
         /// specify the data that was returned.
         ///
         /// - success: Defines that the call was successful. The output variable will contain all
-        /// game analytics data.
+        /// bit leaderboard data.
         /// - failure: Defines that the call failed. Returns all data corresponding to the failed
         /// call. These data pieces are as follows:
         /// 1. Data? - The data that was returned by the API
@@ -452,8 +455,8 @@ public class Twitch {
         ///   - hasDelay: if `true`, delay is added to account for the delay between the actual
         /// stream and when they would experience that moment in the stream. If `false`, then the
         /// clip is captured at the immediate moment with no delay. The default value is `false`.
-        ///   - completionHandler: The function that should be run whenever the retrieval is
-        /// successful. There are two types of `CreateClipResult`: `success` and `failure`.
+        ///   - completionHandler: The function that should be run whenever the post is successful.
+        /// There are two types of `CreateClipResult`: `success` and `failure`.
         ///
         /// - seealso: `CreateClipResult`
         public static func createClip(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
@@ -871,8 +874,8 @@ public class Twitch {
         ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
         ///   - userId: The ID of the user who's stream should be marked at the current time
         ///   - description: The description of the marker.
-        ///   - completionHandler: The function that should be run whenever the retrieval is
-        /// successful. There are two types of `CreateStreamMarkerResult`: `success` and `failure`.
+        ///   - completionHandler: The function that should be run whenever the post is successful.
+        /// There are two types of `CreateStreamMarkerResult`: `success` and `failure`.
         ///
         /// - seealso: `CreateStreamMarkerResult`
         public static func createStreamMarker(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
@@ -1002,7 +1005,7 @@ public class Twitch {
         /// was returned.
         ///
         /// - success: Defines that the call was successful. The output variable will contain all
-        /// game analytics data.
+        /// user data.
         /// - failure: Defines that the call failed. Returns all data corresponding to the failed
         /// call. These data pieces are as follows:
         /// 1. Data? - The data that was returned by the API
@@ -1018,7 +1021,7 @@ public class Twitch {
         /// the data that was returned on completion of this call.
         ///
         /// - success: Defines that the call was successful. The output variable will contain all
-        /// game analytics data.
+        /// user followings data.
         /// - failure: Defines that the call failed. Returns all data corresponding to the failed
         /// call. These data pieces are as follows:
         /// 1. Data? - The data that was returned by the API
@@ -1034,7 +1037,7 @@ public class Twitch {
         /// was returned on completion of this call.
         ///
         /// - success: Defines that the call was successful. The output variable will contain all
-        /// game analytics data.
+        /// user data.
         /// - failure: Defines that the call failed. Returns all data corresponding to the failed
         /// call. These data pieces are as follows:
         /// 1. Data? - The data that was returned by the API
@@ -1044,7 +1047,23 @@ public class Twitch {
             case success(UpdateUserData)
             case failure(Data?, URLResponse?, Error?)
         }
-        
+
+        /// `GetUserExtensionsResult` defines the different types of results that can be retrieved
+        /// from the `getUserExtensions` call of the `Users` API. Variables are included that
+        /// specify the data that was returned on completion of this call.
+        ///
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// user data.
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum GetUserExtensionsResult {
+            case success(GetUserExtensionsData)
+            case failure(Data?, URLResponse?, Error?)
+        }
+
         /// `usersURL` is the URL that should be accessed for basic GET/POST calls that interact
         /// with users data.
         private static let usersURL = URL(string: "https://api.twitch.tv/helix/users")!
@@ -1052,6 +1071,10 @@ public class Twitch {
         /// `getUsersFollowsURL` is the URL that should be accessed for the `Get Users Follows` API
         /// call.
         private static let getUsersFollowsURL = URL(string: "https://api.twitch.tv/helix/users/follows")!
+
+        /// `userExtensionsListURL` is the URL should be accessed for the `Get User Extensions` API
+        /// call.
+        private static let userExtensionsListURL = URL(string: "https://api.twitch.tv/helix/users/extensions/list")!
 
         /// `getUsers` will run the `Get Users` API call of the New Twitch API. You can use this API
         /// call to retrieve the ID, user type, broadcaster type, profile image, offline splash
@@ -1134,7 +1157,7 @@ public class Twitch {
         /// - Parameters:
         ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
         ///   - description: The description to set for the user.
-        ///   - completionHandler: The function that should be run whenever the retrieval is
+        ///   - completionHandler: The function that should be run whenever the command is
         /// successful. There are two types of `UpdateUserResult`: `success` and `failure`.
         ///
         /// - seealso: `UpdateUserResult`
@@ -1147,6 +1170,30 @@ public class Twitch {
                 withBodyParameters: nil, enforcesAuthorization: true, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(UpdateUserResult.success($0)) },
                 onFailure: { completionHandler(UpdateUserResult.failure($0, $1, $2)) })
+        }
+
+        /// `getUserExtensions` will run the `Get User Extensions` API call of the New Twitch API.
+        /// You can use this API call retrieve the extensions that the token-bearing user has.
+        ///
+        /// This API call requires a token with `user:read:broadcast` permissions.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#get-user-extensions)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `GetUserExtensionsResult`: `success` and `failure`.
+        ///
+        /// - seealso: `GetUserExtensionsResult`
+        public static func getUserExtensions(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                             completionHandler: @escaping (GetUserExtensionsResult) -> Void) {
+            Twitch.performAPIWebRequest(
+                to: userExtensionsListURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withQueryParameters: nil, withBodyParameters: nil,
+                enforcesAuthorization: true, withTokenManager: tokenManager,
+                onSuccess: { completionHandler(GetUserExtensionsResult.success($0)) },
+                onFailure: { completionHandler(GetUserExtensionsResult.failure($0, $1, $2)) })
         }
 
         /// `convertGetUsersParamsToDict` is used to convert the typed parameters into a list of web
