@@ -328,7 +328,6 @@ public class Twitch {
         /// 1. URLResponse? - The response from the URL task
         /// 1. Error? - The error that was returned from the API call
         public enum GetBitsLeaderboardResult {
-            // TODO: Change Success to be an object
             case success(GetBitsLeaderboardData)
             case failure(Data?, URLResponse?, Error?)
         }
@@ -987,6 +986,78 @@ public class Twitch {
             parametersDictionary.addValueIfNotNil(after, toKey: Twitch.WebRequestKeys.after)
             parametersDictionary.addValueIfNotNil(before, toKey: Twitch.WebRequestKeys.before)
             parametersDictionary.addValueIfNotNil(first, toKey: Twitch.WebRequestKeys.first)
+            return parametersDictionary
+        }
+    }
+
+    // MARK: - Users
+
+    /// Users is a category of Twitch API calls used for getting data about users on Twitch.
+    public struct Users {
+
+        /// `GetUsersResult` defines the different types of results that can be retrieved from the
+        /// `getUsers` call of the `Bits` API. Variables are included that specify the data that was
+        /// returned.
+        ///
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// game analytics data.
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum GetUsersResult {
+            case success(GetUsersData)
+            case failure(Data?, URLResponse?, Error?)
+        }
+
+        /// `getUsersURL` is the URL that should be accessed for the `Get Users` API call.
+        private static let getUsersURL = URL(string: "https://api.twitch.tv/helix/users")!
+
+        /// `getUsers` will run the `Get Users` API call of the New Twitch API. You can use this API
+        /// call to retrieve the ID, user type, broadcaster type, profile image, offline splash
+        /// image, view count and username of any provided users. You can provide both User IDs and
+        /// Login Names for this call to retrieve this information. If neither information is
+        /// provided the user specified through the token will have their information retrieved.
+        ///
+        /// This API call has an optional authentication token with `user:read:email` permissions.
+        /// If such a token is provided, you can retrieve the email of the Bearer token's holder as
+        /// well from this API call.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#get-users)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - userIds: The IDs of the users to look up information for
+        ///   - userLoginNames: The login names of the users to look up information for
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `GetUsersResult`: `success` and `failure`.
+        ///
+        /// - seealso: `GetUsersResult`
+        public static func getUsers(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                    userIds: [String]?, userLoginNames: [String]?,
+                                    completionHandler: @escaping (GetUsersResult) -> Void) {
+            Twitch.performAPIWebRequest(
+                to: getUsersURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withQueryParameters: convertGetUsersParamsToDict(userLoginNames: userLoginNames, userIds: userIds),
+                withBodyParameters: nil, enforcesAuthorization: true, withTokenManager: tokenManager,
+                onSuccess: { completionHandler(GetUsersResult.success($0)) },
+                onFailure: { completionHandler(GetUsersResult.failure($0, $1, $2)) })
+        }
+
+        /// `convertGetUsersParamsToDict` is used to convert the typed parameters into a list of web
+        /// request parameters as a String-keyed Dictionary for a `getUsers` method call.
+        ///
+        /// - Parameters:
+        ///   - userIds: input
+        ///   - userLoginNames: input
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertGetUsersParamsToDict(userLoginNames: [String]?,
+                                                        userIds: [String]?) -> [String: Any] {
+            var parametersDictionary = [String: Any]()
+            parametersDictionary.addValueIfNotNil(userLoginNames, toKey: WebRequestKeys.login)
+            parametersDictionary.addValueIfNotNil(userIds, toKey: WebRequestKeys.id)
             return parametersDictionary
         }
     }

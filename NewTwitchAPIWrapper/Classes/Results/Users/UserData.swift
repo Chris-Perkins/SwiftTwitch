@@ -60,7 +60,7 @@ public struct UserData: Unmarshaling {
 
     /// `offlineImageURL` specifies the offline image url of this user. This image is shown whenever
     /// their stream is visited, but it is offline.
-    public let offlineImageURL: URL
+    public let offlineImageURL: URL?
 
     /// `viewCount` specifies the number of views that this user has.
     public let viewCount: Int
@@ -68,7 +68,7 @@ public struct UserData: Unmarshaling {
     /// `email` specifies the email that this user has. This variable will only be returned if the
     /// `Get User(s)` API was called on one's self and `user:read:email` is defined as a scope of
     /// permissions for the token provided.
-    public let email: String
+    public let email: String?
 
     /// Initializes a `UserData` object from the input `MarshaledObject`. This will throw if there
     /// is missing data from the input `MarshaledObject`.
@@ -83,8 +83,8 @@ public struct UserData: Unmarshaling {
         broadcasterType = try object.value(for: Twitch.WebRequestKeys.broadcasterType)
         description = try? object.value(for: Twitch.WebRequestKeys.description)
         profileImageURL = try object.value(for: Twitch.WebRequestKeys.profileImageURL)
-        offlineImageURL = try object.value(for: Twitch.WebRequestKeys.offlineImageURL)
+        offlineImageURL = try? object.value(for: Twitch.WebRequestKeys.offlineImageURL)
         viewCount = try object.value(for: Twitch.WebRequestKeys.viewCount)
-        email = try object.value(for: Twitch.WebRequestKeys.email)
+        email = try? object.value(for: Twitch.WebRequestKeys.email)
     }
 }
