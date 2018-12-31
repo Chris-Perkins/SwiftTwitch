@@ -223,9 +223,9 @@ public class Twitch {
                                             completionHandler: @escaping (GetGameAnalyticsResult) -> Void) {
             Twitch.performAPIWebRequest(
                 to: gameAnalyticsURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
-                withQueryParameters: convertGameAnalyticsParamsToDict(after: after, startedAt: startedAt,
-                                                                      endedAt: endedAt, gameId: gameId,
-                                                                      first: first, type: type),
+                withQueryParameters: convertGetGameAnalyticsParamsToDict(after: after, startedAt: startedAt,
+                                                                         endedAt: endedAt, gameId: gameId,
+                                                                         first: first, type: type),
                 withBodyParameters: nil, enforcesAuthorization: true, withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetGameAnalyticsResult.success($0)) },
                 onFailure: { completionHandler(GetGameAnalyticsResult.failure($0, $1, $2)) })
@@ -275,10 +275,9 @@ public class Twitch {
         ///   - first: input
         ///   - type: input
         /// - Returns: The String-keyed `Dictionary` of parameters.
-        // Todo: rename to convertGetGameAnalyticsParamsToDict
-        private static func convertGameAnalyticsParamsToDict(after: String?, startedAt: Date?, endedAt: Date?,
-                                                             gameId: String?, first: Int?,
-                                                             type: AnalyticsType?) -> [String: Any] {
+        private static func convertGetGameAnalyticsParamsToDict(after: String?, startedAt: Date?, endedAt: Date?,
+                                                                gameId: String?, first: Int?,
+                                                                type: AnalyticsType?) -> [String: Any] {
             var parametersDictionary = [String: Any]()
             parametersDictionary.addValueIfNotNil(after, toKey: WebRequestKeys.after)
             parametersDictionary.addValueIfNotNil(gameId, toKey: WebRequestKeys.gameId)
@@ -964,10 +963,9 @@ public class Twitch {
         /// - Returns: The String-keyed `Dictionary` of parameters.
         private static func convertCreateStreamMarkerParamsToDict(userId: String,
                                                                   description: String?) -> [String: Any] {
-            // TODO: Shorten to `WebRequestKeys.[$VARIABLE]`
             var parametersDictionary = [String: Any]()
-            parametersDictionary[Twitch.WebRequestKeys.userId] = userId
-            parametersDictionary.addValueIfNotNil(description, toKey: Twitch.WebRequestKeys.description)
+            parametersDictionary[WebRequestKeys.userId] = userId
+            parametersDictionary.addValueIfNotNil(description, toKey: WebRequestKeys.description)
             return parametersDictionary
         }
 
@@ -984,13 +982,12 @@ public class Twitch {
         /// - Returns: The String-keyed `Dictionary` of parameters.
         private static func convertGetStreamMarkersParamsToDict(userId: String, videoId: String, after: String?,
                                                                 before: String?, first: Int?) -> [String: Any] {
-            // TODO: Shorten to `WebRequestKeys.[$VARIABLE]`
             var parametersDictionary = [String: Any]()
-            parametersDictionary[Twitch.WebRequestKeys.userId] = userId
-            parametersDictionary[Twitch.WebRequestKeys.videoId] = videoId
-            parametersDictionary.addValueIfNotNil(after, toKey: Twitch.WebRequestKeys.after)
-            parametersDictionary.addValueIfNotNil(before, toKey: Twitch.WebRequestKeys.before)
-            parametersDictionary.addValueIfNotNil(first, toKey: Twitch.WebRequestKeys.first)
+            parametersDictionary[WebRequestKeys.userId] = userId
+            parametersDictionary[WebRequestKeys.videoId] = videoId
+            parametersDictionary.addValueIfNotNil(after, toKey: WebRequestKeys.after)
+            parametersDictionary.addValueIfNotNil(before, toKey: WebRequestKeys.before)
+            parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
             return parametersDictionary
         }
     }
