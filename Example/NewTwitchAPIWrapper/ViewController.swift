@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        Twitch.Users.getUsers(userIds: ["49370093", "101400190", "60056333"], userLoginNames: nil) { (result) in
+        Twitch.Users.getUsersFollows(followerId: "49370093", followedId: "183186817") { (result) in
             switch result {
             case .failure(let data, let response, let error):
                 let x = data!

@@ -47,6 +47,9 @@ public class Twitch {
         static let endedAt = "ended_at"
         static let extensionId = "extension_id"
         static let first = "first"
+        static let followedAt = "followed_at"
+        static let fromId = "from_id"
+        static let fromName = "from_name"
         static let gameId = "game_id"
         static let hasDelay = "has_delay"
         static let hearthstone = "hearthstone"
@@ -70,6 +73,8 @@ public class Twitch {
         static let startedAt = "started_at"
         static let thumbnailURL = "thumbnail_url"
         static let title = "title"
+        static let toId = "to_id"
+        static let toName = "to_name"
         static let total = "total"
         static let type = "type"
         static let url = "url"
@@ -279,14 +284,12 @@ public class Twitch {
             parametersDictionary.addValueIfNotNil(gameId, toKey: WebRequestKeys.gameId)
             parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
             parametersDictionary.addValueIfNotNil(type?.rawValue, toKey: WebRequestKeys.type)
-
             if let startedAt = startedAt {
                 parametersDictionary[WebRequestKeys.startedAt] = Date.convertDateToZuluString(startedAt)
             }
             if let endedAt = endedAt {
                 parametersDictionary[WebRequestKeys.endedAt] = Date.convertDateToZuluString(endedAt)
             }
-
             return parametersDictionary
         }
     }
@@ -961,6 +964,7 @@ public class Twitch {
         /// - Returns: The String-keyed `Dictionary` of parameters.
         private static func convertCreateStreamMarkerParamsToDict(userId: String,
                                                                   description: String?) -> [String: Any] {
+            // TODO: Shorten to `WebRequestKeys.[$VARIABLE]`
             var parametersDictionary = [String: Any]()
             parametersDictionary[Twitch.WebRequestKeys.userId] = userId
             parametersDictionary.addValueIfNotNil(description, toKey: Twitch.WebRequestKeys.description)
@@ -980,6 +984,7 @@ public class Twitch {
         /// - Returns: The String-keyed `Dictionary` of parameters.
         private static func convertGetStreamMarkersParamsToDict(userId: String, videoId: String, after: String?,
                                                                 before: String?, first: Int?) -> [String: Any] {
+            // TODO: Shorten to `WebRequestKeys.[$VARIABLE]`
             var parametersDictionary = [String: Any]()
             parametersDictionary[Twitch.WebRequestKeys.userId] = userId
             parametersDictionary[Twitch.WebRequestKeys.videoId] = videoId
@@ -996,8 +1001,8 @@ public class Twitch {
     public struct Users {
 
         /// `GetUsersResult` defines the different types of results that can be retrieved from the
-        /// `getUsers` call of the `Bits` API. Variables are included that specify the data that was
-        /// returned.
+        /// `getUsers` call of the `Users` API. Variables are included that specify the data that
+        /// was returned.
         ///
         /// - success: Defines that the call was successful. The output variable will contain all
         /// game analytics data.
@@ -1011,8 +1016,28 @@ public class Twitch {
             case failure(Data?, URLResponse?, Error?)
         }
 
+        /// `GetUsersFollowsResult` defines the different types of results that can be retrieved
+        /// from the `getUsersFollows` call of the `Users` API. Variables are included that specify
+        /// the data that was returned on completion of this call.
+        ///
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// game analytics data.
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum GetUsersFollowsResult {
+            case success(GetUsersFollowsData)
+            case failure(Data?, URLResponse?, Error?)
+        }
+
         /// `getUsersURL` is the URL that should be accessed for the `Get Users` API call.
         private static let getUsersURL = URL(string: "https://api.twitch.tv/helix/users")!
+
+        /// `getUsersFollowsURL` is the URL that should be accessed for the `Get Users Follows` API
+        /// call.
+        private static let getUsersFollowsURL = URL(string: "https://api.twitch.tv/helix/users/follows")!
 
         /// `getUsers` will run the `Get Users` API call of the New Twitch API. You can use this API
         /// call to retrieve the ID, user type, broadcaster type, profile image, offline splash
@@ -1046,6 +1071,43 @@ public class Twitch {
                 onFailure: { completionHandler(GetUsersResult.failure($0, $1, $2)) })
         }
 
+        /// `getUsersFollows` will run the `Get Users Follows` API call of the New Twitch API. You
+        /// can use this API call to retrieve the number of followers a user has, the number of
+        /// users they are following, or if a user is following another user.
+        ///
+        /// The results of this API call are paginated if the response is too large to fit into a
+        /// single request.
+        ///
+        /// This API call requires no authentication.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#get-users-follows)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - followerId: The ID of the follower. Use this to get users this user is following.
+        ///   - followedId: The ID of the user being followed. Use this to get the users that are
+        /// following this user.
+        ///   - after: The forward pagination token.
+        ///   - first: The number of results to return. Default 20. Maximum 100.
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `GetUsersFollowsResult`: `success` and `failure`.
+        ///
+        /// - seealso: `GetUsersFollowsResult`
+        public static func getUsersFollows(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                           followerId: String?, followedId: String?, after: String? = nil,
+                                           first: Int? = nil,
+                                           completionHandler: @escaping (GetUsersFollowsResult) -> Void) {
+            Twitch.performAPIWebRequest(
+                to: getUsersFollowsURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withQueryParameters: convertGetUsersFollowsParamsToDict(followerId: followerId,
+                                                                        followedId: followedId, after: after,
+                                                                        first: first),
+                withBodyParameters: nil, enforcesAuthorization: false, withTokenManager: tokenManager,
+                onSuccess: { completionHandler(GetUsersFollowsResult.success($0)) },
+                onFailure: { completionHandler(GetUsersFollowsResult.failure($0, $1, $2)) })
+        }
+
         /// `convertGetUsersParamsToDict` is used to convert the typed parameters into a list of web
         /// request parameters as a String-keyed Dictionary for a `getUsers` method call.
         ///
@@ -1058,6 +1120,26 @@ public class Twitch {
             var parametersDictionary = [String: Any]()
             parametersDictionary.addValueIfNotNil(userLoginNames, toKey: WebRequestKeys.login)
             parametersDictionary.addValueIfNotNil(userIds, toKey: WebRequestKeys.id)
+            return parametersDictionary
+        }
+
+        /// `convertGetUsersFollowsParamsToDict` is used to convert the typed parameters into a list
+        /// of web request parameters as a String-keyed Dictionary for a `getUsersFollows` method
+        /// call.
+        ///
+        /// - Parameters:
+        ///   - followerId: input
+        ///   - followedId: input
+        ///   - after: input
+        ///   - first: input
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertGetUsersFollowsParamsToDict(followerId: String?, followedId: String?,
+                                                               after: String?, first: Int?) -> [String: Any] {
+            var parametersDictionary = [String: Any]()
+            parametersDictionary.addValueIfNotNil(followerId, toKey: WebRequestKeys.fromId)
+            parametersDictionary.addValueIfNotNil(followedId, toKey: WebRequestKeys.toId)
+            parametersDictionary.addValueIfNotNil(after, toKey: WebRequestKeys.after)
+            parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
             return parametersDictionary
         }
     }
