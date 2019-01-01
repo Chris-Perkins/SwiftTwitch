@@ -23,6 +23,7 @@ public class Twitch {
     /// for the New Twitch API.
     internal struct WebRequestKeys {
         static let ability = "ability"
+        static let active = "active"
         static let after = "after"
         static let before = "before"
         static let boxArtURL = "box_art_url"
@@ -88,6 +89,8 @@ public class Twitch {
         static let videos = "videos"
         static let viewCount = "view_count"
         static let viewerCount = "viewer_count"
+        static let x = "x"
+        static let y = "y"
     }
 
     // MARK: - Analytics
