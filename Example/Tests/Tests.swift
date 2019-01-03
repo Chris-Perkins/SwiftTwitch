@@ -1,5 +1,5 @@
 import XCTest
-import NewTwitchAPIWrapper
+import SwiftTwitch
 
 class Tests: XCTestCase {
     
