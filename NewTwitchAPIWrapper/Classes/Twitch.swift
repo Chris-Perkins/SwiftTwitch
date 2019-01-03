@@ -43,6 +43,7 @@ public class Twitch {
         static let dateRange = "date_range"
         static let description = "description"
         static let displayName = "display_name"
+        static let duration = "duration"
         static let editURL = "edit_url"
         static let email = "email"
         static let embedURL = "embed_url"
@@ -69,10 +70,12 @@ public class Twitch {
         static let period = "period"
         static let positionSeconds = "position_seconds"
         static let profileImageURL = "profile_image_url"
+        static let publishedAt = "published_at"
         static let rank = "rank"
         static let role = "role"
         static let score = "score"
         static let startedAt = "started_at"
+        static let sort = "sort"
         static let thumbnailURL = "thumbnail_url"
         static let title = "title"
         static let toId = "to_id"
@@ -86,6 +89,7 @@ public class Twitch {
         static let version = "version"
         static let videoId = "video_id"
         static let videos = "videos"
+        static let viewable = "viewable"
         static let viewCount = "view_count"
         static let viewerCount = "viewer_count"
     }
@@ -1239,6 +1243,149 @@ public class Twitch {
         private static func convertUpdateUserParamsToDict(description: String?) -> [String: Any] {
             var parametersDictionary = [String: Any]()
             parametersDictionary.addValueIfNotNil(description, toKey: Twitch.WebRequestKeys.description)
+            return parametersDictionary
+        }
+    }
+    
+    /// Videos is a category of Twitch API calls that allow for the interaction of Video Data from
+    /// the New Twitch API.
+    public struct Videos {
+
+        /// `Period` defines the different types of periods that are accepted by the Twitch API for
+        /// use in retrieving Videos based on an amount of time.
+        ///
+        /// - all: Defines a period spanning since the beginning of time. Seriously.
+        /// - day: Defines a period spanning all day.
+        /// - week: Defines a period spanning all week.
+        /// - month: Defines a period spanning all month.
+        public enum Period: String {
+            case all = "all"
+            case day = "day"
+            case week = "week"
+            case month = "month"
+        }
+
+        /// `SortType` defines a type of sorting that can be used to retrieve videos from the
+        /// `Get Videos` API call in a specific order.
+        ///
+        /// - time: Videos will be sorted by their time order. Most recent first.
+        /// - trending: Videos will be sorted based on their "trending" status.
+        /// - views: Videos will be sorted by their amount of views.
+        public enum SortType: String {
+            case time = "time"
+            case trending = "trending"
+            case views = "views"
+        }
+
+        /// `VideoQueryType` defines the types of videos that may be queried for. This enum is used
+        /// in the `Get Videos` API call.
+        ///
+        /// - all: `all` applies no filter to results.
+        /// - upload: `upload` applies a filter that only allows uploaded videos to be returned.
+        /// - archive: `archive` applies a filter that allows only archived videos the be returned.
+        /// - highlight: `highlight` applies a filter that allows only highlighted videos to be
+        /// returned.
+        public enum VideoQueryType: String {
+            case all = "all"
+            case upload = "upload"
+            case archive = "archive"
+            case highlight = "highlight"
+        }
+
+        /// `GetVideosResult` defines the different types of results that can be retrieved from the
+        /// `getVideos` call of the `Videos` API. Variables are included that specify the data that
+        /// was returned.
+        ///
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// received data.
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum GetVideosResult {
+            case success(GetVideosData)
+            case failure(Data?, URLResponse?, Error?)
+        }
+
+        /// `videoURL` is the URL that should be accessed for base Video data calls.
+        private static let videosURL = URL(string: "https://api.twitch.tv/helix/videos")!
+
+        /// `getVideos` will run the `Get Videos` API call of the New Twitch API. This call will
+        /// retrieve all video data in a paginated fashion.
+        ///
+        /// This API call requires no authentication to use.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/api/reference/#get-videos)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - videoIds: The IDs of the video to be queried. Maximum 100. If this is specified,
+        /// then no optional values can be used. Optional if `userId` or `gameId` is specified.
+        ///   - userId: The ID of the user to query videos for. Optional if `videoIds` or `gameId`
+        /// is specified.
+        ///   - gameId: The ID of the game to query videos for. Optional if `videoIds` or `userId`
+        /// is specified.
+        ///   - after: The forward pagination token.
+        ///   - before: The backwards pagination token.
+        ///   - first: The maximum number of videos to return. Maximum: 100. Default: 20.
+        ///   - language: The language videos must be in to be returned.
+        ///   - period: The period to obtain data for. If this value is `.all`, Default: `.all`.
+        ///   - sortType: The type of sorting that should occur. Default: `.time`.
+        ///   - videoType: The type of videos that should be retrieved. Default: `.all`.
+        ///   - completionHandler: The function that should be run whenever the retrieval is
+        /// successful. There are two types of `GetVideosResultResult`: `success` and `failure`.
+        ///
+        /// - seealso: `Period`
+        /// - seealso: `GetVideosResult`
+        public static func getVideos(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                     videoIds: [String]?, userId: String?, gameId: String?,
+                                     after: String? = nil, before: String? = nil, first: Int? = nil,
+                                     language: String? = nil, period: Period? = nil,
+                                     sortType: SortType? = nil, videoType: VideoQueryType? = nil,
+                                     completionHandler: @escaping (GetVideosResult) -> Void) {
+            Twitch.performAPIWebRequest(
+                to: videosURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withQueryParameters: convertGetVideosParamsToDict(videoIds: videoIds, userId: userId, gameId: gameId,
+                                                                  after: after, before: before, first: first,
+                                                                  language: language, period: period,
+                                                                  sortType: sortType, videoType: videoType),
+                withBodyParameters: nil, enforcesAuthorization: false, withTokenManager: tokenManager,
+                onSuccess: { completionHandler(GetVideosResult.success($0)) },
+                onFailure: { completionHandler(GetVideosResult.failure($0, $1, $2)) })
+        }
+
+        /// `convertGetVideosParamsToDict` is used to convert the typed parameters into a list of
+        /// web request parameters as a String-keyed Dictionary for a `getVideos` method call.
+        ///
+        /// - Parameters:
+        ///   - videoIds: input
+        ///   - userId: input
+        ///   - gameId: input
+        ///   - after: input
+        ///   - before: input
+        ///   - first: input
+        ///   - language: input
+        ///   - period: input
+        ///   - sortType: input
+        ///   - videoType: input
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertGetVideosParamsToDict(videoIds: [String]?, userId: String?,gameId: String?,
+                                                         after: String?, before: String?, first: Int?,
+                                                         language: String?, period: Period?, sortType: SortType?,
+                                                         videoType: VideoQueryType?) -> [String: Any] {
+            var parametersDictionary = [String: Any]()
+            parametersDictionary.addValueIfNotNil(videoIds, toKey: WebRequestKeys.id)
+            parametersDictionary.addValueIfNotNil(userId, toKey: WebRequestKeys.userId)
+            parametersDictionary.addValueIfNotNil(gameId, toKey: WebRequestKeys.gameId)
+            parametersDictionary.addValueIfNotNil(after, toKey: WebRequestKeys.after)
+            parametersDictionary.addValueIfNotNil(before, toKey: WebRequestKeys.before)
+            parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
+            parametersDictionary.addValueIfNotNil(language, toKey: WebRequestKeys.language)
+            parametersDictionary.addValueIfNotNil(period?.rawValue, toKey: WebRequestKeys.period)
+            parametersDictionary.addValueIfNotNil(sortType?.rawValue, toKey: WebRequestKeys.sort)
+            parametersDictionary.addValueIfNotNil(videoType?.rawValue, toKey: WebRequestKeys.type)
             return parametersDictionary
         }
     }

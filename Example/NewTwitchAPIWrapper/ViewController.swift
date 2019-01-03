@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        Twitch.Users.getUserExtensions { (result) in
+        Twitch.Videos.getVideos(videoIds: nil, userId: "183186817", gameId: nil) { (result) in
             switch result {
             case .failure(let data, let response, let error):
                 let x = data!
