@@ -1,4 +1,4 @@
-# Swift Twitch
+![](https://github.com/Chris-Perkins/SwiftTwitch/raw/master/Readme_Imgs/SwiftTwitch.jpg)
 
 [![Version](https://img.shields.io/cocoapods/v/SwiftTwitch.svg?style=flat)](https://cocoapods.org/pods/SwiftTwitch)
 [![License](https://img.shields.io/cocoapods/l/SwiftTwitch.svg?style=flat)](https://cocoapods.org/pods/SwiftTwitch)
