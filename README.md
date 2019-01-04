@@ -8,9 +8,16 @@
 
 ## What is It?
 
-Swift Twitch is a library intended for client-facing applications to interact with the New Twitch API, or the Helix API. This library aims to simplify the process of interacting with Twitch by returning Typed data values to help get your application running as soon as possible.
+Swift Twitch is a library intended for client-facing applications interaction with the New Twitch API, Helix. This library aims to ease API interaction by returning typed data values to help you finish your application without headaches.
+For example, after a `Get Videos` call, you can use:
 
-🥰 Pull requests are very welcome 🥰
+```Swift
+let firstVideoData: VideoData? = getVideosData.videoData.first
+let title: String? = firstVideoData?.title
+let viewCount: Int? = firstVideoData?.viewCount
+```
+
+❤️ Pull requests are very welcome ❤️
 
 ## Available API Calls
 
@@ -37,15 +44,14 @@ Get Videos | `Twitch.Videos.getVideos`
 
 ### Documentation
 
-[The Twitch API Documentation is available here](https://dev.twitch.tv/docs/api/reference/)
+[New Twitch API (Helix) Documentation](https://dev.twitch.tv/docs/api/reference/)
 
-[This Library's Documentation is available here](https://htmlpreview.github.io/?https://github.com/Chris-Perkins/SwiftTwitch/blob/master/docs/index.html)
+[Swift Twitch Documentation](https://htmlpreview.github.io/?https://github.com/Chris-Perkins/SwiftTwitch/blob/master/docs/index.html)
 
 ### Example Usage
 
 <details>  
-<summary>Example method to check if a user is following another user</summary>  
-Let's say I want to find out if two users are following each other. Below is how I might utilize that by using the `Get User Follows` API method:
+<summary>How to check if a user is following another user</summary>  
 
 ```Swift
 import SwiftTwitch
@@ -82,7 +88,7 @@ class AwesomeClass {
 
 In order to use this library, you must first have an application register on the Twitch Developer portal. You can register your application quickly [on Twitch's official application creation dashboard](https://glass.twitch.tv/console/apps/create). After this step, there are two methods to retrieving API keys.
 
-#### Automatic Access Token Retrieval
+#### Automatically Retrieve Access Token
 
 TODO :)
 
@@ -92,13 +98,17 @@ TODO :)
 
 ### I have my access token, now what?
 
-Now that you have an access token, you can provide it to the application in the following manner.
+Now that you have an access token, you can provide it to the application in the following manner:
 
 ```Swift
 TwitchTokenManager.shared.accessToken = "$Your_Token"
 ```
 
 Once this command is run, all of your API calls are now automatically authenticated! Now go make some API calls. :)
+
+### I still have questions!
+
+For Twitch Swift support, feel free to open up an issue. For API-based support, please visit [The Twitch Developer Forums](https://discuss.dev.twitch.tv/)
 
 ## Example Project
 
