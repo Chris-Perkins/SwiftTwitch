@@ -1,0 +1,488 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Helping Extensions/DateFormattingExtensions.swift",
+      "line": 54,
+      "symbol": "Date.value(from:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Streams/StreamData.swift",
+      "line": 19,
+      "symbol": "StreamData.StreamType.live",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Streams/StreamData.swift",
+      "line": 20,
+      "symbol": "StreamData.StreamType.error",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Users/ExtensionData.swift",
+      "line": 26,
+      "symbol": "ExtensionData.ExtensionType.component",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Users/ExtensionData.swift",
+      "line": 27,
+      "symbol": "ExtensionData.ExtensionType.mobile",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Users/ExtensionData.swift",
+      "line": 28,
+      "symbol": "ExtensionData.ExtensionType.panel",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Users/ExtensionData.swift",
+      "line": 29,
+      "symbol": "ExtensionData.ExtensionType.overlay",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Users/UserData.swift",
+      "line": 20,
+      "symbol": "UserData.UserType.staff",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Users/UserData.swift",
+      "line": 21,
+      "symbol": "UserData.UserType.admin",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Users/UserData.swift",
+      "line": 22,
+      "symbol": "UserData.UserType.globalMod",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Users/UserData.swift",
+      "line": 23,
+      "symbol": "UserData.UserType.normal",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Users/UserData.swift",
+      "line": 35,
+      "symbol": "UserData.BroadcasterType.partner",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Users/UserData.swift",
+      "line": 36,
+      "symbol": "UserData.BroadcasterType.affiliate",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Users/UserData.swift",
+      "line": 37,
+      "symbol": "UserData.BroadcasterType.normal",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Videos/VideoData.swift",
+      "line": 21,
+      "symbol": "VideoData.VideoType.archive",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Videos/VideoData.swift",
+      "line": 22,
+      "symbol": "VideoData.VideoType.highlight",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Videos/VideoData.swift",
+      "line": 23,
+      "symbol": "VideoData.VideoType.upload",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Videos/VideoData.swift",
+      "line": 32,
+      "symbol": "VideoData.ViewSettings.privateVideo",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Results/Videos/VideoData.swift",
+      "line": 33,
+      "symbol": "VideoData.ViewSettings.publicVideo",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 123,
+      "symbol": "Twitch.Analytics.AnalyticsType.overviewVersion1",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 124,
+      "symbol": "Twitch.Analytics.AnalyticsType.overviewVersion2",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 139,
+      "symbol": "Twitch.Analytics.GetExtensionAnalyticsResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 140,
+      "symbol": "Twitch.Analytics.GetExtensionAnalyticsResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 155,
+      "symbol": "Twitch.Analytics.GetGameAnalyticsResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 156,
+      "symbol": "Twitch.Analytics.GetGameAnalyticsResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 332,
+      "symbol": "Twitch.Bits.Period.all",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 333,
+      "symbol": "Twitch.Bits.Period.day",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 334,
+      "symbol": "Twitch.Bits.Period.week",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 335,
+      "symbol": "Twitch.Bits.Period.month",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 336,
+      "symbol": "Twitch.Bits.Period.year",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 351,
+      "symbol": "Twitch.Bits.GetBitsLeaderboardResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 352,
+      "symbol": "Twitch.Bits.GetBitsLeaderboardResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 440,
+      "symbol": "Twitch.Clips.CreateClipResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 441,
+      "symbol": "Twitch.Clips.CreateClipResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 456,
+      "symbol": "Twitch.Clips.GetClipsResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 457,
+      "symbol": "Twitch.Clips.GetClipsResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 602,
+      "symbol": "Twitch.Games.GetTopGamesResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 603,
+      "symbol": "Twitch.Games.GetTopGamesResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 618,
+      "symbol": "Twitch.Games.GetGamesResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 619,
+      "symbol": "Twitch.Games.GetGamesResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 743,
+      "symbol": "Twitch.Streams.GetStreamsResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 744,
+      "symbol": "Twitch.Streams.GetStreamsResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 759,
+      "symbol": "Twitch.Streams.GetStreamsMetadataResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 760,
+      "symbol": "Twitch.Streams.GetStreamsMetadataResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 775,
+      "symbol": "Twitch.Streams.CreateStreamMarkerResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 776,
+      "symbol": "Twitch.Streams.CreateStreamMarkerResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 791,
+      "symbol": "Twitch.Streams.GetStreamMarkersResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 792,
+      "symbol": "Twitch.Streams.GetStreamMarkersResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1040,
+      "symbol": "Twitch.Users.GetUsersResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1041,
+      "symbol": "Twitch.Users.GetUsersResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1056,
+      "symbol": "Twitch.Users.GetUsersFollowsResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1057,
+      "symbol": "Twitch.Users.GetUsersFollowsResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1072,
+      "symbol": "Twitch.Users.UpdateUserResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1073,
+      "symbol": "Twitch.Users.UpdateUserResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1088,
+      "symbol": "Twitch.Users.GetUserExtensionsResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1089,
+      "symbol": "Twitch.Users.GetUserExtensionsResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1283,
+      "symbol": "Twitch.Videos.Period.all",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1284,
+      "symbol": "Twitch.Videos.Period.day",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1285,
+      "symbol": "Twitch.Videos.Period.week",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1286,
+      "symbol": "Twitch.Videos.Period.month",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1296,
+      "symbol": "Twitch.Videos.SortType.time",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1297,
+      "symbol": "Twitch.Videos.SortType.trending",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1298,
+      "symbol": "Twitch.Videos.SortType.views",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1310,
+      "symbol": "Twitch.Videos.VideoQueryType.all",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1311,
+      "symbol": "Twitch.Videos.VideoQueryType.upload",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1312,
+      "symbol": "Twitch.Videos.VideoQueryType.archive",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1313,
+      "symbol": "Twitch.Videos.VideoQueryType.highlight",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1328,
+      "symbol": "Twitch.Videos.GetVideosResult.success(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper/SwiftTwitch/Classes/Twitch.swift",
+      "line": 1329,
+      "symbol": "Twitch.Videos.GetVideosResult.failure(_:_:_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/chrisperkins/Desktop/NewTwitchAPIWrapper"
+}

@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ClipData Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Struct/ClipData" class="dashAnchor"></a>
+    <a title="ClipData Structure Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">SwiftTwitch Docs</a> (79% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">SwiftTwitch Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        ClipData Structure Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Twitch.html">Twitch</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Twitch/Analytics.html">– Analytics</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Twitch/Bits.html">– Bits</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Twitch/Clips.html">– Clips</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Twitch/Games.html">– Games</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Twitch/Streams.html">– Streams</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Twitch/Users.html">– Users</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Twitch/Videos.html">– Videos</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TwitchTokenManager.html">TwitchTokenManager</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Date.html">Date</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/ClipData.html">ClipData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CreateClipData.html">CreateClipData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CreateClipInfoData.html">CreateClipInfoData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CreateStreamMarkerData.html">CreateStreamMarkerData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ExtensionAnalyticsReportData.html">ExtensionAnalyticsReportData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ExtensionData.html">ExtensionData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ExtensionData/ExtensionType.html">– ExtensionType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GameAnalyticsReportData.html">GameAnalyticsReportData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GameData.html">GameData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GetBitsLeaderboardData.html">GetBitsLeaderboardData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GetBitsLeaderboardUserData.html">GetBitsLeaderboardUserData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GetClipsData.html">GetClipsData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GetExtensionAnalyticsData.html">GetExtensionAnalyticsData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GetGameAnalyticsData.html">GetGameAnalyticsData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GetGamesData.html">GetGamesData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GetStreamMarkersData.html">GetStreamMarkersData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GetStreamsData.html">GetStreamsData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GetStreamsMetadataData.html">GetStreamsMetadataData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GetTopGamesData.html">GetTopGamesData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GetUserExtensionsData.html">GetUserExtensionsData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GetUsersData.html">GetUsersData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GetUsersFollowsData.html">GetUsersFollowsData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GetVideosData.html">GetVideosData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HearthstoneHeroMetadata.html">HearthstoneHeroMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HearthstoneMetadata.html">HearthstoneMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HearthstonePlayerMetadata.html">HearthstonePlayerMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/MarkedStreamerData.html">MarkedStreamerData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/MarkedVideoData.html">MarkedVideoData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OverwatchHeroMetadata.html">OverwatchHeroMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OverwatchMetadata.html">OverwatchMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OverwatchPlayerMetadata.html">OverwatchPlayerMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PaginationData.html">PaginationData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PostedStreamMarkerData.html">PostedStreamMarkerData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/StreamData.html">StreamData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/StreamData/StreamType.html">– StreamType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/StreamMetadata.html">StreamMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/UnpostedStreamMarkerData.html">UnpostedStreamMarkerData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/UpdateUserData.html">UpdateUserData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/UserData.html">UserData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/UserData/UserType.html">– UserType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/UserData/BroadcasterType.html">– BroadcasterType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/UserFollowData.html">UserFollowData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VideoData.html">VideoData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VideoData/VideoType.html">– VideoType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VideoData/ViewSettings.html">– ViewSettings</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>ClipData</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ClipData</span> <span class="p">:</span> <span class="kt">Unmarshaling</span></code></pre>
+
+                </div>
+              </div>
+            <p><code>ClipData</code> is a class that encapsulates all of the information of a single returned clip from
+the returned array of Clip data from the New Twitch API&rsquo;s <code>Clips</code> methods.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch8ClipDataV13broadcasterIdSSvp"></a>
+                    <a name="//apple_ref/swift/Property/broadcasterId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch8ClipDataV13broadcasterIdSSvp">broadcasterId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>broadcasterId</code> specifies the ID of the user from whose stream the clip was taken from.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">broadcasterId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch8ClipDataV15broadcasterNameSSvp"></a>
+                    <a name="//apple_ref/swift/Property/broadcasterName" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch8ClipDataV15broadcasterNameSSvp">broadcasterName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>broadcasterName</code> specifies the name of the user from whose stream the clip was taken from.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">broadcasterName</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch8ClipDataV12creationDate10Foundation0F0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/creationDate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch8ClipDataV12creationDate10Foundation0F0Vvp">creationDate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>creationDate</code> specifies when the clip was created.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">creationDate</span><span class="p">:</span> <span class="kt">Date</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch8ClipDataV9creatorIdSSvp"></a>
+                    <a name="//apple_ref/swift/Property/creatorId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch8ClipDataV9creatorIdSSvp">creatorId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>creatorId</code> specifies the ID of the user from who created the clip.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    This shares <strong>no relationship</strong> with the broadcaster from whose stream the clip was
+from. See <code><a href="../Structs/ClipData.html#/s:11SwiftTwitch8ClipDataV13broadcasterIdSSvp">broadcasterId</a></code> for that property instead.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">creatorId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch8ClipDataV11creatorNameSSvp"></a>
+                    <a name="//apple_ref/swift/Property/creatorName" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch8ClipDataV11creatorNameSSvp">creatorName</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>creatorName</code> specifies the name of the user who created the clip.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    This shares <strong>no relationship</strong> with the broadcaster from whose stream the clip was
+from. See <code><a href="../Structs/ClipData.html#/s:11SwiftTwitch8ClipDataV15broadcasterNameSSvp">broadcasterName</a></code> for that property instead.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">creatorName</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch8ClipDataV8embedURL10Foundation0F0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/embedURL" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch8ClipDataV8embedURL10Foundation0F0Vvp">embedURL</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>embedURL</code> specifies the URL for which you can embed this clip into your application.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">embedURL</span><span class="p">:</span> <span class="kt">URL</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch8ClipDataV6gameIdSSvp"></a>
+                    <a name="//apple_ref/swift/Property/gameId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch8ClipDataV6gameIdSSvp">gameId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>gameId</code> specifies the ID of the game from which the clip was taken from.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">gameId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch8ClipDataV6clipIdSSvp"></a>
+                    <a name="//apple_ref/swift/Property/clipId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch8ClipDataV6clipIdSSvp">clipId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>clipId</code> specifies the ID of the clip.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">clipId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch8ClipDataV8languageSSvp"></a>
+                    <a name="//apple_ref/swift/Property/language" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch8ClipDataV8languageSSvp">language</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>language</code> specifies the language of the stream when the clip was created.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">language</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch8ClipDataV12thumbnailURL10Foundation0F0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/thumbnailURL" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch8ClipDataV12thumbnailURL10Foundation0F0Vvp">thumbnailURL</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>thumbnailURL</code> specifies the URL of the clip thumbnail.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">thumbnailURL</span><span class="p">:</span> <span class="kt">URL</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch8ClipDataV5titleSSvp"></a>
+                    <a name="//apple_ref/swift/Property/title" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch8ClipDataV5titleSSvp">title</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>title</code> specifies the title of the clip.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch8ClipDataV7clipURL10Foundation0F0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/clipURL" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch8ClipDataV7clipURL10Foundation0F0Vvp">clipURL</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>clipURL</code> specifies the URL where the clip can be viewed.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    This is <strong>not</strong> the same as the url to embed the clip.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">clipURL</span><span class="p">:</span> <span class="kt">URL</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch8ClipDataV7videoIdSSvp"></a>
+                    <a name="//apple_ref/swift/Property/videoId" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch8ClipDataV7videoIdSSvp">videoId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>videoId</code> specifies the ID of the stream/video from which this clip was taken from.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">videoId</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch8ClipDataV9viewCountSivp"></a>
+                    <a name="//apple_ref/swift/Property/viewCount" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch8ClipDataV9viewCountSivp">viewCount</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>viewCount</code> specifies the amount of views this clip has.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">viewCount</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch8ClipDataV6objectAC7Marshal15MarshaledObject_p_tKcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(object:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch8ClipDataV6objectAC7Marshal15MarshaledObject_p_tKcfc">init(object:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializes a <code>ClipData</code> object from the input <code>MarshaledObject</code>. This will throw if there
+is missing data from the input <code>MarshaledObject</code>.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    If data is missing that was expected to be non-<code>nil</code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">object</span><span class="p">:</span> <span class="kt">MarshaledObject</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>object</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The object to initialize a <code>ClipData</code> piece from</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2019 <a class="link" href="https://github.com/chrisfromtemporaryid@gmail.com/SwiftTwitch" target="_blank" rel="external">chrisfromtemporaryid@gmail.com</a>. All rights reserved. (Last updated: 2019-01-03)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

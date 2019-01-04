@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Users Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../../js/jquery.min.js" defer></script>
+    <script src="../../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Struct/Users" class="dashAnchor"></a>
+    <a title="Users Structure Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../../index.html">SwiftTwitch Docs</a> (79% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../../index.html">SwiftTwitch Reference</a>
+        <img id="carat" src="../../img/carat.png" />
+        Users Structure Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../../Classes/Twitch.html">Twitch</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Classes/Twitch/Analytics.html">– Analytics</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Classes/Twitch/Bits.html">– Bits</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Classes/Twitch/Clips.html">– Clips</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Classes/Twitch/Games.html">– Games</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Classes/Twitch/Streams.html">– Streams</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Classes/Twitch/Users.html">– Users</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Classes/Twitch/Videos.html">– Videos</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Classes/TwitchTokenManager.html">TwitchTokenManager</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../../Extensions/Date.html">Date</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../../Structs/ClipData.html">ClipData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/CreateClipData.html">CreateClipData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/CreateClipInfoData.html">CreateClipInfoData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/CreateStreamMarkerData.html">CreateStreamMarkerData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/ExtensionAnalyticsReportData.html">ExtensionAnalyticsReportData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/ExtensionData.html">ExtensionData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/ExtensionData/ExtensionType.html">– ExtensionType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GameAnalyticsReportData.html">GameAnalyticsReportData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GameData.html">GameData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GetBitsLeaderboardData.html">GetBitsLeaderboardData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GetBitsLeaderboardUserData.html">GetBitsLeaderboardUserData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GetClipsData.html">GetClipsData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GetExtensionAnalyticsData.html">GetExtensionAnalyticsData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GetGameAnalyticsData.html">GetGameAnalyticsData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GetGamesData.html">GetGamesData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GetStreamMarkersData.html">GetStreamMarkersData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GetStreamsData.html">GetStreamsData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GetStreamsMetadataData.html">GetStreamsMetadataData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GetTopGamesData.html">GetTopGamesData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GetUserExtensionsData.html">GetUserExtensionsData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GetUsersData.html">GetUsersData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GetUsersFollowsData.html">GetUsersFollowsData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/GetVideosData.html">GetVideosData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/HearthstoneHeroMetadata.html">HearthstoneHeroMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/HearthstoneMetadata.html">HearthstoneMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/HearthstonePlayerMetadata.html">HearthstonePlayerMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/MarkedStreamerData.html">MarkedStreamerData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/MarkedVideoData.html">MarkedVideoData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/OverwatchHeroMetadata.html">OverwatchHeroMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/OverwatchMetadata.html">OverwatchMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/OverwatchPlayerMetadata.html">OverwatchPlayerMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/PaginationData.html">PaginationData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/PostedStreamMarkerData.html">PostedStreamMarkerData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/StreamData.html">StreamData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/StreamData/StreamType.html">– StreamType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/StreamMetadata.html">StreamMetadata</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/UnpostedStreamMarkerData.html">UnpostedStreamMarkerData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/UpdateUserData.html">UpdateUserData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/UserData.html">UserData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/UserData/UserType.html">– UserType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/UserData/BroadcasterType.html">– BroadcasterType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/UserFollowData.html">UserFollowData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/VideoData.html">VideoData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/VideoData/VideoType.html">– VideoType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../../Structs/VideoData/ViewSettings.html">– ViewSettings</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Users</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Users</span></code></pre>
+
+                </div>
+              </div>
+            <p>Users is a category of Twitch API calls used for getting data about users on Twitch.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch0B0C5UsersV03GetC6ResultO"></a>
+                    <a name="//apple_ref/swift/Enum/GetUsersResult" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch0B0C5UsersV03GetC6ResultO">GetUsersResult</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>GetUsersResult</code> defines the different types of results that can be retrieved from the
+<code>getUsers</code> call of the <code><a href="../../Classes/Twitch/Users.html">Users</a></code> API. Variables are included that specify the data that
+was returned.</p>
+
+<ul>
+<li>success: Defines that the call was successful. The output variable will contain all
+user data.</li>
+<li>failure: Defines that the call failed. Returns all data corresponding to the failed
+call. These data pieces are as follows:</li>
+<li>Data? - The data that was returned by the API</li>
+<li>URLResponse? - The response from the URL task</li>
+<li>Error? - The error that was returned from the API call</li>
+</ul>
+
+                        <a href="../../Classes/Twitch/Users/GetUsersResult.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">GetUsersResult</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch0B0C5UsersV03GetC13FollowsResultO"></a>
+                    <a name="//apple_ref/swift/Enum/GetUsersFollowsResult" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch0B0C5UsersV03GetC13FollowsResultO">GetUsersFollowsResult</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>GetUsersFollowsResult</code> defines the different types of results that can be retrieved
+from the <code>getUsersFollows</code> call of the <code><a href="../../Classes/Twitch/Users.html">Users</a></code> API. Variables are included that specify
+the data that was returned on completion of this call.</p>
+
+<ul>
+<li>success: Defines that the call was successful. The output variable will contain all
+user followings data.</li>
+<li>failure: Defines that the call failed. Returns all data corresponding to the failed
+call. These data pieces are as follows:</li>
+<li>Data? - The data that was returned by the API</li>
+<li>URLResponse? - The response from the URL task</li>
+<li>Error? - The error that was returned from the API call</li>
+</ul>
+
+                        <a href="../../Classes/Twitch/Users/GetUsersFollowsResult.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">GetUsersFollowsResult</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch0B0C5UsersV16UpdateUserResultO"></a>
+                    <a name="//apple_ref/swift/Enum/UpdateUserResult" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch0B0C5UsersV16UpdateUserResultO">UpdateUserResult</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>UpdateUserResult</code> defines the different types of results that can be retrieved from the
+<code>updateUser</code> call of the <code><a href="../../Classes/Twitch/Users.html">Users</a></code> API. Variables are included that specify the data that
+was returned on completion of this call.</p>
+
+<ul>
+<li>success: Defines that the call was successful. The output variable will contain all
+user data.</li>
+<li>failure: Defines that the call failed. Returns all data corresponding to the failed
+call. These data pieces are as follows:</li>
+<li>Data? - The data that was returned by the API</li>
+<li>URLResponse? - The response from the URL task</li>
+<li>Error? - The error that was returned from the API call</li>
+</ul>
+
+                        <a href="../../Classes/Twitch/Users/UpdateUserResult.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">UpdateUserResult</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch0B0C5UsersV23GetUserExtensionsResultO"></a>
+                    <a name="//apple_ref/swift/Enum/GetUserExtensionsResult" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch0B0C5UsersV23GetUserExtensionsResultO">GetUserExtensionsResult</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>GetUserExtensionsResult</code> defines the different types of results that can be retrieved
+from the <code>getUserExtensions</code> call of the <code><a href="../../Classes/Twitch/Users.html">Users</a></code> API. Variables are included that
+specify the data that was returned on completion of this call.</p>
+
+<ul>
+<li>success: Defines that the call was successful. The output variable will contain all
+user data.</li>
+<li>failure: Defines that the call failed. Returns all data corresponding to the failed
+call. These data pieces are as follows:</li>
+<li>Data? - The data that was returned by the API</li>
+<li>URLResponse? - The response from the URL task</li>
+<li>Error? - The error that was returned from the API call</li>
+</ul>
+
+                        <a href="../../Classes/Twitch/Users/GetUserExtensionsResult.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">GetUserExtensionsResult</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch0B0C5UsersV03getC012tokenManager7userIds0G10LoginNames17completionHandleryAA0b5TokenF0C_SaySSGSgANyAE03GetC6ResultOctFZ"></a>
+                    <a name="//apple_ref/swift/Method/getUsers(tokenManager:userIds:userLoginNames:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch0B0C5UsersV03getC012tokenManager7userIds0G10LoginNames17completionHandleryAA0b5TokenF0C_SaySSGSgANyAE03GetC6ResultOctFZ">getUsers(tokenManager:userIds:userLoginNames:completionHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>getUsers</code> will run the <code>Get Users</code> API call of the New Twitch API. You can use this API
+call to retrieve the ID, user type, broadcaster type, profile image, offline splash
+image, view count and username of any provided users. You can provide both User IDs and
+Login Names for this call to retrieve this information. If neither information is
+provided the user specified through the token will have their information retrieved.</p>
+
+<p>This API call has an optional authentication token with <code>user:read:email</code> permissions.
+If such a token is provided, you can retrieve the email of the Bearer token&rsquo;s holder as
+well from this API call.</p>
+
+<p><a href="https://dev.twitch.tv/docs/api/reference/#get-users">More information about the web call is available here</a></p>
+<div class="aside aside-seealso">
+    <p class="aside-title">Seealso</p>
+    <p><code><a href="../../Classes/Twitch/Users/GetUsersResult.html">GetUsersResult</a></code></p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getUsers</span><span class="p">(</span><span class="nv">tokenManager</span><span class="p">:</span> <span class="kt"><a href="../../Classes/TwitchTokenManager.html">TwitchTokenManager</a></span> <span class="o">=</span> <span class="kt"><a href="../../Classes/TwitchTokenManager.html">TwitchTokenManager</a></span><span class="o">.</span><span class="n">shared</span><span class="p">,</span>
+                            <span class="nv">userIds</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?,</span> <span class="nv">userLoginNames</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?,</span>
+                            <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../../Classes/Twitch/Users/GetUsersResult.html">GetUsersResult</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>tokenManager</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The TokenManager whose token should be used. Singleton by default.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>userIds</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The IDs of the users to look up information for</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>userLoginNames</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The login names of the users to look up information for</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The function that should be run whenever the retrieval is
+successful. There are two types of <code><a href="../../Classes/Twitch/Users/GetUsersResult.html">GetUsersResult</a></code>: <code>success</code> and <code>failure</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch0B0C5UsersV03getC7Follows12tokenManager10followerId08followedI05after5first17completionHandleryAA0b5TokenG0C_SSSgA2OSiSgyAE03GetcE6ResultOctFZ"></a>
+                    <a name="//apple_ref/swift/Method/getUsersFollows(tokenManager:followerId:followedId:after:first:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch0B0C5UsersV03getC7Follows12tokenManager10followerId08followedI05after5first17completionHandleryAA0b5TokenG0C_SSSgA2OSiSgyAE03GetcE6ResultOctFZ">getUsersFollows(tokenManager:followerId:followedId:after:first:completionHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>getUsersFollows</code> will run the <code>Get Users Follows</code> API call of the New Twitch API. You
+can use this API call to retrieve the number of followers a user has, the number of
+users they are following, or if a user is following another user.</p>
+
+<p>The results of this API call are paginated if the response is too large to fit into a
+single request.</p>
+
+<p>This API call requires no authentication.</p>
+
+<p><a href="https://dev.twitch.tv/docs/api/reference/#get-users-follows">More information about the web call is available here</a></p>
+<div class="aside aside-seealso">
+    <p class="aside-title">Seealso</p>
+    <p><code><a href="../../Classes/Twitch/Users/GetUsersFollowsResult.html">GetUsersFollowsResult</a></code></p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getUsersFollows</span><span class="p">(</span><span class="nv">tokenManager</span><span class="p">:</span> <span class="kt"><a href="../../Classes/TwitchTokenManager.html">TwitchTokenManager</a></span> <span class="o">=</span> <span class="kt"><a href="../../Classes/TwitchTokenManager.html">TwitchTokenManager</a></span><span class="o">.</span><span class="n">shared</span><span class="p">,</span>
+                                   <span class="nv">followerId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">followedId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">after</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+                                   <span class="nv">first</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+                                   <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../../Classes/Twitch/Users/GetUsersFollowsResult.html">GetUsersFollowsResult</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>tokenManager</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The TokenManager whose token should be used. Singleton by default.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>followerId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The ID of the follower. Use this to get users this user is following.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>followedId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The ID of the user being followed. Use this to get the users that are
+following this user.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>after</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The forward pagination token.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>first</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The number of results to return. Default 20. Maximum 100.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The function that should be run whenever the retrieval is
+successful. There are two types of <code><a href="../../Classes/Twitch/Users/GetUsersFollowsResult.html">GetUsersFollowsResult</a></code>: <code>success</code> and <code>failure</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch0B0C5UsersV10updateUser12tokenManager11description17completionHandleryAA0b5TokenG0C_SSSgyAE06UpdateE6ResultOctFZ"></a>
+                    <a name="//apple_ref/swift/Method/updateUser(tokenManager:description:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch0B0C5UsersV10updateUser12tokenManager11description17completionHandleryAA0b5TokenG0C_SSSgyAE06UpdateE6ResultOctFZ">updateUser(tokenManager:description:completionHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>updateUser</code> will run the <code>Update User</code> API call of the New Twitch API. You can use this
+API call to update the description of the user. No other methods are available at this
+moment.</p>
+
+<p>This API call requires a token with <code>user:edit</code> permissions.</p>
+
+<p><a href="https://dev.twitch.tv/docs/api/reference/#update-user">More information about the web call is available here</a></p>
+<div class="aside aside-seealso">
+    <p class="aside-title">Seealso</p>
+    <p><code><a href="../../Classes/Twitch/Users/UpdateUserResult.html">UpdateUserResult</a></code></p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">updateUser</span><span class="p">(</span><span class="nv">tokenManager</span><span class="p">:</span> <span class="kt"><a href="../../Classes/TwitchTokenManager.html">TwitchTokenManager</a></span> <span class="o">=</span> <span class="kt"><a href="../../Classes/TwitchTokenManager.html">TwitchTokenManager</a></span><span class="o">.</span><span class="n">shared</span><span class="p">,</span>
+                              <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span>
+                              <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../../Classes/Twitch/Users/UpdateUserResult.html">UpdateUserResult</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>tokenManager</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The TokenManager whose token should be used. Singleton by default.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>description</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The description to set for the user.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The function that should be run whenever the command is
+successful. There are two types of <code><a href="../../Classes/Twitch/Users/UpdateUserResult.html">UpdateUserResult</a></code>: <code>success</code> and <code>failure</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11SwiftTwitch0B0C5UsersV17getUserExtensions12tokenManager17completionHandleryAA0b5TokenH0C_yAE03GeteF6ResultOctFZ"></a>
+                    <a name="//apple_ref/swift/Method/getUserExtensions(tokenManager:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11SwiftTwitch0B0C5UsersV17getUserExtensions12tokenManager17completionHandleryAA0b5TokenH0C_yAE03GeteF6ResultOctFZ">getUserExtensions(tokenManager:completionHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>getUserExtensions</code> will run the <code>Get User Extensions</code> API call of the New Twitch API.
+You can use this API call retrieve the extensions that the token-bearing user has.</p>
+
+<p>This API call requires a token with <code>user:read:broadcast</code> permissions.</p>
+
+<p><a href="https://dev.twitch.tv/docs/api/reference/#get-user-extensions">More information about the web call is available here</a></p>
+<div class="aside aside-seealso">
+    <p class="aside-title">Seealso</p>
+    <p><code><a href="../../Classes/Twitch/Users/GetUserExtensionsResult.html">GetUserExtensionsResult</a></code></p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">getUserExtensions</span><span class="p">(</span><span class="nv">tokenManager</span><span class="p">:</span> <span class="kt"><a href="../../Classes/TwitchTokenManager.html">TwitchTokenManager</a></span> <span class="o">=</span> <span class="kt"><a href="../../Classes/TwitchTokenManager.html">TwitchTokenManager</a></span><span class="o">.</span><span class="n">shared</span><span class="p">,</span>
+                                     <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../../Classes/Twitch/Users/GetUserExtensionsResult.html">GetUserExtensionsResult</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>tokenManager</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The TokenManager whose token should be used. Singleton by default.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The function that should be run whenever the retrieval is
+successful. There are two types of <code><a href="../../Classes/Twitch/Users/GetUserExtensionsResult.html">GetUserExtensionsResult</a></code>: <code>success</code> and <code>failure</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2019 <a class="link" href="https://github.com/chrisfromtemporaryid@gmail.com/SwiftTwitch" target="_blank" rel="external">chrisfromtemporaryid@gmail.com</a>. All rights reserved. (Last updated: 2019-01-03)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
