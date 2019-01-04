@@ -9,12 +9,12 @@
 ## What is It?
 
 Swift Twitch is a library intended for client-facing applications interaction with the New Twitch API, Helix. This library aims to ease API interaction by returning typed data values to help you finish your application without headaches.
-For example, after a `Get Videos` call, you can use:
+For example, after a non-empty `Get Videos` call, you can do the following:
 
 ```Swift
-let firstVideoData: VideoData? = getVideosData.videoData.first
-let title: String? = firstVideoData?.title
-let viewCount: Int? = firstVideoData?.viewCount
+let firstVideoData: VideoData = getVideosData.videoData.first!
+let title: String = firstVideoData.title
+let viewCount: Int = firstVideoData.viewCount
 ```
 
 ❤️ Pull requests are very welcome ❤️
