@@ -95,7 +95,6 @@ public struct VideoData: Unmarshaling {
         creationDate = try object.value(for: Twitch.WebRequestKeys.createdAt)
         publishedDate = try object.value(for: Twitch.WebRequestKeys.publishedAt)
         url = try object.value(for: Twitch.WebRequestKeys.url)
-        print((object as? [String: Any])?[Twitch.WebRequestKeys.thumbnailURL])
         thumbnailURLString = try object.value(for: Twitch.WebRequestKeys.thumbnailURL)
         viewSetting = try object.value(for: Twitch.WebRequestKeys.viewable)
         viewCount = try object.value(for: Twitch.WebRequestKeys.viewCount)
