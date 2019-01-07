@@ -48,8 +48,8 @@ public struct StreamData: Unmarshaling {
     public let language: String
 
     /// `thumbnailURLString` specifies the URL as a String of the clip thumbnail. To convert this
-    /// to a real URL, you must replace the `{width}` and `{height}` substrings that are present in
-    /// this String.
+    /// to a real URL, you must replace the `%{width}` and `%{height}` substrings that are present
+    /// in this String.
     public let thumbnailURLString: String
 
     /// `viewCounert` specifies the amount of views this stream has.

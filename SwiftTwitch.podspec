@@ -23,9 +23,5 @@ usage document of SwiftTwitch, please view the GitHub README available here: htt
 
   s.source_files = 'SwiftTwitch/Classes/**/*'
   
-  # s.resource_bundles = {
-  #   'SwiftTwitch' => ['SwiftTwitch/Assets/*.png']
-  # }
-  
   s.dependency 'Marshal', '~> 1.2.7'
 end

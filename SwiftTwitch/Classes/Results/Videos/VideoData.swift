@@ -57,8 +57,8 @@ public struct VideoData: Unmarshaling {
     /// `url` is the URL where the video can be located at.
     public let url: URL
 
-    /// `thumbnailURLString` is the URL of the video as a String. It contains text `{height}` and
-    /// `{width}` that need to be replaced in order to be a valid URL
+    /// `thumbnailURLString` is the URL of the video as a String. It contains text `%{height}` and
+    /// `%{width}` that need to be replaced in order to be a valid URL
     public let thumbnailURLString: String
 
     /// `viewSetting` is the current settings of the video for viewing.
@@ -95,6 +95,7 @@ public struct VideoData: Unmarshaling {
         creationDate = try object.value(for: Twitch.WebRequestKeys.createdAt)
         publishedDate = try object.value(for: Twitch.WebRequestKeys.publishedAt)
         url = try object.value(for: Twitch.WebRequestKeys.url)
+        print((object as? [String: Any])?[Twitch.WebRequestKeys.thumbnailURL])
         thumbnailURLString = try object.value(for: Twitch.WebRequestKeys.thumbnailURL)
         viewSetting = try object.value(for: Twitch.WebRequestKeys.viewable)
         viewCount = try object.value(for: Twitch.WebRequestKeys.viewCount)

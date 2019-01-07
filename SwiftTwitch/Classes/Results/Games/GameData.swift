@@ -12,7 +12,7 @@ import Marshal
 public struct GameData: Unmarshaling {
     
     /// `boxArtURL` specifies the URL as a `String` where the box art of the game can be found.
-    /// To use this as a real `URL`, you must replace the `{width}` and `{height}` strings found
+    /// To use this as a real `URL`, you must replace the `%{width}` and `%{height}` strings found
     /// within the URL. Otherwise, it is not considered a valid URL.
     public let boxArtURLString: String
     

@@ -8,9 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		16886AB54F2A09B839889C1D /* Pods_SwiftTwitch_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E6940718335F7997F407A7F /* Pods_SwiftTwitch_Example.framework */; };
+		224D6BC721E2EBCD0002CB25 /* TwitchVideoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224D6BC621E2EBCD0002CB25 /* TwitchVideoTableViewCell.swift */; };
+		224D6BC921E2EC790002CB25 /* UIImageViewLoadFromURLExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224D6BC821E2EC790002CB25 /* UIImageViewLoadFromURLExtension.swift */; };
 		45339E04E147C2F65F61ECC6 /* Pods_SwiftTwitch_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0093FDEDF9770C3EAC29B796 /* Pods_SwiftTwitch_Tests.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
-		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
+		607FACD81AFB9204008FA782 /* TwitchVideosTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* TwitchVideosTableViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
@@ -31,6 +33,8 @@
 		0093FDEDF9770C3EAC29B796 /* Pods_SwiftTwitch_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftTwitch_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D8814406ACD62E41D67B120 /* Pods-SwiftTwitch_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTwitch_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftTwitch_Tests/Pods-SwiftTwitch_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		1679B523F6D532910F9D7395 /* Pods-SwiftTwitch_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTwitch_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftTwitch_Example/Pods-SwiftTwitch_Example.release.xcconfig"; sourceTree = "<group>"; };
+		224D6BC621E2EBCD0002CB25 /* TwitchVideoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitchVideoTableViewCell.swift; sourceTree = "<group>"; };
+		224D6BC821E2EC790002CB25 /* UIImageViewLoadFromURLExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewLoadFromURLExtension.swift; sourceTree = "<group>"; };
 		233E80534601F479D04F73F8 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		30FC94CDC41674361AC2F0C4 /* SwiftTwitch.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SwiftTwitch.podspec; path = ../SwiftTwitch.podspec; sourceTree = "<group>"; };
 		3E6940718335F7997F407A7F /* Pods_SwiftTwitch_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftTwitch_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -38,7 +42,7 @@
 		607FACD01AFB9204008FA782 /* SwiftTwitch_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftTwitch_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		607FACD71AFB9204008FA782 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		607FACD71AFB9204008FA782 /* TwitchVideosTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitchVideosTableViewController.swift; sourceTree = "<group>"; };
 		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -94,11 +98,13 @@
 			isa = PBXGroup;
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
-				607FACD71AFB9204008FA782 /* ViewController.swift */,
+				607FACD71AFB9204008FA782 /* TwitchVideosTableViewController.swift */,
+				224D6BC621E2EBCD0002CB25 /* TwitchVideoTableViewCell.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
+				224D6BC821E2EC790002CB25 /* UIImageViewLoadFromURLExtension.swift */,
 			);
 			name = "Example for SwiftTwitch";
 			path = SwiftTwitch;
@@ -324,7 +330,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				607FACD81AFB9204008FA782 /* TwitchVideosTableViewController.swift in Sources */,
+				224D6BC921E2EC790002CB25 /* UIImageViewLoadFromURLExtension.swift in Sources */,
+				224D6BC721E2EBCD0002CB25 /* TwitchVideoTableViewCell.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
