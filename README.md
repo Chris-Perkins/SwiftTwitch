@@ -88,13 +88,13 @@ class AwesomeClass {
 
 In order to use this library, you must first have an application register on the Twitch Developer portal. You can register your application quickly [on Twitch's official application creation dashboard](https://glass.twitch.tv/console/apps/create). After this step, there are two methods to retrieving API keys.
 
-#### Automatically Retrieve Access Token
-
-TODO :)
-
 #### Manually Retrieve Access Token
 
 [To manually retrieve an access token, please utilize this guide by Twitch.](https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#oauth-implicit-code-flow)
+
+#### Automatically Retrieve Access Token
+
+I'm in the process of creating an pain-free way to retrieve tokens with a separate library! Feel free to email me at `chris@chrisperkins.me` and I'll inform you when the library is public.
 
 ### I have my access token, now what?
 
@@ -112,7 +112,11 @@ For Twitch Swift support, feel free to open up an issue. For API-based support, 
 
 ## Example Project
 
+![](https://github.com/Chris-Perkins/SwiftTwitch/raw/master/Readme_Imgs/ExampleProject)
+
 To run the example project, clone the repo, and run `pod install` from the Example directory. After that, open the resulting `.xcworkspace` file and go nuts!
+
+The example project is a simple Videos browser for a pre-selected user on Twitch. To run the example project properly, you will need an access token. Set this access token in `TwitchVideosTableViewController`'s `viewDidLoad` method. 
 
 
 ## Installation
