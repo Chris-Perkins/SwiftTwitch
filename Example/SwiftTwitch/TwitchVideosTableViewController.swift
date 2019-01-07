@@ -31,8 +31,13 @@ class TwitchVideosTableViewController: UITableViewController {
             switch $0 {
             case .success(let getVideosData):
                self.videos = getVideosData.videoData
-            case .failure(_, _, _):
+            case .failure(let data, _, _):
                 print("The API call failed! Unable to get videos. Did you set an access token?")
+                if let data = data,
+                    let jsonObject = try? JSONSerialization.jsonObject(with: data, options: .allowFragments),
+                    let jsonDict = jsonObject as? [String: Any]{
+                    print(jsonDict)
+                }
                 self.videos = [VideoData]()
             }
         }
