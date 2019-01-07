@@ -212,7 +212,7 @@
         <section>
           <section class="section">
             
-            <h1 id='swift-twitch' class='heading'>Swift Twitch</h1>
+            <p><img src="https://github.com/Chris-Perkins/SwiftTwitch/raw/master/Readme_Imgs/SwiftTwitch.jpg" alt=""></p>
 
 <p><a href="https://cocoapods.org/pods/SwiftTwitch"><img src="https://img.shields.io/cocoapods/v/SwiftTwitch.svg?style=flat" alt="Version"></a>
 <a href="https://cocoapods.org/pods/SwiftTwitch"><img src="https://img.shields.io/cocoapods/l/SwiftTwitch.svg?style=flat" alt="License"></a>
@@ -221,11 +221,14 @@
 <p><strong>THIS IS AN UNOFFICIAL, FAN-MADE WRAPPER. IT IS IN NO WAY ENDORSED BY TWITCH.TV</strong></p>
 <h2 id='what-is-it' class='heading'>What is It?</h2>
 
-<p>Swift Twitch is a library intended for client-facing applications to interact with the New Twitch API, or the Helix API. This library aims to simplify the process of interacting with Twitch by returning Typed data values to help get your application running as soon as possible.</p>
+<p>Swift Twitch is a library intended for client-facing applications interaction with the New Twitch API, Helix. This library aims to ease API interaction by returning typed data values to help you finish your application without headaches.
+For example, after a non-empty <code>Get Videos</code> call, you can do the following:</p>
+<pre class="highlight plaintext"><code>let firstVideoData: VideoData = getVideosData.videoData.first!
+let title: String = firstVideoData.title
+let viewCount: Int = firstVideoData.viewCount
+</code></pre>
 
-<p>Please note that this is not an official Twitch wrapper, and so any changes to the API will not be immediately reflected here. If this occurs, please inform me or open a pull request.</p>
-
-<p>🥰 Pull requests are very welcome 🥰</p>
+<p>❤️ Pull requests are very welcome ❤️</p>
 <h2 id='available-api-calls' class='heading'>Available API Calls</h2>
 
 <p>You can run the following API calls:</p>
@@ -303,13 +306,13 @@
 </tbody></table>
 <h3 id='documentation' class='heading'>Documentation</h3>
 
-<p><a href="https://dev.twitch.tv/docs/api/reference/">The Twitch API Documentation is available here</a>
-<a href="###FILL%20IN###">This Library&rsquo;s Documentation is available here</a></p>
+<p><a href="https://dev.twitch.tv/docs/api/reference/">New Twitch API (Helix) Documentation</a></p>
+
+<p><a href="https://htmlpreview.github.io/?https://github.com/Chris-Perkins/SwiftTwitch/blob/master/docs/index.html">Swift Twitch Documentation</a></p>
 <h3 id='example-usage' class='heading'>Example Usage</h3>
 
 <details>  
-<summary>Example method to check if a user is following another user</summary>  
-Let&rsquo;s say I want to find out if two users are following each other. Below is how I might utilize that by using the `Get User Follows` API method:
+<summary>How to check if a user is following another user</summary>  
 
 &ldquo;`Swift
 import SwiftTwitch
@@ -324,7 +327,7 @@ class AwesomeClass {
             switch result {
             case .success(let getUsersFollowsData):
                 /* If the total = 1, we know that user1 is following user2 
-                    as it is documented in the Twitch API docs. */
+                   as it is documented in the Twitch API docs. */
                 if getUsersFollowsData.total == 1 {
                     print(&ldquo;User \(user1Id) is following user \(user2Id)!&rdquo;)
                 } else {
@@ -332,6 +335,7 @@ class AwesomeClass {
                 }
             case .failure(let data, let response, let error):
                 print(&ldquo;The API call failed! Unable to determine relationship.&rdquo;)
+            }
         }
     }
 }
@@ -342,22 +346,29 @@ class AwesomeClass {
 <h3 id='i-don-39-t-have-an-access-token' class='heading'>I don&rsquo;t have an access token!</h3>
 
 <p>In order to use this library, you must first have an application register on the Twitch Developer portal. You can register your application quickly <a href="https://glass.twitch.tv/console/apps/create">on Twitch&rsquo;s official application creation dashboard</a>. After this step, there are two methods to retrieving API keys.</p>
-<h3 id='automatic' class='heading'>Automatic</h3>
-
-<p>TODO :)</p>
-<h3 id='manually' class='heading'>Manually</h3>
+<h4 id='manually-retrieve-access-token' class='heading'>Manually Retrieve Access Token</h4>
 
 <p><a href="https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/#oauth-implicit-code-flow">To manually retrieve an access token, please utilize this guide by Twitch.</a></p>
+<h4 id='automatically-retrieve-access-token' class='heading'>Automatically Retrieve Access Token</h4>
+
+<p>I&rsquo;m in the process of creating an pain-free way to retrieve tokens with a separate library! Feel free to email me at <code>chris@chrisperkins.me</code> and I&rsquo;ll inform you when the library is public.</p>
 <h3 id='i-have-my-access-token-now-what' class='heading'>I have my access token, now what?</h3>
 
-<p>Now that you have an access token, you can provide it to the application in the following manner.</p>
+<p>Now that you have an access token, you can provide it to the application in the following manner:</p>
 <pre class="highlight plaintext"><code>TwitchTokenManager.shared.accessToken = "$Your_Token"
 </code></pre>
 
 <p>Once this command is run, all of your API calls are now automatically authenticated! Now go make some API calls. :)</p>
+<h3 id='i-still-have-questions' class='heading'>I still have questions!</h3>
+
+<p>For Twitch Swift support, feel free to open up an issue. For API-based support, please visit <a href="https://discuss.dev.twitch.tv/">The Twitch Developer Forums</a></p>
 <h2 id='example-project' class='heading'>Example Project</h2>
 
+<p><img src="https://github.com/Chris-Perkins/SwiftTwitch/raw/master/Readme_Imgs/ExampleProject" alt=""></p>
+
 <p>To run the example project, clone the repo, and run <code>pod install</code> from the Example directory. After that, open the resulting <code>.xcworkspace</code> file and go nuts!</p>
+
+<p>The example project is a simple Videos browser for a pre-selected user on Twitch. To run the example project properly, you will need an access token. Set this access token in <code>TwitchVideosTableViewController</code>&lsquo;s <code>viewDidLoad</code> method. </p>
 <h2 id='installation' class='heading'>Installation</h2>
 
 <ol>
@@ -381,7 +392,7 @@ class AwesomeClass {
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/chrisfromtemporaryid@gmail.com/SwiftTwitch" target="_blank" rel="external">chrisfromtemporaryid@gmail.com</a>. All rights reserved. (Last updated: 2019-01-03)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/chrisfromtemporaryid@gmail.com/SwiftTwitch" target="_blank" rel="external">chrisfromtemporaryid@gmail.com</a>. All rights reserved. (Last updated: 2019-01-06)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
