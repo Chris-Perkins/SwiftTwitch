@@ -46,7 +46,9 @@ Get Videos | `Twitch.Videos.getVideos`
 
 [New Twitch API (Helix) Documentation](https://dev.twitch.tv/docs/api/reference/)
 
-[Swift Twitch Documentation](https://htmlpreview.github.io/?https://github.com/Chris-Perkins/SwiftTwitch/blob/master/docs/index.html)
+[Swift Twitch Documentation](https://htmlpreview.github.io/?https://github.com/Chris-Perkins/SwiftTwitch/blob/master/docs/index.html)  
+
+* If the above link is not working, clone this repo and open `docs/index.html`
 
 ### Example Usage
 
@@ -108,16 +110,7 @@ Once this command is run, all of your API calls are now automatically authentica
 
 ### I still have questions!
 
-For Twitch Swift support, feel free to open up an issue. For API-based support, please visit [The Twitch Developer Forums](https://discuss.dev.twitch.tv/)
-
-## Example Project
-
-![](https://github.com/Chris-Perkins/SwiftTwitch/raw/master/Readme_Imgs/ExampleProject)
-
-To run the example project, clone the repo, and run `pod install` from the Example directory. After that, open the resulting `.xcworkspace` file and go nuts!
-
-The example project is a simple Videos browser for a pre-selected user on Twitch. To run the example project properly, you will need an access token. Set this access token in `TwitchVideosTableViewController`'s `viewDidLoad` method. 
-
+For Twitch Swift support, feel free to open up an issue or email me at `chris@chrisperkins.me`. For API-based support, please visit [The Twitch Developer Forums](https://discuss.dev.twitch.tv/)
 
 ## Installation
 
@@ -135,6 +128,41 @@ The example project is a simple Videos browser for a pre-selected user on Twitch
 1. Run `pod install` in the podfile directory from your terminal
 1. Open up the `.xcworkspace` that CocoaPods created
 1. Done!
+
+## Example Project
+
+![](https://github.com/Chris-Perkins/SwiftTwitch/raw/master/Readme_Imgs/ExampleProject)
+
+To run the example project, clone the repo, and run `pod install` from the Example directory. After that, open the resulting `.xcworkspace` file and go nuts!
+
+The example project is a simple Videos browser for a pre-selected user on Twitch. To run the example project properly, you will need an access token. Set this access token in `TwitchVideosTableViewController`'s `viewDidLoad` method. 
+
+## Contributing
+
+Thank you so much for wanting to contribute! There are a couple of things you can do if you want to help out the project.
+
+<details>
+<summary>Layout of helpful contributions</summary>
+
+- Helper functions for verbosity
+
+	Examples: 
+	* `getUserWithIDFollowers(_ userId: String)` to get the users that are following the user
+	* `getUserWithIDFollowings(_ userId: String)` to get the users that are being followed by the user  
+	
+	Both of these functions are just wrapped around my pre-existing `getUsersFollows` method, but they make the code that uses them more explicit.
+- Additional Documentation
+	* Some documentation regarding the Helix API in this library is lacking. It would be awesome to have someone go back and double-check the functions as they use the library.
+- Missing functions
+	* Currently, we're missing the following Twitch API functions:
+		* [Get User Active Extensions](https://dev.twitch.tv/docs/api/reference/#get-user-active-extensions)
+		* [Update User Active Extensions](https://dev.twitch.tv/docs/api/reference/#update-user-extensions)
+
+		I was actually unsure how to implement these nicely due to their weird way of indexing. If you know what to do, you would be an amazing help.
+
+- Anything you think would be nice! I'll most likely agree with the user (you). 😊
+
+</details>
 
 ## License
 
