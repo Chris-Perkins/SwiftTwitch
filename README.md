@@ -108,6 +108,10 @@ TwitchTokenManager.shared.accessToken = "$Your_Token"
 
 Once this command is run, all of your API calls are now automatically authenticated! Now go make some API calls. :)
 
+### I want to embed a Twitch Stream/Clip/Video in my app!
+
+I made a separate library for that! Please see [TwitchPlayer](https://github.com/Chris-Perkins/TwitchPlayer)!
+
 ### I still have questions!
 
 For Twitch Swift support, feel free to open up an issue or email me at `chris@chrisperkins.me`. For API-based support, please visit [The Twitch Developer Forums](https://discuss.dev.twitch.tv/)
