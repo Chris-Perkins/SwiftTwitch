@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/cocoapods/v/SwiftTwitch.svg?style=flat)](https://cocoapods.org/pods/SwiftTwitch)
 [![License](https://img.shields.io/cocoapods/l/SwiftTwitch.svg?style=flat)](https://cocoapods.org/pods/SwiftTwitch)
 [![Platform](https://img.shields.io/cocoapods/p/SwiftTwitch.svg?style=flat)](https://cocoapods.org/pods/SwiftTwitch)
-[![Discord](https://img.shields.io/discord/325552783787032576.svg?label=support)]
+[![Discord](https://img.shields.io/discord/325552783787032576.svg?label=support)](https://discord.gg/3vj5SnY)
 
 **THIS IS AN UNOFFICIAL, FAN-MADE WRAPPER. IT IS IN NO WAY ENDORSED BY TWITCH.TV**
 
