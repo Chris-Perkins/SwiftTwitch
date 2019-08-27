@@ -39,6 +39,19 @@ extension URLRequest {
     /// This value is in the format of "$PREFIX $VALUE".
     private static let authorizationValueBearerHeaderPrefix = "Bearer"
     
+
+    
+    /// The prefix of OAuth headers.
+    ///
+    /// This value is in the format of "$PREFIX $VALUE". (v5)
+    private static let authorizationValueOAuthHeaderPrefix = "OAuth"
+    
+    /// The accept header specifier. (v5)
+    private static let accept = "accept"
+    
+    /// The prefix of v5 accept headers. (v5)
+    private static let twitchVersion5AcceptString = "application/vnd.twitchtv.v5+json"
+    
     /// Sets the Content-Type of this URLRequest to use application/json.
     internal mutating func setValueToJSONContentType() {
         setValue(URLRequest.applicationJSONValue, forHTTPHeaderField: URLRequest.contentTypeString)
@@ -56,5 +69,22 @@ extension URLRequest {
         }
         setValue("\(URLRequest.authorizationValueBearerHeaderPrefix) \(token)",
             forHTTPHeaderField: URLRequest.authorizationHeader)
+    }
+    
+    /// `addOAuthAuthorizationHeader` is used to add an Authorization OAuth to a `URLRequest` whose
+    /// recipient is meant for the v5 Twitch API. This function will use the provided
+    /// `TwitchTokenManager` to set the token value and will also request the version 5 of the
+    /// kraken API.
+    ///
+    /// - Parameter tokenManager: The `TwitchTokenManager` whose token should be used as
+    /// authorization
+    internal mutating func addOAuthAuthorizationHeader(fromTokenManager tokenManager: TwitchTokenManager) throws {
+        guard let token = tokenManager.accessToken else {
+            throw AuthorizationError.nilAccessToken
+        }
+        setValue("\(URLRequest.authorizationValueOAuthHeaderPrefix) \(token)",
+            forHTTPHeaderField: URLRequest.authorizationHeader)
+        setValue(URLRequest.twitchVersion5AcceptString,
+            forHTTPHeaderField: URLRequest.accept)
     }
 }

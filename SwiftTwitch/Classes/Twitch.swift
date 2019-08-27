@@ -102,6 +102,22 @@ public class Twitch {
         static let viewCount = "view_count"
         static let viewerCount = "viewer_count"
     }
+    
+    internal struct WebRequestKeysV5 {
+        static let streamType = "stream_type"
+        static let limit = "limit"
+        static let offset = "offset"
+        static let streams = "streams"
+        static let total = "_total"
+        static let id = "_id"
+        static let channelID = "channel._id"
+        static let channelName = "channel.name"
+        static let viewerCount = "viewers"
+        static let title = "channel.status"
+        static let createdAt = "created_at"
+        static let language = "channel.language"
+        static let thumbnailURL = "preview.template"
+    }
 
     // MARK: - Analytics
 
@@ -743,9 +759,25 @@ public class Twitch {
             case success(GetStreamsData)
             case failure(Data?, URLResponse?, Error?)
         }
+        
+        /// `GetFollowedStreamsResult` defines the different types of results that can be
+        /// retrieved from the `getFollowedStreams` call of the `Streams` API. Variables are
+        /// included that specify the data that was returned.
+        ///
+        /// - success: Defines that the call was successful. The output variable will contain all
+        /// returned data.
+        /// - failure: Defines that the call failed. Returns all data corresponding to the failed
+        /// call. These data pieces are as follows:
+        /// 1. Data? - The data that was returned by the API
+        /// 1. URLResponse? - The response from the URL task
+        /// 1. Error? - The error that was returned from the API call
+        public enum GetFollowedStreamsResult {
+            case success(GetFollowedStreamsData)
+            case failure(Data?, URLResponse?, Error?)
+        }
 
         /// `GetStreamsMetadataResult` defines the different types of results that can be retrieved
-        /// from the `getStreamsMetadata` call of the `Sttreams` API. Variables are included that
+        /// from the `getStreamsMetadata` call of the `Streams` API. Variables are included that
         /// specify the data that was returned.
         ///
         /// - success: Defines that the call was successful. The output variable will contain all
@@ -800,6 +832,9 @@ public class Twitch {
 
         /// The URL that will be used for all Stream Markers API calls.
         private static let streamMarkersURL = URL(string: "https://api.twitch.tv/helix/streams/markers")!
+        
+        /// The URL that will be used for all `Get Followed Streams` API calls.
+        private static let getFollowedStreamsURL = URL(string: "https://api.twitch.tv/kraken/streams/followed")!
 
         /// `getStreams` will run the `Get Streams` API call of the New Twitch API. The returned
         /// streams are sorted in descending order such that the most-watched streamer is returned
@@ -840,6 +875,36 @@ public class Twitch {
                 onSuccess: { completionHandler(GetStreamsResult.success($0)) },
                 onFailure: { completionHandler(GetStreamsResult.failure($0, $1, $2)) })
         }
+    
+        
+        /// `getFollowedStreams` will run the `Get Streams` API call of the v5 Twitch API. The
+        /// returned streams are sorted in descending order such that the most-watched streamer
+        /// is returned first in the received data.
+        ///
+        /// [More information about the web call is available here](
+        /// https://dev.twitch.tv/docs/v5/reference/streams/#get-followed-streams)
+        ///
+        /// - Parameters:
+        ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
+        ///   - streamType: Constrains the type of streams returned. Valid values: live,
+        /// playlist, all. Playlists are offline streams of VODs (Video on Demand) that appear
+        /// live. Default: live.
+        ///   - limit: Maximum number of objects to return. Default: 25. Maximum: 100.
+        ///   - offset: Object offset for pagination of results. Default: 0.
+        ///
+        /// - seealso: `GetFollowedStreamsResult`
+        public static func getFollowedStreams(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
+                                      streamType: String? = nil, limit: Int? = nil, offset: Int? = nil, completionHandler: @escaping (GetFollowedStreamsResult) -> Void) {
+            Twitch.performAPIWebRequest(
+                to: getFollowedStreamsURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withQueryParameters: convertGetFollowedStreamsParamsToDict(streamType: streamType, limit: limit,
+                                                                   offset: offset),
+                withBodyParameters: nil, enforcesAuthorization: true, withTokenManager: tokenManager, isNewAPI: false,
+                onSuccess: { completionHandler(GetFollowedStreamsResult.success($0)) },
+                onFailure: { completionHandler(GetFollowedStreamsResult.failure($0, $1, $2)) })
+            
+        }
+            
 
         /// `getStreamsMetadata` will run the `Get Streams Metadata` API call of the New Twitch API.
         /// The returned streams are sorted in descending order such that the most-watched streamer
@@ -978,6 +1043,24 @@ public class Twitch {
             parametersDictionary.addValueIfNotNil(languages, toKey: WebRequestKeys.language)
             parametersDictionary.addValueIfNotNil(userIds, toKey: WebRequestKeys.userId)
             parametersDictionary.addValueIfNotNil(userNames, toKey: WebRequestKeys.userLogin)
+            return parametersDictionary
+        }
+        
+        /// `convertGetFollowedStreamsParamsToDict` is used to convert the typed parameters into a
+        /// list of web request parameters as a String-keyed Dictionary for a `getFollowedStreams`
+        /// method call.
+        ///
+        /// - Parameters:
+        ///   - streamType: input
+        ///   - limit: input
+        ///   - offset: input
+        /// - Returns: The String-keyed `Dictionary` of parameters.
+        private static func convertGetFollowedStreamsParamsToDict(streamType: String?, limit: Int?,
+                                                                  offset: Int?) -> [String: Any] {
+            var parametersDictionary = [String: Any]()
+            parametersDictionary.addValueIfNotNil(streamType, toKey: WebRequestKeysV5.streamType)
+            parametersDictionary.addValueIfNotNil(limit, toKey: WebRequestKeysV5.limit)
+            parametersDictionary.addValueIfNotNil(offset, toKey: WebRequestKeysV5.offset)
             return parametersDictionary
         }
 
@@ -1434,13 +1517,17 @@ public class Twitch {
     private static func performAPIWebRequest<T: Unmarshaling>(
         to url: URL, withHTTPMethod httpMethod: String?, withQueryParameters queryParameters: [String: Any]?,
         withBodyParameters bodyParameters: [String: Any]?, enforcesAuthorization: Bool,
-        withTokenManager tokenManager: TwitchTokenManager,
+        withTokenManager tokenManager: TwitchTokenManager, isNewAPI: Bool = true,
         onSuccess successHandler: @escaping (T) -> Void,
         onFailure failureHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
 
         var request = URLRequest(url: queryParameters == nil ? url : url.withQueryItems(queryParameters!))
         do {
-            try request.addTokenAuthorizationHeader(fromTokenManager: tokenManager)
+            if isNewAPI {
+                try request.addTokenAuthorizationHeader(fromTokenManager: tokenManager)
+            } else {
+                try request.addOAuthAuthorizationHeader(fromTokenManager: tokenManager)
+            }
         } catch {
             if enforcesAuthorization {
                 failureHandler(nil, nil, error)
