@@ -9,7 +9,7 @@ import Marshal
 
 /// `GetVideosData` is a class that encapsulates all of the information of a single returned clip
 /// from the returned array of Clip data from the New Twitch API's `Get Videos` call.
-public struct GetVideosData: Unmarshaling {
+public struct GetVideosData: Unmarshaling, Decodable {
 
     /// `clipData` specifies the data of the Videos that was retrieved from the API call.
     public let videoData: [VideoData]

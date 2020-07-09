@@ -9,7 +9,7 @@ import Marshal
 
 /// `GetStreamMarkersData` is a class that is used to provide a robust interface for data received
 /// from the `Get Streams` call of the New Twitch API.
-public struct GetStreamMarkersData: Unmarshaling {
+public struct GetStreamMarkersData: Unmarshaling, Decodable {
 
     /// `markedStreamers` specifies the streamers who have marked videos.
     public let markedStreamers: [MarkedStreamerData]

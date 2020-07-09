@@ -9,7 +9,7 @@ import Foundation
 import Marshal
 
 /// `GameAnalyticsReportData` holds
-public struct GameAnalyticsReportData: Unmarshaling {
+public struct GameAnalyticsReportData: Unmarshaling, Decodable {
 
     /// `url` specifies the URL that Twitch returned where the analytics report is contained.
     public let url: URL

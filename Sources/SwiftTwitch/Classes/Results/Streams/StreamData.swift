@@ -10,13 +10,13 @@ import Marshal
 
 /// `StreamData` is a class that encapsulates all of the information of a single returned stream
 /// from the returned array of Stream data from the New Twitch API's `Streams` methods.
-public struct StreamData: Unmarshaling {
+public struct StreamData: Unmarshaling, Decodable {
     
     /// StreamType defines the different states of being that a Stream can be in.
     ///
     /// - live: Defines that the stream is currently live
     /// - error: Defines that an error occurred while retrieving this Stream's state.
-    public enum StreamType: String {
+    public enum StreamType: String, Decodable {
         case live = "live"
         case error = ""
     }

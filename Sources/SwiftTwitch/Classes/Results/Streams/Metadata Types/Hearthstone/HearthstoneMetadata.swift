@@ -9,7 +9,7 @@ import Marshal
 
 /// `HearthstoneMetadata` is a class that encapsulates all of the information of a Hearthstone's
 /// metadata as provided by the New Twitch API's "Get Stream Metadata" API.
-public struct HearthstoneMetadata: Unmarshaling {
+public struct HearthstoneMetadata: Unmarshaling, Decodable {
 
     /// The metadata of the broadcaster.
     public let broadcasterMetadata: HearthstonePlayerMetadata

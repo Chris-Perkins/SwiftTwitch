@@ -9,7 +9,7 @@ import Marshal
 
 /// `OverwatchHeroMetadata` is a class that encapsulates the information of a single Overwatch
 /// Hero's metadata as provided by the New Twitch API's "Get Stream Metadata" API.
-public struct OverwatchHeroMetadata: Unmarshaling {
+public struct OverwatchHeroMetadata: Unmarshaling, Decodable {
 
     /// The name of the hero being played.
     public let heroName: String

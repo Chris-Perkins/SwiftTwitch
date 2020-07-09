@@ -135,7 +135,7 @@ public class Twitch {
         ///
         /// - overviewVersion1: The first version of extension analytics reports
         /// - overviewVersion2: The second version of extension analytics reports.
-        public enum AnalyticsType: String {
+        public enum AnalyticsType: String, Decodable {
             case overviewVersion1 = "overview_v1"
             case overviewVersion2 = "overview_v2"
         }
@@ -1519,7 +1519,7 @@ public class Twitch {
         withBodyParameters bodyParameters: [String: Any]?, enforcesAuthorization: Bool,
         withTokenManager tokenManager: TwitchTokenManager, isNewAPI: Bool = true,
         onSuccess successHandler: @escaping (T) -> Void,
-        onFailure failureHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        onFailure failureHandler: @escaping (Data?, URLResponse?, Error?) -> Void) where T: Decodable {
 
         var request = URLRequest(url: queryParameters == nil ? url : url.withQueryItems(queryParameters!))
         do {

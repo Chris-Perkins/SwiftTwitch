@@ -9,7 +9,7 @@ import Marshal
 
 /// `PaginationData` is used to contain data about Pagination in API calls whose responses are too
 /// large to fit within a single response.
-public struct PaginationData: Unmarshaling {
+public struct PaginationData: Unmarshaling, Decodable {
 
     /// The token that should be used for Pagination.
     public let token: String

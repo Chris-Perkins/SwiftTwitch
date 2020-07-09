@@ -9,7 +9,7 @@ import Marshal
 
 /// `CreateStreamMarkerData` contains information about a Stream Marker that was created via the
 /// `Create Stream Marker` API call of the New Twitch API.
-public struct CreateStreamMarkerData: Unmarshaling {
+public struct CreateStreamMarkerData: Unmarshaling, Decodable {
 
     /// `streamMarkerData` holds data about the stream marker that was created.
     public let streamMarkerData: [UnpostedStreamMarkerData]

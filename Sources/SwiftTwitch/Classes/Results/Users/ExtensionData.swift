@@ -14,7 +14,7 @@ import Marshal
 /// * The name of the extension
 /// * Whether or not this extension is activatable
 /// * The type of extension
-public struct ExtensionData: Unmarshaling {
+public struct ExtensionData: Unmarshaling, Decodable {
 
     /// `ExtensionType` is used to define the types for which an extension can be activated for.
     ///
@@ -22,7 +22,7 @@ public struct ExtensionData: Unmarshaling {
     /// - mobile: Extension can be activated on mobile
     /// - panel: Extension can be activated as a panel
     /// - overlay: Extension can be activated on overlay
-    public enum ExtensionType: String {
+    public enum ExtensionType: String, Decodable {
         case component = "component"
         case mobile = "mobile"
         case panel = "panel"

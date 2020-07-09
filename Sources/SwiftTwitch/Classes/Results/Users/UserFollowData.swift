@@ -13,7 +13,7 @@ import Marshal
 /// * The user who is following (username and ID)
 /// * The followed user (username and ID)
 /// * The date that the relationship was established on
-public struct UserFollowData: Unmarshaling {
+public struct UserFollowData: Unmarshaling, Decodable {
 
     /// `followStartDate` specifies the day on which the following relationship was started on.
     public let followStartDate: Date

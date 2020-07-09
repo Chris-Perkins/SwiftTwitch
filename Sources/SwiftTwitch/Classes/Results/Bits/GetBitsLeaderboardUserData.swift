@@ -9,7 +9,7 @@ import Marshal
 
 /// `GetBitsLeaderboardUserData` is a class that holds information about a single user from the
 /// New Twitch API `Get Bits Leaderboard` call.
-public struct GetBitsLeaderboardUserData: Unmarshaling {
+public struct GetBitsLeaderboardUserData: Unmarshaling, Decodable {
 
     /// `userId` specifies the ID of the user who is being described in this leaderboard data.
     /// This corresponds to the user specified by `username`

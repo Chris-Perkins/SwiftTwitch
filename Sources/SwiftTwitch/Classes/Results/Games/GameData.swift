@@ -9,7 +9,7 @@ import Marshal
 
 /// `GameData` is a class that encapsulates all of the information of a single returned game from
 /// the returned array of Game data from the New Twitch API's `Games` methods.
-public struct GameData: Unmarshaling {
+public struct GameData: Unmarshaling, Decodable {
     
     /// `boxArtURL` specifies the URL as a `String` where the box art of the game can be found.
     /// To use this as a real `URL`, you must replace the `%{width}` and `%{height}` strings found

@@ -9,7 +9,7 @@ import Marshal
 
 /// `MarkedStreamerData` is a class that is used to provide a robust interface for data received
 /// from the `Get Streams` call of the New Twitch API.
-public struct MarkedStreamerData: Unmarshaling {
+public struct MarkedStreamerData: Unmarshaling, Decodable {
 
     /// `userId` specifies The ID of the user whose stream was marked.
     public let userId: String

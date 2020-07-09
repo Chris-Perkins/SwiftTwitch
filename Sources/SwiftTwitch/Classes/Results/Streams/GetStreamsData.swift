@@ -9,7 +9,7 @@ import Marshal
 
 /// `GetStreamsData` is a class that is used to provide a robust interface for data received
 /// from the `Get Streams` call of the New Twitch API.
-public struct GetStreamsData: Unmarshaling {
+public struct GetStreamsData: Unmarshaling, Decodable {
 
     /// `streamData` specifies the data of the streams that was retrieved from the API call.
     public let streamData: [StreamData]

@@ -10,7 +10,7 @@ import Marshal
 
 /// `VideoData` defines the data that belongs to a specific Video as retrieved from the `New Twitch
 /// API` endpoint.
-public struct VideoData: Unmarshaling {
+public struct VideoData: Unmarshaling, Decodable {
 
     /// `VideoType` defines the different types of videos that are able to be posted on Twitch.
     ///
@@ -18,7 +18,7 @@ public struct VideoData: Unmarshaling {
     /// - highlight: `highlight` defines a Video that was a highlight of a past livestream the
     /// uploader had.
     /// - upload: `upload` defines a Video that was uploaded to Twitch
-    public enum VideoType: String {
+    public enum VideoType: String, Decodable {
         case archive = "archive"
         case highlight = "highlight"
         case upload = "upload"
@@ -29,7 +29,7 @@ public struct VideoData: Unmarshaling {
     /// - privateVideo: `privateVideo` defines that the video is private; only a select group of
     /// users are able to view the video.
     /// - publicVideo: `publicVideo` defines that the video is public; anyone can see the video.
-    public enum ViewSettings: String {
+    public enum ViewSettings: String, Decodable {
         case privateVideo = "private"
         case publicVideo = "public"
     }

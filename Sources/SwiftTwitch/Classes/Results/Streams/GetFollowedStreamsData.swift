@@ -8,7 +8,7 @@ import Marshal
 
 /// `GetFollowedStreamsData` is a class that is used to provide a robust interface for data received
 /// from the `Get Followed Streams` call of the v5 Twitch API.
-public struct GetFollowedStreamsData: Unmarshaling {
+public struct GetFollowedStreamsData: Unmarshaling, Decodable {
     
     /// `streamData` specifies the data of the streams that was retrieved from the API call.
     public let streamData: [StreamData]

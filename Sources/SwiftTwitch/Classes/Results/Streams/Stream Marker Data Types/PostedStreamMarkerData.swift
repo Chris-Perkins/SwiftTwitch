@@ -11,7 +11,7 @@ import Marshal
 /// `PostedStreamMarkerData` is a class that is used to provide a robust interface for stream
 /// marker data received from the `Get Stream Marker` call of the New Twitch API. This marker
 /// is posted, and therefore it can be accessed via a URL for accessibility.
-public struct PostedStreamMarkerData: Unmarshaling {
+public struct PostedStreamMarkerData: Unmarshaling, Decodable {
 
     /// `url` specifies the URL where the marker can be accessed from.
     public let url: URL
