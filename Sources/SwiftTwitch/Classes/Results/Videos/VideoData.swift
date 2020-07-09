@@ -5,6 +5,7 @@
 //  Created by Christopher Perkins on 1/1/19.
 //
 
+import Foundation
 import Marshal
 
 /// `VideoData` defines the data that belongs to a specific Video as retrieved from the `New Twitch

@@ -5,6 +5,7 @@
 //  Created by Christopher Perkins on 12/28/18.
 //
 
+import Foundation
 import Marshal
 
 /// `GetBitsLeaderboardData` is a class that is used to provide a robust interface for data received
