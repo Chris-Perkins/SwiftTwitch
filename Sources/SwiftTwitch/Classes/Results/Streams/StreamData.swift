@@ -6,11 +6,10 @@
 //
 
 import Foundation
-import Marshal
 
 /// `StreamData` is a class that encapsulates all of the information of a single returned stream
 /// from the returned array of Stream data from the New Twitch API's `Streams` methods.
-public struct StreamData: Unmarshaling, Decodable {
+public struct StreamData: Decodable {
     
     /// StreamType defines the different states of being that a Stream can be in.
     ///
@@ -55,40 +54,5 @@ public struct StreamData: Unmarshaling, Decodable {
 
     /// `viewCounert` specifies the amount of views this stream has.
     public let viewerCount: Int
-    
-    /// Initializes a `StreamData` object from the input `MarshaledObject`. This will throw if there
-    /// is missing data from the input `MarshaledObject`.
-    ///
-    /// - Parameter object: The object to initialize a `StreamData` piece from
-    /// - Throws: If data is missing that was expected to be non-`nil`.
-    public init(object: MarshaledObject) throws {
-        //attempt to unwrap as a New API object first
-        if object.optionalAny(for: Twitch.WebRequestKeys.id) != nil {
-            streamId = try object.value(for: Twitch.WebRequestKeys.id)
-            streamerId = try object.value(for: Twitch.WebRequestKeys.userId)
-            streamerUserName = try object.value(for: Twitch.WebRequestKeys.userName)
-            gameId = try? object.value(for: Twitch.WebRequestKeys.gameId)
-            communityIds = try object.value(for: Twitch.WebRequestKeys.communityIds)
-            streamType = try object.value(for: Twitch.WebRequestKeys.type)
-            title = try object.value(for: Twitch.WebRequestKeys.title)
-            startTime = try object.value(for: Twitch.WebRequestKeys.startedAt)
-            language = try object.value(for: Twitch.WebRequestKeys.language)
-            thumbnailURLString = try object.value(for: Twitch.WebRequestKeys.thumbnailURL)
-            viewerCount = try object.value(for: Twitch.WebRequestKeys.viewerCount)
-        } else {
-            let id: Int = try object.value(for: Twitch.WebRequestKeysV5.id)
-            let channelId: Int = try object.value(for: Twitch.WebRequestKeysV5.channelID)
-            streamId = String(id)
-            streamerId = String(channelId)
-            streamerUserName = try object.value(for: Twitch.WebRequestKeysV5.channelName)
-            gameId = "" //doesn't exist on v5
-            communityIds = [""] //doesn't exist on v5
-            streamType = StreamType.live //default is live, doesn't have an error option
-            title = try object.value(for: Twitch.WebRequestKeysV5.title)
-            startTime = try object.value(for: Twitch.WebRequestKeysV5.createdAt)
-            language = try object.value(for: Twitch.WebRequestKeysV5.language)
-            thumbnailURLString = try object.value(for: Twitch.WebRequestKeysV5.thumbnailURL)
-            viewerCount = try object.value(for: Twitch.WebRequestKeysV5.viewerCount)
-        }
-    }
+
 }

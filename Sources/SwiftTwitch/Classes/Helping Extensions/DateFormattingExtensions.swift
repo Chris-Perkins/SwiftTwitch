@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Marshal
 
 // MARK: - Base Extension
 
@@ -45,19 +44,5 @@ extension Date {
     /// - Returns:
     internal static func convertDateToZuluString(_ date: Date) -> String {
         return zuluDateFormatter.string(from: date)
-    }
-}
-
-// MARK: - ValueType Extension
-
-extension Date: ValueType {
-    public static func value(from object: Any) throws -> Date {
-        guard let dateString = object as? String else {
-            throw MarshalError.typeMismatch(expected: String.self, actual: type(of: object))
-        }
-        guard let date = Date.convertZuluDateStringToLocalDate(dateString) else {
-            throw MarshalError.typeMismatch(expected: "Zulu date string", actual: dateString)
-        }
-        return date
     }
 }

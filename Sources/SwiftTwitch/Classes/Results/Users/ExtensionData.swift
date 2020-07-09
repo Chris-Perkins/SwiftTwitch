@@ -5,7 +5,7 @@
 //  Created by Christopher Perkins on 12/31/18.
 //
 
-import Marshal
+import Foundation
 
 /// `ExtensionData` provides data regarding a single Extension on Twitch. This data can be retrieved
 /// by using the `GetUserExtensions` API call. This object contains the following information:
@@ -14,7 +14,7 @@ import Marshal
 /// * The name of the extension
 /// * Whether or not this extension is activatable
 /// * The type of extension
-public struct ExtensionData: Unmarshaling, Decodable {
+public struct ExtensionData: Decodable {
 
     /// `ExtensionType` is used to define the types for which an extension can be activated for.
     ///
@@ -45,17 +45,5 @@ public struct ExtensionData: Unmarshaling, Decodable {
     ///
     /// - seeAlso: `ExtensionType`
     public let type: [ExtensionType]
-    
-    /// Initializes a `ExtensionData` object from the input `MarshaledObject`. This will throw if
-    /// there is missing data from the input `MarshaledObject`.
-    ///
-    /// - Parameter object: The object to initialize a `ExtensionData` object from
-    /// - Throws: If data is missing that was expected to be non-`nil`.
-    public init(object: MarshaledObject) throws {
-        id = try object.value(for: Twitch.WebRequestKeys.id)
-        version = try object.value(for: Twitch.WebRequestKeys.version)
-        name = try object.value(for: Twitch.WebRequestKeys.name)
-        activatable = try object.value(for: Twitch.WebRequestKeys.canActivate)
-        type = try object.value(for: Twitch.WebRequestKeys.type)
-    }
+
 }

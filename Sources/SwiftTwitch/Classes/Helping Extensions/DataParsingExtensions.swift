@@ -30,7 +30,7 @@ extension Dictionary where Key == String, Value == Any {
     ///
     /// - Returns: The `Data` representation of the `Dictionary`.
     internal func getAsData() -> Data? {
-        guard let jsonData = try? jsonData() else {
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: self) else {
             return nil
         }
         return jsonData

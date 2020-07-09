@@ -6,10 +6,9 @@
 //
 
 import Foundation
-import Marshal
 
 /// `UserData` is a class that encapsulates all of the information of a single user on Twitch.
-public struct UserData: Unmarshaling, Decodable {
+public struct UserData: Decodable {
 
     /// `UserType` is used to show the role that a user has on Twitch.tv.
     ///
@@ -71,21 +70,4 @@ public struct UserData: Unmarshaling, Decodable {
     /// permissions for the token provided.
     public let email: String?
 
-    /// Initializes a `UserData` object from the input `MarshaledObject`. This will throw if there
-    /// is missing data from the input `MarshaledObject`.
-    ///
-    /// - Parameter object: The object to initialize a `UserData` object from
-    /// - Throws: If data is missing that was expected to be non-`nil`.
-    public init(object: MarshaledObject) throws {
-        userId = try object.value(for: Twitch.WebRequestKeys.id)
-        userLoginName = try object.value(for: Twitch.WebRequestKeys.login)
-        userDisplayName = try object.value(for: Twitch.WebRequestKeys.displayName)
-        userType = try object.value(for: Twitch.WebRequestKeys.type)
-        broadcasterType = try object.value(for: Twitch.WebRequestKeys.broadcasterType)
-        description = try? object.value(for: Twitch.WebRequestKeys.description)
-        profileImageURL = try object.value(for: Twitch.WebRequestKeys.profileImageURL)
-        offlineImageURL = try? object.value(for: Twitch.WebRequestKeys.offlineImageURL)
-        viewCount = try object.value(for: Twitch.WebRequestKeys.viewCount)
-        email = try? object.value(for: Twitch.WebRequestKeys.email)
-    }
 }

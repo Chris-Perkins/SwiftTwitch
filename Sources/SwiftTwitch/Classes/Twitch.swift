@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Marshal
 
 /// `Twitch` allows access to client-side New Twitch API functions.
 ///
@@ -118,6 +117,9 @@ public class Twitch {
         static let language = "channel.language"
         static let thumbnailURL = "preview.template"
     }
+
+    /// Utility variable to perform JSON decoding
+    private static let decoder: JSONDecoder = JSONDecoder()
 
     // MARK: - Analytics
 
@@ -1514,7 +1516,7 @@ public class Twitch {
     ///   - tokenManager: The token manager that is used to provide authentication
     ///   - successHandler: The handler for a successful web request
     ///   - failureHandler: The handler for a failed web request
-    private static func performAPIWebRequest<T: Unmarshaling>(
+    private static func performAPIWebRequest<T>(
         to url: URL, withHTTPMethod httpMethod: String?, withQueryParameters queryParameters: [String: Any]?,
         withBodyParameters bodyParameters: [String: Any]?, enforcesAuthorization: Bool,
         withTokenManager tokenManager: TwitchTokenManager, isNewAPI: Bool = true,
@@ -1540,8 +1542,8 @@ public class Twitch {
         request.httpBody = bodyParameters?.getAsData()
 
         urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
-            guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
-                let retrievedObject = try? T(object: dataAsDictionary),
+            guard let nonNilData = data,
+                  let retrievedObject = try? decoder.decode(T.self, from: nonNilData),
                 !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
                     failureHandler(data, response, error)
                     return

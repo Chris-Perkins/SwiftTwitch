@@ -6,11 +6,10 @@
 //
 
 import Foundation
-import Marshal
 
 /// `ClipData` is a class that encapsulates all of the information of a single returned clip from
 /// the returned array of Clip data from the New Twitch API's `Clips` methods.
-public struct ClipData: Unmarshaling, Decodable {
+public struct ClipData: Decodable {
 
     /// `broadcasterId` specifies the ID of the user from whose stream the clip was taken from.
     public let broadcasterId: String
@@ -61,26 +60,5 @@ public struct ClipData: Unmarshaling, Decodable {
     
     /// `viewCount` specifies the amount of views this clip has.
     public let viewCount: Int
-    
-    /// Initializes a `ClipData` object from the input `MarshaledObject`. This will throw if there
-    /// is missing data from the input `MarshaledObject`.
-    ///
-    /// - Parameter object: The object to initialize a `ClipData` piece from
-    /// - Throws: If data is missing that was expected to be non-`nil`.
-    public init(object: MarshaledObject) throws {
-        broadcasterId = try object.value(for: Twitch.WebRequestKeys.broadcasterId)
-        broadcasterName = try object.value(for: Twitch.WebRequestKeys.broadcasterName)
-        creationDate = try object.value(for: Twitch.WebRequestKeys.createdAt)
-        creatorId = try object.value(for: Twitch.WebRequestKeys.creatorId)
-        creatorName = try object.value(for: Twitch.WebRequestKeys.creatorName)
-        embedURL = try object.value(for: Twitch.WebRequestKeys.embedURL)
-        gameId = try object.value(for: Twitch.WebRequestKeys.gameId)
-        clipId = try object.value(for: Twitch.WebRequestKeys.id)
-        language = try object.value(for: Twitch.WebRequestKeys.language)
-        thumbnailURL = try object.value(for: Twitch.WebRequestKeys.thumbnailURL)
-        title = try object.value(for: Twitch.WebRequestKeys.title)
-        clipURL = try object.value(for: Twitch.WebRequestKeys.url)
-        videoId = try object.value(for: Twitch.WebRequestKeys.videoId)
-        viewCount = try object.value(for: Twitch.WebRequestKeys.viewCount)
-    }
+
 }

@@ -6,11 +6,10 @@
 //
 
 import Foundation
-import Marshal
 
 /// `VideoData` defines the data that belongs to a specific Video as retrieved from the `New Twitch
 /// API` endpoint.
-public struct VideoData: Unmarshaling, Decodable {
+public struct VideoData: Decodable {
 
     /// `VideoType` defines the different types of videos that are able to be posted on Twitch.
     ///
@@ -82,25 +81,4 @@ public struct VideoData: Unmarshaling, Decodable {
     /// `durationString` defines the duration of the video as a String in a `HH'h'mm'm'ss's' format.
     public let durationString: String
 
-    /// Initializes a `VideoData` object from the input `MarshaledObject`. This will throw if there
-    /// is missing data from the input `MarshaledObject`.
-    ///
-    /// - Parameter object: The object to initialize a `VideoData` piece from
-    /// - Throws: If data is missing that was expected to be non-`nil`.
-    public init(object: MarshaledObject) throws {
-        id = try object.value(for: Twitch.WebRequestKeys.id)
-        ownerId = try object.value(for: Twitch.WebRequestKeys.userId)
-        ownerName = try object.value(for: Twitch.WebRequestKeys.userName)
-        title = try object.value(for: Twitch.WebRequestKeys.title)
-        description = try object.value(for: Twitch.WebRequestKeys.description)
-        creationDate = try object.value(for: Twitch.WebRequestKeys.createdAt)
-        publishedDate = try object.value(for: Twitch.WebRequestKeys.publishedAt)
-        url = try object.value(for: Twitch.WebRequestKeys.url)
-        thumbnailURLString = try object.value(for: Twitch.WebRequestKeys.thumbnailURL)
-        viewSetting = try object.value(for: Twitch.WebRequestKeys.viewable)
-        viewCount = try object.value(for: Twitch.WebRequestKeys.viewCount)
-        language = try object.value(for: Twitch.WebRequestKeys.language)
-        videoType = try object.value(for: Twitch.WebRequestKeys.type)
-        durationString = try object.value(for: Twitch.WebRequestKeys.duration)
-    }
 }
