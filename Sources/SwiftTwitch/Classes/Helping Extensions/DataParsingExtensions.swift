@@ -21,18 +21,3 @@ extension Data {
         return jsonObject as? [String: Any]
     }
 }
-
-// MARK: - Dictionary Extensions
-
-extension Dictionary where Key == String, Value == Any {
-
-    /// Converts the `Dictionary` to its `Data` representation.
-    ///
-    /// - Returns: The `Data` representation of the `Dictionary`.
-    internal func getAsData() -> Data? {
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: self) else {
-            return nil
-        }
-        return jsonData
-    }
-}
