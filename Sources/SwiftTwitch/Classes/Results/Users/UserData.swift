@@ -5,6 +5,7 @@
 //  Created by Christopher Perkins on 12/30/18.
 //
 
+import Foundation
 import Marshal
 
 /// `UserData` is a class that encapsulates all of the information of a single user on Twitch.

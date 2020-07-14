@@ -5,6 +5,7 @@
 //  Created by Christopher Perkins on 12/29/18.
 //
 
+import Foundation
 import Marshal
 
 /// `GameAnalyticsReportData` holds

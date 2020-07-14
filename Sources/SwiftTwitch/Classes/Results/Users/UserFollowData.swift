@@ -5,6 +5,7 @@
 //  Created by Christopher Perkins on 12/31/18.
 //
 
+import Foundation
 import Marshal
 
 /// `UserFollowData` is a class that encapsulates a single data point of a following relationship
