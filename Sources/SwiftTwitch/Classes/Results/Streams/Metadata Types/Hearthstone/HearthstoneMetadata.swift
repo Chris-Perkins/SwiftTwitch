@@ -9,7 +9,7 @@ import Foundation
 
 /// `HearthstoneMetadata` is a class that encapsulates all of the information of a Hearthstone's
 /// metadata as provided by the New Twitch API's "Get Stream Metadata" API.
-public struct HearthstoneMetadata: Decodable {
+public struct HearthstoneMetadata: Codable {
 
     /// The metadata of the broadcaster.
     public let broadcasterMetadata: HearthstonePlayerMetadata

@@ -9,7 +9,7 @@ import Foundation
 
 /// `HearthstoneHeroMetadata` is a class that encapsulates the information of a single Hearthstone
 /// Hero's metadata as provided by the New Twitch API's "Get Stream Metadata" API.
-public struct HearthstoneHeroMetadata: Decodable {
+public struct HearthstoneHeroMetadata: Codable {
 
     /// The name of the class being played for this hero.
     public let className: String

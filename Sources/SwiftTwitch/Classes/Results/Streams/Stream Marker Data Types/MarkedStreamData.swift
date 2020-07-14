@@ -9,7 +9,7 @@ import Foundation
 
 /// `MarkedStreamerData` is a class that is used to provide a robust interface for data received
 /// from the `Get Streams` call of the New Twitch API.
-public struct MarkedStreamerData: Decodable {
+public struct MarkedStreamerData: Codable {
 
     /// `userId` specifies The ID of the user whose stream was marked.
     public let userId: String

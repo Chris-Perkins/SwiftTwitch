@@ -9,7 +9,7 @@ import Foundation
 
 /// `CreateClipInfoData` is a class that encapsulates all of the information of a single returned
 /// clip from the returned array of Clip data from the New Twitch API's `Create Clip` call.
-public struct CreateClipInfoData: Decodable {
+public struct CreateClipInfoData: Codable {
 
     /// `editURL` specifies the URL of the clip that was created. This URL can be used to edit the
     /// clip.

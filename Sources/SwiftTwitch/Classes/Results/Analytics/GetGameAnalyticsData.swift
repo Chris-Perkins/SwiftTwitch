@@ -9,7 +9,7 @@ import Foundation
 
 /// `GetGameAnalyticsData` is a class that is used to provide a robust interface for data
 /// received from the `Get Game Analytics` call of the New Twitch API.
-public struct GetGameAnalyticsData: Decodable {
+public struct GetGameAnalyticsData: Codable {
 
     /// `reportData` holds the reports returned by the New Twitch API that contain information on
     /// the analytics reports.

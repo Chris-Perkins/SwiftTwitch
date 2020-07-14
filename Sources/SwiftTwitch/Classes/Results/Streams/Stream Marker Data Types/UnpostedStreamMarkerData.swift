@@ -10,7 +10,7 @@ import Foundation
 /// `UnpostedStreamMarkerData` is a class that is used to provide a robust interface for stream
 /// marker data received from the `Create Stream Marker` call of the New Twitch API. This marker
 /// is NOT posted, and therefore it does not have a URL for accessibility.
-public struct UnpostedStreamMarkerData: Decodable {
+public struct UnpostedStreamMarkerData: Codable {
 
     /// `id` specifies the id of the Stream Marker.
     public let id: String

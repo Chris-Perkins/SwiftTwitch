@@ -9,7 +9,7 @@ import Foundation
 
 /// `VideoData` defines the data that belongs to a specific Video as retrieved from the `New Twitch
 /// API` endpoint.
-public struct VideoData: Decodable {
+public struct VideoData: Codable {
 
     /// `VideoType` defines the different types of videos that are able to be posted on Twitch.
     ///
@@ -17,7 +17,7 @@ public struct VideoData: Decodable {
     /// - highlight: `highlight` defines a Video that was a highlight of a past livestream the
     /// uploader had.
     /// - upload: `upload` defines a Video that was uploaded to Twitch
-    public enum VideoType: String, Decodable {
+    public enum VideoType: String, Codable {
         case archive = "archive"
         case highlight = "highlight"
         case upload = "upload"
@@ -28,7 +28,7 @@ public struct VideoData: Decodable {
     /// - privateVideo: `privateVideo` defines that the video is private; only a select group of
     /// users are able to view the video.
     /// - publicVideo: `publicVideo` defines that the video is public; anyone can see the video.
-    public enum ViewSettings: String, Decodable {
+    public enum ViewSettings: String, Codable {
         case privateVideo = "private"
         case publicVideo = "public"
     }

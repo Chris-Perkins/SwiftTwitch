@@ -9,7 +9,7 @@ import Foundation
 
 /// `GetTopGamesData` is a class that is used to provide a robust interface for data received
 /// from the `Get Top Games` call of the New Twitch API.
-public struct GetTopGamesData: Decodable {
+public struct GetTopGamesData: Codable {
     
     /// `gameData` specifies the data of the top games that was retrieved from the API call.
     public let gameData: [GameData]

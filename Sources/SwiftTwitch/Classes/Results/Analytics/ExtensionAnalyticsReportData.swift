@@ -11,7 +11,7 @@ import Foundation
 /// `ExtensionAnalyticsReportData` holds data about the different reports that are returned by
 /// Twitch. This will contain the URL, the ID of the extension being reported on, and other details
 /// about the report.
-public struct ExtensionAnalyticsReportData: Decodable {
+public struct ExtensionAnalyticsReportData: Codable {
 
     /// `url` specifies the URL that Twitch returned where the analytics report is contained.
     public let url: URL

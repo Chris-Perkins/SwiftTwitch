@@ -9,7 +9,7 @@ import Foundation
 
 /// `MarkedVideoData` is a class that is used to provide a robust interface for data received
 /// from the `Get Streams` call of the New Twitch API.
-public struct MarkedVideoData: Decodable {
+public struct MarkedVideoData: Codable {
 
     /// The ID of the video who was marked by `markers`.
     public let videoId: String

@@ -9,7 +9,7 @@ import Foundation
 
 /// `GetStreamsMetadataData` is a class that is used to provide a robust interface for data received
 /// from the `Get Streams` call of the New Twitch API.
-public struct GetStreamsMetadataData: Decodable {
+public struct GetStreamsMetadataData: Codable {
     
     /// `streamMetadata` specifies the metadata of the streams that was retrieved from the API call.
     public let streamMetadata: [StreamMetadata]

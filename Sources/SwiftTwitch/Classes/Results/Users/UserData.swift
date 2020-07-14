@@ -8,7 +8,7 @@
 import Foundation
 
 /// `UserData` is a class that encapsulates all of the information of a single user on Twitch.
-public struct UserData: Decodable {
+public struct UserData: Codable {
 
     /// `UserType` is used to show the role that a user has on Twitch.tv.
     ///
@@ -16,7 +16,7 @@ public struct UserData: Decodable {
     /// - admin: The user is an administrator of Twitch
     /// - globalMod: The user is a moderator on all channels of Twitch
     /// - normal: The user is a normal user.
-    public enum UserType: String, Decodable {
+    public enum UserType: String, Codable {
         case staff = "staff"
         case admin = "admin"
         case globalMod = "global_mod"
@@ -31,7 +31,7 @@ public struct UserData: Decodable {
     /// - partner: The user is a partner on Twitch; special features are available for this user.
     /// - affiliate: The user is an affiliate on Twitch; monetization on streams is possible.
     /// - normal: The user is a normal streamer on Twitch; no special permissions are garnered.
-    public enum BroadcasterType: String, Decodable {
+    public enum BroadcasterType: String, Codable {
         case partner = "partner"
         case affiliate = "affiliate"
         case normal = ""

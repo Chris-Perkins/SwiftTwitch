@@ -9,7 +9,7 @@ import Foundation
 
 /// `ClipData` is a class that encapsulates all of the information of a single returned clip from
 /// the returned array of Clip data from the New Twitch API's `Clips` methods.
-public struct ClipData: Decodable {
+public struct ClipData: Codable {
 
     /// `broadcasterId` specifies the ID of the user from whose stream the clip was taken from.
     public let broadcasterId: String

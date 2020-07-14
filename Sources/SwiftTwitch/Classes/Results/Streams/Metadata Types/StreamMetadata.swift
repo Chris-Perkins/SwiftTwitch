@@ -9,7 +9,7 @@ import Foundation
 
 /// `StreamMetadata` is a class that encapsulates all of the information of a single returned stream
 /// from the returned array of Stream metadata from the New Twitch API's `Streams` methods.
-public struct StreamMetadata: Decodable {
+public struct StreamMetadata: Codable {
 
     /// `streamerId` specifies the ID of the streamer.
     public let streamerId: String

@@ -8,7 +8,7 @@
 import Foundation
 
 /// `GameAnalyticsReportData` holds
-public struct GameAnalyticsReportData: Decodable {
+public struct GameAnalyticsReportData: Codable {
 
     /// `url` specifies the URL that Twitch returned where the analytics report is contained.
     public let url: URL

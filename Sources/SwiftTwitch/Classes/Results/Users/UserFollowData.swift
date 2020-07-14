@@ -12,7 +12,7 @@ import Foundation
 /// * The user who is following (username and ID)
 /// * The followed user (username and ID)
 /// * The date that the relationship was established on
-public struct UserFollowData: Decodable {
+public struct UserFollowData: Codable {
 
     /// `followStartDate` specifies the day on which the following relationship was started on.
     public let followStartDate: Date

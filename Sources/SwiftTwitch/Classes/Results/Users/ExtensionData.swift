@@ -14,7 +14,7 @@ import Foundation
 /// * The name of the extension
 /// * Whether or not this extension is activatable
 /// * The type of extension
-public struct ExtensionData: Decodable {
+public struct ExtensionData: Codable {
 
     /// `ExtensionType` is used to define the types for which an extension can be activated for.
     ///
@@ -22,7 +22,7 @@ public struct ExtensionData: Decodable {
     /// - mobile: Extension can be activated on mobile
     /// - panel: Extension can be activated as a panel
     /// - overlay: Extension can be activated on overlay
-    public enum ExtensionType: String, Decodable {
+    public enum ExtensionType: String, Codable {
         case component = "component"
         case mobile = "mobile"
         case panel = "panel"

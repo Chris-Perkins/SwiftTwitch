@@ -9,7 +9,7 @@ import Foundation
 
 /// `GetBitsLeaderboardData` is a class that is used to provide a robust interface for data received
 /// from the `Get Bits Leaderboard Analytics` call of the New Twitch API.
-public struct GetBitsLeaderboardData: Decodable {
+public struct GetBitsLeaderboardData: Codable {
 
     /// `userData` specifies the received data from `Get Bits Leaderboard Data` API calls. This
     /// data will contain the users with ranks in descending order.
