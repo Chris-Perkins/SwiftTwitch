@@ -1,6 +1,6 @@
 //
 //  GetTopGamesData.swift
-//  Marshal
+//  SwiftTwitch
 //
 //  Created by Christopher Perkins on 12/29/18.
 //

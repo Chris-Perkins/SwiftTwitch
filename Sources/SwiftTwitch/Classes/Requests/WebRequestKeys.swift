@@ -1,6 +1,6 @@
 //
 //  WebRequestKeys.swift
-//  
+//  SwiftTwitch
 //
 //  Created by Kevin Romero Peces-Barba on 14/07/2020.
 //

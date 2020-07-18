@@ -1,6 +1,6 @@
 //
 //  GetFollowedStreamsData.swift
-//  Marshal
+//  SwiftTwitch
 //
 //  Created by Nick Potts on 09/20/19.
 

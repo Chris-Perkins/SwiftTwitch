@@ -1,6 +1,6 @@
 //
 //  GetStreamsData.swift
-//  Marshal
+//  SwiftTwitch
 //
 //  Created by Christopher Perkins on 12/30/18.
 //

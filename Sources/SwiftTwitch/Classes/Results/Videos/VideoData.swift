@@ -1,6 +1,6 @@
 //
 //  VideoData.swift
-//  Marshal
+//  SwiftTwitch
 //
 //  Created by Christopher Perkins on 1/1/19.
 //

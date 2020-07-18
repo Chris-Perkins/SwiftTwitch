@@ -42,7 +42,7 @@ public struct GetExtensionAnalyticsParams {
     ///
     /// Limit: 1.
     ///
-    /// Valid values: "overview_v1", "overview_v2".
+    /// Valid values: `.overviewVersion1`, `.overviewVersion2`.
     ///
     /// Default: all report types for the authenticated user’s Extensions.
     let reportType: Twitch.Analytics.AnalyticsType?

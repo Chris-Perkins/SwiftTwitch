@@ -14,6 +14,6 @@ public struct CreateClipData: Codable {
 
     /// `clipsInfo` specifies the received data from `Create Clip` API calls. This will contain the
     /// actual clip information from the post response.
-    public let clipsInfo: [GetBitsLeaderboardUserData]
+    public let clipsInfo: [CreateClipInfoData]
 
 }

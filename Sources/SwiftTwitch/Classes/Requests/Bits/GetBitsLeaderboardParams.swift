@@ -19,11 +19,11 @@ public struct GetBitsLeaderboardParams {
     /// Time period over which data is aggregated (PST time zone). (optional)
     ///
     /// This parameter interacts with `started_at`. Valid values are:
-    /// - "day" – 00:00:00 on the day specified in `started_at`, through 00:00:00 on the following day.
-    /// - "week" – 00:00:00 on Monday of the week specified in `started_at`, through 00:00:00 on the following Monday.
-    /// - "month" – 00:00:00 on the first day of the month specified in `started_at`, through 00:00:00 on the first day of the following month.
-    /// - "year" – 00:00:00 on the first day of the year specified in `started_at`, through 00:00:00 on the first day of the following year.
-    /// - "all" – The lifetime of the broadcaster's channel. If this is specified (or used by default), `started_at` is ignored.
+    /// - `.day` – 00:00:00 on the day specified in `started_at`, through 00:00:00 on the following day.
+    /// - `.week` – 00:00:00 on Monday of the week specified in `started_at`, through 00:00:00 on the following Monday.
+    /// - `.month` – 00:00:00 on the first day of the month specified in `started_at`, through 00:00:00 on the first day of the following month.
+    /// - `.year` – 00:00:00 on the first day of the year specified in `started_at`, through 00:00:00 on the first day of the following year.
+    /// - `.all` – The lifetime of the broadcaster's channel. If this is specified (or used by default), `started_at` is ignored.
     let period: Twitch.Bits.Period?
     /// Timestamp for the period over which the returned data is aggregated. (optional)
     ///
