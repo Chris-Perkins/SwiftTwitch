@@ -1,6 +1,6 @@
 //
 //  GetUserFollowsParams.swift
-//  
+//  SwiftTwitch
 //
 //  Created by Kevin Romero Peces-Barba on 14/07/2020.
 //
@@ -10,17 +10,30 @@ import Foundation
 /// `GetUserFollowsParams`
 public struct GetUserFollowsParams: Codable {
 
-    /// fromId: The ID of the follower. Use this to get users this user is following.
+    /// User ID. The request returns information about users who are being followed by the `from_id user.
     let fromId: String?
-
-    /// toId: The ID of the user being followed. Use this to get the users that are
-    /// following this user.
+    /// User ID. The request returns information about users who are following the `to_id` user.
     let toId: String?
-
-    /// after: The forward pagination token.
+    /// Cursor for forward pagination: tells the server where to start fetching the next set of results, in a multi-page response. (optional)
+    ///
+    /// The cursor value specified here is from the pagination response field of a prior query.
     let after: String?
-
-    /// first: The number of results to return. Default 20. Maximum 100.
+    /// Maximum number of objects to return.
+    ///
+    /// Maximum: 100.
+    ///
+    /// Default: 20.
     let first: Int?
 
+}
+
+extension GetUserFollowsParams: Codable {
+
+    enum CodingKeys: String, CodingKey {
+        case fromId = "from_id"
+        case toId = "to_id"
+        case after = "after"
+        case first = "first"
+    }
+    
 }
