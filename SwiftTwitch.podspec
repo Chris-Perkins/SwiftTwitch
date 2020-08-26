@@ -5,7 +5,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SwiftTwitch'
-  s.version          = '0.1.1'
+  s.version          = '0.1.2'
   s.summary          = 'Wrapper for the New Twitch API written in Swift.'
 
   s.description      = <<-DESC
