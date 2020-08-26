@@ -26,6 +26,7 @@ class TwitchVideosTableViewController: UITableViewController {
         super.viewDidLoad()
 
         TwitchTokenManager.shared.accessToken = "$YourTokenHere"
+        TwitchTokenManager.shared.clientID = "$YourClientIDHere"
 
         Twitch.Videos.getVideos(videoIds: nil, userId: "60056333", gameId: nil) {
             switch $0 {

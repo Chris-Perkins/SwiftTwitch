@@ -23,6 +23,7 @@ extension URLRequest {
     /// - nilAccessToken: Used to specify that the access token was unexpectedly nil
     internal enum AuthorizationError: Error {
         case nilAccessToken
+        case nilClientID
     }
     
     /// The application JSON value.
@@ -33,6 +34,9 @@ extension URLRequest {
     
     /// The Authorization Header specifier.
     private static let authorizationHeader = "Authorization"
+
+    /// The Client ID header specifier.
+    private static let clientIDHeaderPrefix = "Client-ID"
     
     /// The prefix of Authorization headers.
     ///
@@ -59,16 +63,22 @@ extension URLRequest {
     
     /// `addTokenAuthorizationHeader` is used to add an Authorization header to a `URLRequest` whose
     /// recipient is meant for the New Twitch API. This function will use the provided
-    /// `TwitchTokenManager` to set the token value.
+    /// `TwitchTokenManager` to set the token and clientID value.
     ///
-    /// - Parameter tokenManager: The `TwitchTokenManager` whose token should be used as
+    /// - Parameter tokenManager: The `TwitchTokenManager` whose token and client ID should be used as
     /// authorization
     internal mutating func addTokenAuthorizationHeader(fromTokenManager tokenManager: TwitchTokenManager) throws {
         guard let token = tokenManager.accessToken else {
             throw AuthorizationError.nilAccessToken
         }
+        guard let clientID = tokenManager.clientID else {
+            throw AuthorizationError.nilClientID
+        }
+
         setValue("\(URLRequest.authorizationValueBearerHeaderPrefix) \(token)",
             forHTTPHeaderField: URLRequest.authorizationHeader)
+        setValue(clientID,
+            forHTTPHeaderField: URLRequest.clientIDHeaderPrefix)
     }
     
     /// `addOAuthAuthorizationHeader` is used to add an Authorization OAuth to a `URLRequest` whose
