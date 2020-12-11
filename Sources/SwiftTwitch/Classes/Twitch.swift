@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Marshal
 
 /// `Twitch` allows access to client-side New Twitch API functions.
 ///
@@ -27,97 +26,9 @@ public class Twitch {
     /// `urlSessionForWrapper` is a singleton for all Twitch API calls that will be used for.
     private static let urlSessionForWrapper: URLSession = URLSession.shared
 
-    // TODO: Move this to a separate file for readability?
-    /// `WebRequestKeys` define the web request keys for both resolving results and sending requests
-    /// for the New Twitch API.
-    internal struct WebRequestKeys {
-        static let ability = "ability"
-        static let after = "after"
-        static let before = "before"
-        static let boxArtURL = "box_art_url"
-        static let broadcaster = "broadcaster"
-        static let broadcasterId = "broadcaster_id"
-        static let broadcasterName = "broadcaster_name"
-        static let broadcasterType = "broadcaster_type"
-        static let canActivate = "can_activate"
-        static let classKey = "class"
-        static let communityId = "community_id"
-        static let communityIds = "community_ids"
-        static let count = "count"
-        static let createdAt = "created_at"
-        static let creatorId = "creator_id"
-        static let creatorName = "creator_name"
-        static let cursor = "cursor"
-        static let data = "data"
-        static let dateRange = "date_range"
-        static let description = "description"
-        static let displayName = "display_name"
-        static let duration = "duration"
-        static let editURL = "edit_url"
-        static let email = "email"
-        static let embedURL = "embed_url"
-        static let endedAt = "ended_at"
-        static let extensionId = "extension_id"
-        static let first = "first"
-        static let followedAt = "followed_at"
-        static let fromId = "from_id"
-        static let fromName = "from_name"
-        static let gameId = "game_id"
-        static let hasDelay = "has_delay"
-        static let hearthstone = "hearthstone"
-        static let hero = "hero"
-        static let id = "id"
-        static let language = "language"
-        static let login = "login"
-        static let manifestId = "manifest_id"
-        static let markers = "markers"
-        static let name = "name"
-        static let offlineImageURL = "offline_image_url"
-        static let opponent = "opponent"
-        static let overwatch = "overwatch"
-        static let pagination = "pagination"
-        static let period = "period"
-        static let positionSeconds = "position_seconds"
-        static let profileImageURL = "profile_image_url"
-        static let publishedAt = "published_at"
-        static let rank = "rank"
-        static let role = "role"
-        static let score = "score"
-        static let startedAt = "started_at"
-        static let sort = "sort"
-        static let thumbnailURL = "thumbnail_url"
-        static let title = "title"
-        static let toId = "to_id"
-        static let toName = "to_name"
-        static let total = "total"
-        static let type = "type"
-        static let url = "url"
-        static let userId = "user_id"
-        static let userLogin = "user_login"
-        static let userName = "user_name"
-        static let version = "version"
-        static let videoId = "video_id"
-        static let videos = "videos"
-        static let viewable = "viewable"
-        static let viewCount = "view_count"
-        static let viewerCount = "viewer_count"
-    }
-    
-    internal struct WebRequestKeysV5 {
-        static let streamType = "stream_type"
-        static let limit = "limit"
-        static let offset = "offset"
-        static let streams = "streams"
-        static let total = "_total"
-        static let id = "_id"
-        static let channelID = "channel._id"
-        static let channelName = "channel.name"
-        static let viewerCount = "viewers"
-        static let title = "channel.status"
-        static let createdAt = "created_at"
-        static let language = "channel.language"
-        static let thumbnailURL = "preview.template"
-    }
+    /// Utility variables to perform JSON encoding & decoding
+    private static let encoder: JSONEncoder = JSONEncoder()
+    private static let decoder: JSONDecoder = JSONDecoder()
 
     // MARK: - Analytics
 
@@ -135,7 +46,7 @@ public class Twitch {
         ///
         /// - overviewVersion1: The first version of extension analytics reports
         /// - overviewVersion2: The second version of extension analytics reports.
-        public enum AnalyticsType: String {
+        public enum AnalyticsType: String, Codable {
             case overviewVersion1 = "overview_v1"
             case overviewVersion2 = "overview_v2"
         }
@@ -1199,19 +1110,21 @@ public class Twitch {
         ///
         /// - Parameters:
         ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
-        ///   - userIds: The IDs of the users to look up information for
-        ///   - userLoginNames: The login names of the users to look up information for
+        ///   - parameters:
         ///   - completionHandler: The function that should be run whenever the retrieval is
         /// successful. There are two types of `GetUsersResult`: `success` and `failure`.
         ///
         /// - seealso: `GetUsersResult`
         public static func getUsers(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
-                                    userIds: [String]?, userLoginNames: [String]?,
+                                    parameters: GetUsersParams
                                     completionHandler: @escaping (GetUsersResult) -> Void) {
             Twitch.performAPIWebRequest(
-                to: usersURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
-                withQueryParameters: convertGetUsersParamsToDict(userLoginNames: userLoginNames, userIds: userIds),
-                withBodyParameters: nil, enforcesAuthorization: true, withTokenManager: tokenManager,
+                to: usersURL,
+                withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withQueryParameters: parameters,
+                withBodyParameters: EmptyParams(),
+                enforcesAuthorization: true,
+                withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetUsersResult.success($0)) },
                 onFailure: { completionHandler(GetUsersResult.failure($0, $1, $2)) })
         }
@@ -1230,25 +1143,21 @@ public class Twitch {
         ///
         /// - Parameters:
         ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
-        ///   - followerId: The ID of the follower. Use this to get users this user is following.
-        ///   - followedId: The ID of the user being followed. Use this to get the users that are
-        /// following this user.
-        ///   - after: The forward pagination token.
-        ///   - first: The number of results to return. Default 20. Maximum 100.
+        ///   - parameters:
         ///   - completionHandler: The function that should be run whenever the retrieval is
         /// successful. There are two types of `GetUsersFollowsResult`: `success` and `failure`.
         ///
         /// - seealso: `GetUsersFollowsResult`
         public static func getUsersFollows(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
-                                           followerId: String?, followedId: String?, after: String? = nil,
-                                           first: Int? = nil,
+                                           parameters: GetUserFollowsParams,
                                            completionHandler: @escaping (GetUsersFollowsResult) -> Void) {
             Twitch.performAPIWebRequest(
-                to: getUsersFollowsURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
-                withQueryParameters: convertGetUsersFollowsParamsToDict(followerId: followerId,
-                                                                        followedId: followedId, after: after,
-                                                                        first: first),
-                withBodyParameters: nil, enforcesAuthorization: false, withTokenManager: tokenManager,
+                to: getUsersFollowsURL,
+                withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withQueryParameters: parameters,
+                withBodyParameters: EmptyParams(),
+                enforcesAuthorization: false,
+                withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetUsersFollowsResult.success($0)) },
                 onFailure: { completionHandler(GetUsersFollowsResult.failure($0, $1, $2)) })
         }
@@ -1264,18 +1173,21 @@ public class Twitch {
         ///
         /// - Parameters:
         ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
-        ///   - description: The description to set for the user.
+        ///   - parameters: UpdateUserParams object which contains the description to update
         ///   - completionHandler: The function that should be run whenever the command is
         /// successful. There are two types of `UpdateUserResult`: `success` and `failure`.
         ///
         /// - seealso: `UpdateUserResult`
         public static func updateUser(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
-                                      description: String?,
+                                      parameters: UpdateUserParams,
                                       completionHandler: @escaping (UpdateUserResult) -> Void) {
             Twitch.performAPIWebRequest(
-                to: usersURL, withHTTPMethod: URLRequest.RequestHeaderTypes.put,
-                withQueryParameters: convertUpdateUserParamsToDict(description: description),
-                withBodyParameters: nil, enforcesAuthorization: true, withTokenManager: tokenManager,
+                to: usersURL,
+                withHTTPMethod: URLRequest.RequestHeaderTypes.put,
+                withQueryParameters: parameters,
+                withBodyParameters: EmptyParams(),
+                enforcesAuthorization: true,
+                withTokenManager: tokenManager,
                 onSuccess: { completionHandler(UpdateUserResult.success($0)) },
                 onFailure: { completionHandler(UpdateUserResult.failure($0, $1, $2)) })
         }
@@ -1297,58 +1209,16 @@ public class Twitch {
         public static func getUserExtensions(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
                                              completionHandler: @escaping (GetUserExtensionsResult) -> Void) {
             Twitch.performAPIWebRequest(
-                to: userExtensionsListURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
-                withQueryParameters: nil, withBodyParameters: nil,
-                enforcesAuthorization: true, withTokenManager: tokenManager,
+                to: userExtensionsListURL,
+                withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withQueryParameters: EmptyParams(),
+                withBodyParameters: EmptyParams(),
+                enforcesAuthorization: true,
+                withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetUserExtensionsResult.success($0)) },
                 onFailure: { completionHandler(GetUserExtensionsResult.failure($0, $1, $2)) })
         }
 
-        /// `convertGetUsersParamsToDict` is used to convert the typed parameters into a list of web
-        /// request parameters as a String-keyed Dictionary for a `getUsers` method call.
-        ///
-        /// - Parameters:
-        ///   - userIds: input
-        ///   - userLoginNames: input
-        /// - Returns: The String-keyed `Dictionary` of parameters.
-        private static func convertGetUsersParamsToDict(userLoginNames: [String]?,
-                                                        userIds: [String]?) -> [String: Any] {
-            var parametersDictionary = [String: Any]()
-            parametersDictionary.addValueIfNotNil(userLoginNames, toKey: WebRequestKeys.login)
-            parametersDictionary.addValueIfNotNil(userIds, toKey: WebRequestKeys.id)
-            return parametersDictionary
-        }
-
-        /// `convertGetUsersFollowsParamsToDict` is used to convert the typed parameters into a list
-        /// of web request parameters as a String-keyed Dictionary for a `getUsersFollows` method
-        /// call.
-        ///
-        /// - Parameters:
-        ///   - followerId: input
-        ///   - followedId: input
-        ///   - after: input
-        ///   - first: input
-        /// - Returns: The String-keyed `Dictionary` of parameters.
-        private static func convertGetUsersFollowsParamsToDict(followerId: String?, followedId: String?,
-                                                               after: String?, first: Int?) -> [String: Any] {
-            var parametersDictionary = [String: Any]()
-            parametersDictionary.addValueIfNotNil(followerId, toKey: WebRequestKeys.fromId)
-            parametersDictionary.addValueIfNotNil(followedId, toKey: WebRequestKeys.toId)
-            parametersDictionary.addValueIfNotNil(after, toKey: WebRequestKeys.after)
-            parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
-            return parametersDictionary
-        }
-
-        /// `convertUpdateUserParamsToDict` is used to convert the typed parameters into a list of
-        /// web request parameters as a String-keyed Dictionary for a `updateUser` method call.
-        ///
-        /// - Parameter description: input
-        /// - Returns: The String-keyed `Dictionary` of parameters.
-        private static func convertUpdateUserParamsToDict(description: String?) -> [String: Any] {
-            var parametersDictionary = [String: Any]()
-            parametersDictionary.addValueIfNotNil(description, toKey: Twitch.WebRequestKeys.description)
-            return parametersDictionary
-        }
     }
 
     /// Videos is a category of Twitch API calls that allow for the interaction of Video Data from
@@ -1362,7 +1232,7 @@ public class Twitch {
         /// - day: Defines a period spanning all day.
         /// - week: Defines a period spanning all week.
         /// - month: Defines a period spanning all month.
-        public enum Period: String {
+        public enum Period: String, Codable {
             case all = "all"
             case day = "day"
             case week = "week"
@@ -1375,7 +1245,7 @@ public class Twitch {
         /// - time: Videos will be sorted by their time order. Most recent first.
         /// - trending: Videos will be sorted based on their "trending" status.
         /// - views: Videos will be sorted by their amount of views.
-        public enum SortType: String {
+        public enum SortType: String, Codable {
             case time = "time"
             case trending = "trending"
             case views = "views"
@@ -1389,7 +1259,7 @@ public class Twitch {
         /// - archive: `archive` applies a filter that allows only archived videos the be returned.
         /// - highlight: `highlight` applies a filter that allows only highlighted videos to be
         /// returned.
-        public enum VideoQueryType: String {
+        public enum VideoQueryType: String, Codable {
             case all = "all"
             case upload = "upload"
             case archive = "archive"
@@ -1426,73 +1296,25 @@ public class Twitch {
         ///
         /// - Parameters:
         ///   - tokenManager: The TokenManager whose token should be used. Singleton by default.
-        ///   - videoIds: The IDs of the video to be queried. Maximum 100. If this is specified,
-        /// then no optional values can be used. Optional if `userId` or `gameId` is specified.
-        ///   - userId: The ID of the user to query videos for. Optional if `videoIds` or `gameId`
-        /// is specified.
-        ///   - gameId: The ID of the game to query videos for. Optional if `videoIds` or `userId`
-        /// is specified.
-        ///   - after: The forward pagination token.
-        ///   - before: The backwards pagination token.
-        ///   - first: The maximum number of videos to return. Maximum: 100. Default: 20.
-        ///   - language: The language videos must be in to be returned.
-        ///   - period: The period to obtain data for. If this value is `.all`, Default: `.all`.
-        ///   - sortType: The type of sorting that should occur. Default: `.time`.
-        ///   - videoType: The type of videos that should be retrieved. Default: `.all`.
-        ///   - completionHandler: The function that should be run whenever the retrieval is
-        /// successful. There are two types of `GetVideosResultResult`: `success` and `failure`.
+        ///   - parameters: Set of GetVideoParams which should be sent in the request and used to filter videos
         ///
         /// - seealso: `Period`
+        /// - seealso: `GetVideosParams`
         /// - seealso: `GetVideosResult`
         public static func getVideos(tokenManager: TwitchTokenManager = TwitchTokenManager.shared,
-                                     videoIds: [String]?, userId: String?, gameId: String?,
-                                     after: String? = nil, before: String? = nil, first: Int? = nil,
-                                     language: String? = nil, period: Period? = nil,
-                                     sortType: SortType? = nil, videoType: VideoQueryType? = nil,
+                                     parameters: GetVideoParams,
                                      completionHandler: @escaping (GetVideosResult) -> Void) {
             Twitch.performAPIWebRequest(
-                to: videosURL, withHTTPMethod: URLRequest.RequestHeaderTypes.get,
-                withQueryParameters: convertGetVideosParamsToDict(videoIds: videoIds, userId: userId, gameId: gameId,
-                                                                  after: after, before: before, first: first,
-                                                                  language: language, period: period,
-                                                                  sortType: sortType, videoType: videoType),
-                withBodyParameters: nil, enforcesAuthorization: false, withTokenManager: tokenManager,
+                to: videosURL,
+                withHTTPMethod: URLRequest.RequestHeaderTypes.get,
+                withQueryParameters: parameters,
+                withBodyParameters: EmptyParams(),
+                enforcesAuthorization: false,
+                withTokenManager: tokenManager,
                 onSuccess: { completionHandler(GetVideosResult.success($0)) },
                 onFailure: { completionHandler(GetVideosResult.failure($0, $1, $2)) })
         }
 
-        /// `convertGetVideosParamsToDict` is used to convert the typed parameters into a list of
-        /// web request parameters as a String-keyed Dictionary for a `getVideos` method call.
-        ///
-        /// - Parameters:
-        ///   - videoIds: input
-        ///   - userId: input
-        ///   - gameId: input
-        ///   - after: input
-        ///   - before: input
-        ///   - first: input
-        ///   - language: input
-        ///   - period: input
-        ///   - sortType: input
-        ///   - videoType: input
-        /// - Returns: The String-keyed `Dictionary` of parameters.
-        private static func convertGetVideosParamsToDict(videoIds: [String]?, userId: String?,gameId: String?,
-                                                         after: String?, before: String?, first: Int?,
-                                                         language: String?, period: Period?, sortType: SortType?,
-                                                         videoType: VideoQueryType?) -> [String: Any] {
-            var parametersDictionary = [String: Any]()
-            parametersDictionary.addValueIfNotNil(videoIds, toKey: WebRequestKeys.id)
-            parametersDictionary.addValueIfNotNil(userId, toKey: WebRequestKeys.userId)
-            parametersDictionary.addValueIfNotNil(gameId, toKey: WebRequestKeys.gameId)
-            parametersDictionary.addValueIfNotNil(after, toKey: WebRequestKeys.after)
-            parametersDictionary.addValueIfNotNil(before, toKey: WebRequestKeys.before)
-            parametersDictionary.addValueIfNotNil(first, toKey: WebRequestKeys.first)
-            parametersDictionary.addValueIfNotNil(language, toKey: WebRequestKeys.language)
-            parametersDictionary.addValueIfNotNil(period?.rawValue, toKey: WebRequestKeys.period)
-            parametersDictionary.addValueIfNotNil(sortType?.rawValue, toKey: WebRequestKeys.sort)
-            parametersDictionary.addValueIfNotNil(videoType?.rawValue, toKey: WebRequestKeys.type)
-            return parametersDictionary
-        }
     }
 
     // MARK: - Twitch Functions
@@ -1507,21 +1329,27 @@ public class Twitch {
     /// - Parameters:
     ///   - url: The URL to perform the web request to
     ///   - httpMethod: The method to perform the url request with
-    ///   - queryParameters: The query parameters of the web request
-    ///   - bodyParameters: The body parameters of the web request
+    ///   - queryParameters: Codable object representing the query parameters of the web request
+    ///   - bodyParameters: Codable object representing the body parameters of the web request
     ///   - enforcesAuthorization: If set to `true`, this will fail the API call if adding the
     /// authorization header fails. If `false`, the call will be ignored instead.
     ///   - tokenManager: The token manager that is used to provide authentication
     ///   - successHandler: The handler for a successful web request
     ///   - failureHandler: The handler for a failed web request
-    private static func performAPIWebRequest<T: Unmarshaling>(
-        to url: URL, withHTTPMethod httpMethod: String?, withQueryParameters queryParameters: [String: Any]?,
-        withBodyParameters bodyParameters: [String: Any]?, enforcesAuthorization: Bool,
-        withTokenManager tokenManager: TwitchTokenManager, isNewAPI: Bool = true,
+    private static func performAPIWebRequest<T, U, V>(
+        to url: URL,
+        withHTTPMethod httpMethod: String?,
+        withQueryParameters queryParameters: U,
+        withBodyParameters bodyParameters: V,
+        enforcesAuthorization: Bool,
+        withTokenManager tokenManager: TwitchTokenManager,
+        isNewAPI: Bool = true,
         onSuccess successHandler: @escaping (T) -> Void,
-        onFailure failureHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        onFailure failureHandler: @escaping (Data?, URLResponse?, Error?) -> Void
+    ) where T: Codable, U: Codable, V: Codable {
 
-        var request = URLRequest(url: queryParameters == nil ? url : url.withQueryItems(queryParameters!))
+        var request = URLRequest(url: url.withQueryItems(queryParameters))
+
         do {
             if isNewAPI {
                 try request.addTokenAuthorizationHeader(fromTokenManager: tokenManager)
@@ -1537,11 +1365,16 @@ public class Twitch {
 
         request.setValueToJSONContentType()
         request.httpMethod = httpMethod
-        request.httpBody = bodyParameters?.getAsData()
+
+        do {
+            request.httpBody = try encoder.encode(bodyParameters)
+        } catch {
+            failureHandler(nil, nil, error)
+        }
 
         urlSessionForWrapper.dataTask(with: request) { (data, response, error) in
-            guard let nonNilData = data, let dataAsDictionary = nonNilData.getAsDictionary(),
-                let retrievedObject = try? T(object: dataAsDictionary),
+            guard let nonNilData = data,
+                  let retrievedObject = try? decoder.decode(T.self, from: nonNilData),
                 !Twitch.getIfErrorOccurred(data: data, response: response, error: error) else {
                     failureHandler(data, response, error)
                     return
@@ -1572,5 +1405,8 @@ public class Twitch {
     }
 
     /// Private initializer. The entire Twitch API can be accessed through static methods.
-    private init() { }
+    private init() {
+        Self.decoder.keyDecodingStrategy = .convertFromSnakeCase
+        Self.encoder.keyEncodingStrategy = .convertToSnakeCase
+    }
 }

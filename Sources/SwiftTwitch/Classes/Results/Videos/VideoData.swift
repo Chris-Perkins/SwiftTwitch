@@ -1,16 +1,15 @@
 //
 //  VideoData.swift
-//  Marshal
+//  SwiftTwitch
 //
 //  Created by Christopher Perkins on 1/1/19.
 //
 
 import Foundation
-import Marshal
 
 /// `VideoData` defines the data that belongs to a specific Video as retrieved from the `New Twitch
 /// API` endpoint.
-public struct VideoData: Unmarshaling {
+public struct VideoData: Codable {
 
     /// `VideoType` defines the different types of videos that are able to be posted on Twitch.
     ///
@@ -18,7 +17,7 @@ public struct VideoData: Unmarshaling {
     /// - highlight: `highlight` defines a Video that was a highlight of a past livestream the
     /// uploader had.
     /// - upload: `upload` defines a Video that was uploaded to Twitch
-    public enum VideoType: String {
+    public enum VideoType: String, Codable {
         case archive = "archive"
         case highlight = "highlight"
         case upload = "upload"
@@ -29,7 +28,7 @@ public struct VideoData: Unmarshaling {
     /// - privateVideo: `privateVideo` defines that the video is private; only a select group of
     /// users are able to view the video.
     /// - publicVideo: `publicVideo` defines that the video is public; anyone can see the video.
-    public enum ViewSettings: String {
+    public enum ViewSettings: String, Codable {
         case privateVideo = "private"
         case publicVideo = "public"
     }
@@ -82,25 +81,4 @@ public struct VideoData: Unmarshaling {
     /// `durationString` defines the duration of the video as a String in a `HH'h'mm'm'ss's' format.
     public let durationString: String
 
-    /// Initializes a `VideoData` object from the input `MarshaledObject`. This will throw if there
-    /// is missing data from the input `MarshaledObject`.
-    ///
-    /// - Parameter object: The object to initialize a `VideoData` piece from
-    /// - Throws: If data is missing that was expected to be non-`nil`.
-    public init(object: MarshaledObject) throws {
-        id = try object.value(for: Twitch.WebRequestKeys.id)
-        ownerId = try object.value(for: Twitch.WebRequestKeys.userId)
-        ownerName = try object.value(for: Twitch.WebRequestKeys.userName)
-        title = try object.value(for: Twitch.WebRequestKeys.title)
-        description = try object.value(for: Twitch.WebRequestKeys.description)
-        creationDate = try object.value(for: Twitch.WebRequestKeys.createdAt)
-        publishedDate = try object.value(for: Twitch.WebRequestKeys.publishedAt)
-        url = try object.value(for: Twitch.WebRequestKeys.url)
-        thumbnailURLString = try object.value(for: Twitch.WebRequestKeys.thumbnailURL)
-        viewSetting = try object.value(for: Twitch.WebRequestKeys.viewable)
-        viewCount = try object.value(for: Twitch.WebRequestKeys.viewCount)
-        language = try object.value(for: Twitch.WebRequestKeys.language)
-        videoType = try object.value(for: Twitch.WebRequestKeys.type)
-        durationString = try object.value(for: Twitch.WebRequestKeys.duration)
-    }
 }

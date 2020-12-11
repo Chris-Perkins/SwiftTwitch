@@ -40,4 +40,21 @@ extension URL {
 
         return URL(string: urlComponents.string ?? absoluteString)!
     }
+
+    /**
+     Add, update, or remove a query string parameters from the URL
+
+     - parameter url:   the URL
+     - parameter items: the Codable object to use as parameters dictionary
+
+     - returns: the URL with the mutated query string
+     */
+    func withQueryItems<T>(_ items: T) -> URL where T: Encodable {
+        guard let itemsDict = items.dictionary else {
+            return URL(string: absoluteString)!
+        }
+
+        return withQueryItems(itemsDict)
+    }
+
 }

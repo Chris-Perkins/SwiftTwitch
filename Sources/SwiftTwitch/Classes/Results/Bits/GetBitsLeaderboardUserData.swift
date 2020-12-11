@@ -5,11 +5,11 @@
 //  Created by Christopher Perkins on 12/28/18.
 //
 
-import Marshal
+import Foundation
 
 /// `GetBitsLeaderboardUserData` is a class that holds information about a single user from the
 /// New Twitch API `Get Bits Leaderboard` call.
-public struct GetBitsLeaderboardUserData: Unmarshaling {
+public struct GetBitsLeaderboardUserData: Codable {
 
     /// `userId` specifies the ID of the user who is being described in this leaderboard data.
     /// This corresponds to the user specified by `username`
@@ -25,15 +25,4 @@ public struct GetBitsLeaderboardUserData: Unmarshaling {
     /// `score` specifies the current score of the user in this leaderboard.
     public let score: Int
 
-    /// Initializes a `GetExtensionAnalyticsData` object from the input `MarshaledObject`. This will
-    /// throw if there is missing data from the input `MarshaledObject`.
-    ///
-    /// - Parameter object: The object to initialize a `GetExtensionAnalyticsData` piece from
-    /// - Throws: If data is missing that was expected to be non-`nil`.
-    public init(object: MarshaledObject) throws {
-        userId = try object.value(for: Twitch.WebRequestKeys.userId)
-        userName = try object.value(for: Twitch.WebRequestKeys.userName)
-        rank = try object.value(for: Twitch.WebRequestKeys.rank)
-        score = try object.value(for: Twitch.WebRequestKeys.score)
-    }
 }
